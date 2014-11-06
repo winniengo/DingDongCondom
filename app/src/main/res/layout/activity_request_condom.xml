@@ -74,6 +74,8 @@
                 android:text="@string/request_condom_dorm_room"/>
 
             <EditText
+                android:inputType="number"
+                android:maxLength="4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/request_condom_edit_text_dorm_room"
