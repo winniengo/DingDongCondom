@@ -4,8 +4,8 @@
  */
 
 // worker functions 
-var register = require('config/register');
-var login = require('config/login');
+var register = require('./register');
+var login = require('./login');
 
 module.exports = function(app) {
     app.get('/', function(req, res) {
