@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" >
+<pre-dex-items>
 
     <item
-        jar="/Users/dfeist/Documents/Swarthmore/Courses/Fall_2014/cs97_mobileHealth/android/app/libs/additionnal.jar"
+        dex="/home/dfeista1/TheSexButton/android/app/build/intermediates/pre-dexed/debug/additionnal-b132434f4730bfb7eba992cfb34ae6c6edf79e7f.jar"
+        jar="/home/dfeista1/TheSexButton/android/app/libs/additionnal.jar"
         jumboMode="false"
         revision="20.0.0"
-        sha1="bd9e8dc422bb8c8405359947fe9f4282b49f57f4">
-        <dex dex="/Users/dfeist/Documents/Swarthmore/Courses/Fall_2014/cs97_mobileHealth/android/app/build/intermediates/pre-dexed/debug/additionnal-7276a03b9604a6469303bd5639b315c8a5b9900f.jar" />
-    </item>
+        sha1="bd9e8dc422bb8c8405359947fe9f4282b49f57f4"/>
     <item
-        jar="/Users/dfeist/Documents/Swarthmore/Courses/Fall_2014/cs97_mobileHealth/android/app/libs/activation.jar"
+        dex="/home/dfeista1/TheSexButton/android/app/build/intermediates/pre-dexed/debug/activation-b37f22cb72dcf9a8d482e38da567681bb2ebb73b.jar"
+        jar="/home/dfeista1/TheSexButton/android/app/libs/activation.jar"
         jumboMode="false"
         revision="20.0.0"
-        sha1="d1257cbff6faa44c1f325ae0d9413522d4644383">
-        <dex dex="/Users/dfeist/Documents/Swarthmore/Courses/Fall_2014/cs97_mobileHealth/android/app/build/intermediates/pre-dexed/debug/activation-2738e59176c1febec38cdb3464a0bab09e2d0683.jar" />
-    </item>
+        sha1="d1257cbff6faa44c1f325ae0d9413522d4644383"/>
     <item
-        jar="/Users/dfeist/Documents/Swarthmore/Courses/Fall_2014/cs97_mobileHealth/android/app/libs/mail.jar"
+        dex="/home/dfeista1/TheSexButton/android/app/build/intermediates/pre-dexed/debug/mail-68698038e8187fe8c917824ca1bdb50ce12d985b.jar"
+        jar="/home/dfeista1/TheSexButton/android/app/libs/mail.jar"
         jumboMode="false"
         revision="20.0.0"
-        sha1="428e267abff0d10802ccde86b915da2c20471160">
-        <dex dex="/Users/dfeist/Documents/Swarthmore/Courses/Fall_2014/cs97_mobileHealth/android/app/build/intermediates/pre-dexed/debug/mail-1dc0d804db00b1f1644a0a944108121ca8faf1dc.jar" />
-    </item>
+        sha1="428e267abff0d10802ccde86b915da2c20471160"/>
 
-</items>
+</pre-dex-items>
