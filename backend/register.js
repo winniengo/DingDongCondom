@@ -11,8 +11,14 @@ exports.register = function(uuid, login_token, callback) {
     var u = uuid;
     
     //TODO: Some checking of the UUID here
-    var token = crypto.createHash('sha512').update(uuid+rand).digest('hex');
-    var hashed_auth_token = crypto.createHash('sha512').update(login_token).digest('hex');
+    
+    
+    //var token = crypto.createHash('sha512').update(uuid, 'ascii').digest('hex');
+    //var hashed_auth_token = crypto.createHash('sha512').update(login_token, 'ascii').digest('hex');
+    
+    var token = uuid;
+    var hashed_auth_token = login_token;
+
     var date = new Date();
 
     var new_user = new user({
