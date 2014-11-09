@@ -20,7 +20,7 @@ module.exports = function(app) {
     app.post('/api/login',function(req,res){
 	var uuid = req.body.uuid;
         var auth_token = req.body.auth_token;
-	login.login(uuid, auth_token,function (found) {
+	login.login(uuid, auth_token, function (found) {
 	    console.log(found);
 	    res.json(found);
 	});
