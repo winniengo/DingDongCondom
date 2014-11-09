@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/home/dfeista1/cs97/TheSexButton/app/build/intermediates/pre-dexed/debug/activation-397798eb466b0df4aa648e4085acb0bb1b9703d9.jar"
+        jar="/home/dfeista1/cs97/TheSexButton/app/libs/activation.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="d1257cbff6faa44c1f325ae0d9413522d4644383"/>
+    <item
+        dex="/home/dfeista1/cs97/TheSexButton/app/build/intermediates/pre-dexed/debug/additionnal-6a69507ae066adb87503857ef249faaebe2a239b.jar"
+        jar="/home/dfeista1/cs97/TheSexButton/app/libs/additionnal.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="bd9e8dc422bb8c8405359947fe9f4282b49f57f4"/>
+    <item
+        dex="/home/dfeista1/cs97/TheSexButton/app/build/intermediates/pre-dexed/debug/mail-ff250ade3765a31c1103c2b79fd24cbf11f66468.jar"
+        jar="/home/dfeista1/cs97/TheSexButton/app/libs/mail.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="428e267abff0d10802ccde86b915da2c20471160"/>
+
+</pre-dex-items>
