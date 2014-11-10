@@ -25,10 +25,10 @@ var orderLifecycleSchema = mongoose.Schema({
     deliverer : String, //uuid of the deliverer
 
     // status fields
-    order_received : Boolean
-    order_accepted : Boolean
-    order_delivered : Boolean
-    order_failed : Boolean
+    order_received : Boolean,
+    order_accepted : Boolean,
+    order_delivered : Boolean,
+    order_failed : Boolean,
 
     // timestamp fields
     date_requested : Date,
@@ -54,4 +54,4 @@ mongoose.connect('mongodb://localhost:27017/tsb-db');
 
 // export the different schemas as models
 module.exports = mongoose.model('users', userSchema);
-module.exports = mongoose.model('orderLifecyle', condomLifecycleSchema);
+module.exports = mongoose.model('orderLifecyle', orderLifecycleSchema);

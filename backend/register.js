@@ -10,7 +10,7 @@ var user = require('./models');
 exports.register = function(device_uuid, passphrase, signup_token, callback) {
     var u = device_uuid;
     var p = passphrase;
-    var st = signup_token
+    var st = signup_token;
 
     // check that the signup_token is correct
     if (signup_token != "TSBSignupToken2014") {
@@ -61,5 +61,6 @@ exports.register = function(device_uuid, passphrase, signup_token, callback) {
 		callback({'response':'Device already registered'});
 	    }
 	});
+    }
 
-}	
+}
