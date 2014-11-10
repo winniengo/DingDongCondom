@@ -44,7 +44,7 @@ exports.register = function(device_uuid, passphrase, signup_token, callback) {
 	    uuid : u, 
 	    hashed_passphrase : hp,
 	    session_token : t, 
-	    salt : s;
+	    salt : s,
 	    register_date : d,
 	});
 
