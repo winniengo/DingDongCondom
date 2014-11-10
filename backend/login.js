@@ -21,7 +21,7 @@ exports.login = function(uuid, secret, callback) {
 	    // generate hash from secret input
 	    try {
 		var hs = crypto.pbkdf2(secret, s, iter, 64);
-	    } catch {
+	    } catch (ex) {
 		//error lol
 	    }
 

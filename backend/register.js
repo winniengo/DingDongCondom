@@ -31,7 +31,7 @@ exports.register = function(device_uuid, passphrase, signup_token, callback) {
 	
 	try {
 	    var hp = crypto.pbkdf2(p, s, iter, 64); 
-	} catch {
+	} catch (ex) {
 	    console.log("problem generating hash in register()");
 	    // problem generating hash, probably should handle this
 	}
