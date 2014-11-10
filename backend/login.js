@@ -8,23 +8,31 @@ var mongoose = require('mongoose');
 var user = require('./models');
 
 
-exports.login = function(uuid, signup_code, callback) {
+exports.login = function(uuid, secret, callback) {
 	
-	user.find( {uuid: uuid}, function (err,users) {
+    user.find( {uuid: uuid}, function (err,users) {
 	
 	if(users.length != 0){
-		var hash_db = users[0].hashed_auth_token;
-		var id = users[0].token;
-		//var hashed_auth_token = crypto.createHash('sha512').update(auth_token).digest("hex");
-		
-		if(hash_db == signup_code){
-			callback({'response':"Login Sucess",'res':true,'token':id});
-		}else{
-			callback({'response':"Invalid Password",'res':false});
-		}
-	}else {
-		callback({'response':"User not exist",'res':false});
+	    var hp = users[0].hashed_passphrase;
+	    var t = users[0].session_token;
+	    var s = users[0].salt;
+	    var iter = 1000;
+
+	    // generate hash from secret input
+	    try {
+		var hs = crypto.pbkdf2(secret, s, iter, 64);
+	    } catch {
+		//error lol
+	    }
+
+	    if(hp == hs){
+		callback({'response':"Login Sucess",'res':true,'token':t});
+	    } else {
+		callback({'response':"Invalid Passphrase",'res':false});
+	    }
+	} else {
+	    callback({'response':"User not exist",'res':false});
 	}
 	
-	});
+    });
 }
