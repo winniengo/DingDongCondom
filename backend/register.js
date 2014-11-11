@@ -12,8 +12,6 @@ exports.register = function(device_uuid, passphrase, signup_token, callback) {
     var p = passphrase;
     var st = signup_token;
 
-    console.log("u:", u, "p:", p, "st:", st);
-
     // check that the signup_token is correct
     if (st != "TSBSignupToken2014") {
 	console.log("TSBToken incorrect, token was:", signup_token);
@@ -21,7 +19,6 @@ exports.register = function(device_uuid, passphrase, signup_token, callback) {
 	
     // do crypto to hash passphrase and generate auth_token
     
-    var hash = 'sha1' //apparently required by PBKDF2
     var iter = 1000 //num iterations of Hash function
 
     try {
@@ -32,7 +29,7 @@ exports.register = function(device_uuid, passphrase, signup_token, callback) {
     }
     
     try {
-	var hp = crypto.pbkdf2Sync(p, s, iter, 64).toString('hex'); 
+	var hp = crypto.pbkdf2Sync(p, s, iter, 128).toString('hex'); 
     } catch (ex) {
 	console.log("problem generating hash in register()");
 	// problem generating hash, probably should handle this

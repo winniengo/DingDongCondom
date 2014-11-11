@@ -16,13 +16,12 @@ exports.login = function(uuid, secret, callback) {
 	    var hp = users[0].hashed_passphrase;
 	    var t = users[0].session_token;
 	    var s = users[0].salt;
-	    var iter = 1000;
-
-	    console.log("in /login, hp:",hp, "t:", t,"s:",s, "secret:", secret);
+	
+	    var iter = 1000;	   
 
 	    // generate hash from secret input
 	    try {
-		var hs = crypto.pbkdf2Sync(secret, s, iter, 64).toString('hex');
+		var hs = crypto.pbkdf2Sync(secret, s, iter, 128).toString('hex');
 	    } catch (ex) {
 		//error lol
 		console.log("error hashing in /login");
