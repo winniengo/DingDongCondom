@@ -18,11 +18,14 @@ exports.login = function(uuid, secret, callback) {
 	    var s = users[0].salt;
 	    var iter = 1000;
 
+	    console.log("in /login, hp:",hp, "t:", t,"s:",s, "secret:", secret);
+
 	    // generate hash from secret input
 	    try {
-		var hs = crypto.pbkdf2(secret, s, iter, 64);
+		var hs = crypto.pbkdf2Sync(secret, s, iter, 64).toString('hex');
 	    } catch (ex) {
 		//error lol
+		console.log("error hashing in /login");
 	    }
 
 	    if(hp == hs){

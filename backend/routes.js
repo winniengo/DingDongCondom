@@ -18,9 +18,9 @@ module.exports = function(app) {
 
     
     app.post('/api/login',function(req,res){
-	var uuid = req.body.uuid;
-        var auth_token = req.body.auth_token;
-	login.login(uuid, auth_token, function (found) {
+	var uuid = req.body.device_uuid;
+        var passphrase = req.body.passphrase;
+	login.login(uuid, passphrase, function (found) {
 	    console.log(found);
 	    res.json(found);
 	});
