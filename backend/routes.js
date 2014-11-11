@@ -31,9 +31,13 @@ module.exports = function(app) {
     //     - a signup_code that is distributed to each user
 
     app.post('/api/register',function(req,res){
-	var uuid = req.body.uuid;
-        var signup_code = req.body.signup_code;
-	register.register(uuid, signup_code, function (found) {
+	var uuid = req.body.device_uuid;
+        var passphrase = req.body.passphrase;
+	var signup_token = req.body.signup_token;
+	
+	console.log("in routes.js, uuid:", uuid);
+	
+	register.register(uuid, passphrase, signup_token, function (found) {
 	    console.log(found);
 	    res.json(found);
 	});

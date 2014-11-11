@@ -17,7 +17,7 @@ var userSchema = mongoose.Schema({
     //add more fields for various stuff
 
 });
-
+/*
 var orderLifecycleSchema = mongoose.Schema({
     order_number : String, 
     
@@ -48,10 +48,11 @@ var orderLifecycleSchema = mongoose.Schema({
 
 });
 
+*/
 
 mongoose.connect('mongodb://localhost:27017/tsb-db');
 
 
 // export the different schemas as models
 module.exports = mongoose.model('users', userSchema);
-module.exports = mongoose.model('orderLifecyle', orderLifecycleSchema);
+//module.exports = mongoose.model('orderLifecyle', orderLifecycleSchema);
