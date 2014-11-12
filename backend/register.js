@@ -4,7 +4,7 @@
 
 var mongoose = require('mongoose');
 var crypto = require('crypto');
-var user = require('./models');
+var user = require('./models').users;
 
 
 exports.register = function(device_uuid, passphrase, signup_token, callback) {

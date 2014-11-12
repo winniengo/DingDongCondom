@@ -17,7 +17,7 @@ var userSchema = mongoose.Schema({
     //add more fields for various stuff
 
 });
-/*
+
 var orderLifecycleSchema = mongoose.Schema({
     order_number : String, 
     
@@ -34,7 +34,8 @@ var orderLifecycleSchema = mongoose.Schema({
     date_requested : Date,
     date_accepted: Date,
     date_delivered: Date,
-    
+
+    delivery_estimate : Number, 
 
     // specifics
     delivery_destination : { 
@@ -44,15 +45,17 @@ var orderLifecycleSchema = mongoose.Schema({
 	geo : {lat: Number, lon: Number} //field for geo location
 	},
     
+    
     comments : [ {body: String, date: Date} ]
 
 });
 
-*/
 
 mongoose.connect('mongodb://localhost:27017/tsb-db');
 
 
 // export the different schemas as models
-module.exports = mongoose.model('users', userSchema);
-//module.exports = mongoose.model('orderLifecyle', orderLifecycleSchema);
+module.exports = {
+    users : mongoose.model('users', userSchema),
+    orders : mongoose.model('orderLifecyle', orderLifecycleSchema),
+};

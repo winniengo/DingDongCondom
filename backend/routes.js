@@ -6,6 +6,7 @@
 // worker functions 
 var register = require('./register');
 var login = require('./login');
+var order = require('./order');
 
 module.exports = function(app) {
     app.get('/', function(req, res) {
@@ -43,5 +44,33 @@ module.exports = function(app) {
 	});
     });
 
+    app.post('/api/delivery/request', function(req, res) {
+	var session_token = req.body.session_token;
+	var dorm_name = req.body.dorm_name;
+	var dorm_room = req.body.dorm_room;
+	var delivery_type = req.body.delivery_type;
+	var date_requested = req.body.date_requested;
+	
+	order.request(dorm_name, dorm_room, delivery_type, date_requested,
+		      function (found) {
+			  console.log(found);
+			  res.json(found);
+		      }
+		     );
+    });
 
+
+    app.post('/api/delivery/status', function(req, res) {
+	var session_token = req.body.session_token;
+	var order_number = req.body.order_number;
+	
+	order.status(order_number, function (found) {
+	    console.log(found);
+	    res.json(found);
+	}
+		    );
+
+    });
+
+	
 };

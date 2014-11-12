@@ -8,7 +8,9 @@
 	"csprng":"~0.1.1",
 	"connect":"~2.14.4",
 	"nodemailer":"~0.6.3",
-	"gravatar":"~1.0.6"
+	"gravatar":"~1.0.6",
+	"shortid":"~2.1.3"
     }
+
 
 }
