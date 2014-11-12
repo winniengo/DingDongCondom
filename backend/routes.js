@@ -52,9 +52,9 @@ module.exports = function(app) {
 	var date_requested = req.body.date_requested;
 	
 	order.request(dorm_name, dorm_room, delivery_type, date_requested,
-		      function (found) {
-			  console.log(found);
-			  res.json(found);
+		      function (found, status) {
+			  console.log(found, status);
+			  res.status(status).json(found);
 		      }
 		     );
     });

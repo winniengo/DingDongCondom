@@ -70,10 +70,10 @@ exports.request = function (dorm_name, dorm_room, delivery_type,
 	    //order doesn't exist, so let's create it
 	    new_order.save(function (err) {
 		callback({'response': "Order successfully placed",
-			 'order_number': oid});
+			 'order_number': oid}, 200);
 		});
 	} else {
-	    callback({'response':"Order failed, please try again"});
+	    callback({'response':"Order failed, please try again"}, 400);
 	}
 
     });
@@ -87,9 +87,12 @@ exports.status = function(order_number, callback) {
 
     order.find({order_number:oid}, function (err, orders) {
 	var len = orders.length;
+	var succes_code = 200;
+	var error_code = 404;
+
 	if (len == 0) {
 	    // the order doesn't exist
-	    callback({'response':'Order does not exist'});
+	    callback({'response':'Order does not exist'}, error_code);
 	} else {
 	    var or = orders[0];
 	    var order_accepted = or.order_accepted;
@@ -108,7 +111,7 @@ exports.status = function(order_number, callback) {
 		'date_accepted' : date_accepted,
 		'delivery_estimate' : delivery_estimate,
 		
-		});
+		}, success_code);
 	}
 
 
