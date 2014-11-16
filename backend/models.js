@@ -8,9 +8,13 @@ var Schema = mongoose.Schema;
 
 var userSchema = mongoose.Schema({
     uuid : String,
+    device_os : String, 
+
     hashed_passphrase: String,
-    session_token : String,
     salt : String,
+
+    session_token : String,
+    sesion_token_expires : Date,
 
     register_date : Date,
 
@@ -42,7 +46,8 @@ var orderLifecycleSchema = mongoose.Schema({
 	dorm_name : String,
 	dorm_room : Number, 
 	delivery_type : String, 
-	geo : {lat: Number, lon: Number} //field for geo location
+	coordinates : 
+        {lat: Number, lng: Number} //field for geo location
 	},
     
     

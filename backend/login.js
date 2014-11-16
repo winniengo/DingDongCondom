@@ -15,6 +15,7 @@ exports.login = function(uuid, secret, callback) {
 	if(users.length != 0){
 	    var hp = users[0].hashed_passphrase;
 	    var t = users[0].session_token;
+	    var t_expires = users[0].session_token_expires;
 	    var s = users[0].salt;
 	
 	    var iter = 1000;	   
@@ -28,13 +29,19 @@ exports.login = function(uuid, secret, callback) {
 	    }
 
 	    if(hp == hs){
-		callback({'response':"Login Sucess",'res':true,'token':t});
+	    	// TODO: generate new session token and reassign it appropriately:
+			callback({'response' : "LOGIN_SUCCESS",
+					  'session_token' : t,
+					  'session_token_expires' : session_token_expires,
+					 });
 	    } else {
-		callback({'response':"Invalid Passphrase",'res':false});
+			callback({'response' : "LOGIN_ERROR_INVALID_PASSPHRASE", });
 	    }
 	} else {
-	    callback({'response':"User not exist",'res':false});
+		    callback({'response':"LOGIN_ERROR_INVALID_DEVICE_UUID", });
 	}
 	
     });
 }
+
+
