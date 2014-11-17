@@ -7,6 +7,7 @@ var express  = require('express');
 var connect  = require('connect');
 var app      = express();
 var port     = process.env.PORT || 8080;
+var db 		 = require('./modules/db/db.js');
 
 // Configuration
 app.use(express.static(__dirname + '/public'));

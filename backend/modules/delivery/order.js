@@ -10,10 +10,10 @@
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 var order = require('./models').orders;
-var user = require('./models').users;
+var user = require('../user/models').users;
 var shortid = require('shortid');
 
-exports.request = function (dorm_name, dorm_room, delivery_type, date_requested, callback) {
+exports.request = function (session_token, dorm_name, dorm_room, delivery_type, date_requested, callback) {
     var dn = dorm_name;
     var dr = dorm_room;
     var dt = delivery_type;
@@ -21,13 +21,21 @@ exports.request = function (dorm_name, dorm_room, delivery_type, date_requested,
 
     var now = new Date();
     var oid = shortid.generate();
-    
+
+
+    //get the user's device_uuid
+    user.find ({session_token : session_token}, function(err, users) {
+		if (users.length == 0) {
+			callback({'response': 'DELIVERY_REQUEST_ERROR_USER_NOT_FOUND'}, 400);
+		} else {
+			var device_uuid = users[0].device_uuid;
+		}
+	});	
+
+
     //debug
     console.log("request got in at:", new Date());
-
-
-    // TODO : find the user from device_id 
-    var device_uuid = "00000000";
+    console.log('request was made by uuid: ' + device_uuid);
 
     var new_order = new order({
 		order_number : oid, 

@@ -8,9 +8,9 @@ var mongoose = require('mongoose');
 var user = require('./models').users;
 
 
-exports.login = function(uuid, secret, callback) {
+exports.login = function(device_uuid, secret, callback) {
 	
-    user.find( {uuid: uuid}, function (err,users) {
+    user.find( {device_uuid: device_uuid}, function (err,users) {
 	
 	if(users.length != 0){
 	    var hp = users[0].hashed_passphrase;

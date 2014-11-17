@@ -1,26 +1,10 @@
 /*
- * TSB - Models.JS file
- * Defines the TSB Backend's database models
+ * TSB - Delivery/Models.JS file
+ * Defines the TSB Backend's database models for delivery aspects
  */
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
-var userSchema = mongoose.Schema({
-    uuid : String,
-    device_os : String, 
-
-    hashed_passphrase: String,
-    salt : String,
-
-    session_token : String,
-    sesion_token_expires : Date,
-
-    register_date : Date,
-
-    //add more fields for various stuff
-
-});
 
 var orderLifecycleSchema = mongoose.Schema({
     order_number : String, 
@@ -56,11 +40,7 @@ var orderLifecycleSchema = mongoose.Schema({
 });
 
 
-mongoose.connect('mongodb://localhost:27017/tsb-db');
-
-
 // export the different schemas as models
 module.exports = {
-    users : mongoose.model('users', userSchema),
     orders : mongoose.model('orderLifecyle', orderLifecycleSchema),
 };

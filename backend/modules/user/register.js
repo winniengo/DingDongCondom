@@ -7,7 +7,7 @@ var crypto = require('crypto');
 var user = require('./models').users;
 
 
-exports.register = function(device_uuid, passphrase, signup_token, device_os callback) {
+exports.register = function(device_uuid, passphrase, signup_token, device_os, callback) {
     var u = device_uuid;
     var p = passphrase;
     var st = signup_token;
@@ -46,7 +46,7 @@ exports.register = function(device_uuid, passphrase, signup_token, device_os cal
 
     var d = new Date();
     var new_user = new user({
-	uuid : u, 
+	device_uuid : u, 
 	device_os : dos,
 	
 	hashed_passphrase : hp, 
