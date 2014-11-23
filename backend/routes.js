@@ -8,6 +8,7 @@ var register = require('./modules/user/register');
 var login = require('./modules/user/login');
 var order = require('./modules/delivery/order');
 var middleware = require('./modules/support/middleware');
+var survey = require('./modules/survey/retrieve');
 
 module.exports = function(app) {
     app.get('/', function(req, res) {
@@ -74,5 +75,33 @@ module.exports = function(app) {
 
     });
 
+
+    // get a survey for a given campaign id
+
+    app.post('/api/survey/retrieve', middleware.is_authenticated, function(req, res) {
+	var session_token = req.body.session_token;
+	var campaign_id = req.body.campaign_id;
 	
+	survey.retrieve(session_token, campaign_id, function (result, status) {
+	    console.log(result);
+	    res.status(status).json(result);
+		});
+
+    });
+
+
+    // get a survey for a given campaign id
+
+    app.post('/api/survey/complete', middleware.is_authenticated, function(req, res) {
+	var session_token = req.body.session_token;
+	var campaign_id = req.body.campaign_id;
+	var survey = req.body.survey;
+	
+	survey.complete(session_token, campaign_id, survey, function (result, status) {
+	    console.log(result);
+	    res.status(status).json(result);
+		});
+
+    });
+
 };
