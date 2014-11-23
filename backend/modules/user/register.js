@@ -46,16 +46,16 @@ exports.register = function(device_uuid, passphrase, signup_token, device_os, ca
 
     var d = new Date();
     var new_user = new user({
-	device_uuid : u, 
-	device_os : dos,
-	
-	hashed_passphrase : hp, 
-	salt : s,
-	
-	session_token : t,
-	session_token_expires : t_expiration,
-	
-	register_date : d,
+		device_uuid : u, 
+		device_os : dos,
+		
+		hashed_passphrase : hp, 
+		salt : s,
+		
+		session_token : t,
+		session_token_expires : t_expiration,
+		
+		register_date : d,
     });
 
     
