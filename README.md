@@ -1,7 +1,7 @@
 cs97_mobileHealth
 =================
 
-aka TSB aka Press C for Condom 
+aka TSB aka Ding Dong: Condom! (hear ye, hear ye -- the official name)
 
 Structure:
 
