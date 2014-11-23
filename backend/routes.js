@@ -104,4 +104,15 @@ module.exports = function(app) {
 
     });
 
+
+    // for testing purposes
+    app.get('/api/survey/create_test_campaign', function (req, res) {
+
+    	survey.create_test_campaign(function(result, status) {
+    		console.log(result);
+    		res.status(200).json(result);
+    	});
+
+    });
+
 };
