@@ -2,22 +2,22 @@
 <pre-dex-items>
 
     <item
-        dex="/home/dfeista1/TheSexButton/android/app/build/intermediates/pre-dexed/debug/additionnal-b132434f4730bfb7eba992cfb34ae6c6edf79e7f.jar"
-        jar="/home/dfeista1/TheSexButton/android/app/libs/additionnal.jar"
+        dex="/home/wngo1/cs97/cs97_mobileHealth/android/app/build/intermediates/pre-dexed/debug/mail-e7b4e1b9a3db1ee8beca427dde53c26a85f04d8c.jar"
+        jar="/home/wngo1/cs97/cs97_mobileHealth/android/app/libs/mail.jar"
         jumboMode="false"
         revision="20.0.0"
-        sha1="bd9e8dc422bb8c8405359947fe9f4282b49f57f4"/>
+        sha1="428e267abff0d10802ccde86b915da2c20471160"/>
     <item
-        dex="/home/dfeista1/TheSexButton/android/app/build/intermediates/pre-dexed/debug/activation-b37f22cb72dcf9a8d482e38da567681bb2ebb73b.jar"
-        jar="/home/dfeista1/TheSexButton/android/app/libs/activation.jar"
+        dex="/home/wngo1/cs97/cs97_mobileHealth/android/app/build/intermediates/pre-dexed/debug/activation-d71e787f064a1c3353861be80ba9cb6c454c1299.jar"
+        jar="/home/wngo1/cs97/cs97_mobileHealth/android/app/libs/activation.jar"
         jumboMode="false"
         revision="20.0.0"
         sha1="d1257cbff6faa44c1f325ae0d9413522d4644383"/>
     <item
-        dex="/home/dfeista1/TheSexButton/android/app/build/intermediates/pre-dexed/debug/mail-68698038e8187fe8c917824ca1bdb50ce12d985b.jar"
-        jar="/home/dfeista1/TheSexButton/android/app/libs/mail.jar"
+        dex="/home/wngo1/cs97/cs97_mobileHealth/android/app/build/intermediates/pre-dexed/debug/additionnal-4f928e4a684e13d9dfaece5fee65390867b4fcb5.jar"
+        jar="/home/wngo1/cs97/cs97_mobileHealth/android/app/libs/additionnal.jar"
         jumboMode="false"
         revision="20.0.0"
-        sha1="428e267abff0d10802ccde86b915da2c20471160"/>
+        sha1="bd9e8dc422bb8c8405359947fe9f4282b49f57f4"/>
 
 </pre-dex-items>
