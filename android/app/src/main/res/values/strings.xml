@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">TheSexButton</string>
+    <string name="app_name">Ding Dong: Condom</string>
     <string name="request_condom_text">This app will put in an order request for a condom to you.
         Please fill out the below form and press the button to request a condom delivery.</string>
     <string name="request_condom_button_text">I\'m Feeling Lucky</string>
@@ -31,4 +31,7 @@
         <item>Woolman</item>
         <item>Worth</item>
     </string-array>
+
+
+    <string name="login_about">blah\nblah\nblah\nblah\nblah</string>
 </resources>
