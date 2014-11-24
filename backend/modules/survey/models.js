@@ -22,7 +22,7 @@ var surveyCampaignSchema = mongoose.Schema({
         campaign_id : String,
         campaign_title : String, 
 
-        prototype_survey_id : String, // TODO: Change this to ref instead
+        prototype_survey_id : {type: Schema.ObjectId, ref: 'SurveyPrototype'}, 
         completed_survey_ids : [{type: Schema.ObjectId, ref: 'surveySchema'}],
 
         eligible_users : [{type: Schema.ObjectId, ref: 'User'}],
@@ -54,7 +54,7 @@ var surveySchema = mongoose.Schema({
 
 // export the different schemas as models
 module.exports = {
-    surveyPrototype : mongoose.model('surveyPrototype', prototypeSurveySchema),
-    survey : mongoose.model('survey', surveySchema),
-    surveyCampaign : mongoose.model('surveyCampaign', surveyCampaignSchema),
+    SurveyPrototype : mongoose.model('SurveyPrototype', prototypeSurveySchema),
+    Survey : mongoose.model('Survey', surveySchema),
+    SurveyCampaign : mongoose.model('SurveyCampaign', surveyCampaignSchema),
 };
