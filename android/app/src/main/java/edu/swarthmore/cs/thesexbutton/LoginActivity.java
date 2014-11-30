@@ -1,11 +1,13 @@
 /**
  * Created by wngo1 on 11/23/14.
+ *
+ * Main Activity
  */
 
 package edu.swarthmore.cs.thesexbutton;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,37 +19,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoginActivity extends Activity {
-    EditText mEmail, mPassword;
-    Button mLogin, mRegister;
-    String mEmailString, mPasswordString;
-    List<NameValuePair> mParams;
-    SharedPreferences mSharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
     String mAccessToken, mAccessTokenExpires, mDeviceUUID, mPassphrase;
+
+    Context c = LoginActivity.this;
+    SavedSharedPreferences mSavedSharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mAccessToken = mSavedSharedPreferences.getSessionToken(c);
+        mAccessTokenExpires = mSavedSharedPreferences.getSessionTokenExpires(c);
+        mDeviceUUID = mSavedSharedPreferences.getDeviceUUID(c);
+        mPassphrase = mSavedSharedPreferences.getPassphrase(c);
+
+        /*
         mAccessToken = mSharedPreferences.getString("access_token", null);
         mAccessTokenExpires = mSharedPreferences.getString("access_token_expires", null);
         mDeviceUUID = mSharedPreferences.getString("device_uuid", null);
         mPassphrase = mSharedPreferences.getString("secret", null);
+        */
 
         if(mAccessToken.equals(null)) {
-            if(mDeviceUUID.equals(null)) { // new user
+            if(mDeviceUUID.equals(null)) { // new user, call Register Activity
                 Intent i = new Intent(LoginActivity.this, edu.swarthmore.cs.thesexbutton.RegisterActivity.class);
                 startActivity(i);
-                finish();
+                //finish();
             }
-            else { // retrieve valid access token
+            else { // call Login Activity, retrieve valid access token
                 Login(mDeviceUUID, mPassphrase);
             }
         }
 
+        // switch to Request Condom Activity
         Intent i = new Intent(LoginActivity.this, edu.swarthmore.cs.thesexbutton.RequestCondomActivity.class);
         startActivity(i);
-        finish();
     }
 
     public void Login(String deviceUUID, String passphrase) {
@@ -62,12 +70,18 @@ public class LoginActivity extends Activity {
             try {
                 String jsonString = json.getString("response");
                 String sessionToken = json.getString("session_token");
-                String sessionTokenExpires = json.getString("session_token_expries");
+                String sessionTokenExpires = json.getString("session_token_expires");
 
+                mSavedSharedPreferences.setSessionToken(c, sessionToken);
+                mSavedSharedPreferences.setSessionTokenExpires(c, sessionTokenExpires);
+
+                /*
                 SharedPreferences.Editor edit = mSharedPreferences.edit();
                 edit.putString("session_token", sessionToken);
                 edit.putString("session_token_expires", sessionTokenExpires);
                 edit.commit();
+                */
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

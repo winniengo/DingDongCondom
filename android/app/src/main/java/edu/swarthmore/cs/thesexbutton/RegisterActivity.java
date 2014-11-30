@@ -4,6 +4,7 @@
 
 package edu.swarthmore.cs.thesexbutton;
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +27,8 @@ public class RegisterActivity extends Activity {
     String mSignupTokenString, mDeviceUUID, mDeviceOS, mPassphrase;
     List<NameValuePair> mParams;
 
-    SharedPreferences mSharedPreferences;
+    SavedSharedPreferences mSavedSharedPreferences;
+    Context c = RegisterActivity.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,6 @@ public class RegisterActivity extends Activity {
                     mDeviceUUID = UUID.randomUUID().toString();
                 }
 
-
                 mParams = new ArrayList<NameValuePair>();
                 mParams.add(new BasicNameValuePair("signup_token", mSignupTokenString));
                 mParams.add(new BasicNameValuePair("device_uuid", mDeviceUUID));
@@ -63,15 +64,22 @@ public class RegisterActivity extends Activity {
                         String sessionToken = json.getString("session_token");
                         String sessionTokenExpires = json.getString("session_token_expires");
 
+                        mSavedSharedPreferences.setSessionToken(c, sessionToken);
+                        mSavedSharedPreferences.setSessionTokenExpires(c, sessionTokenExpires);
+                        mSavedSharedPreferences.setDeviceUuid(c, mDeviceUUID);
+                        mSavedSharedPreferences.setPassphrase(c, mPassphrase);
+
+                        /*
                         SharedPreferences.Editor edit = mSharedPreferences.edit();
                         edit.putString("session_token", sessionToken);
                         edit.putString("session_token_expires", sessionTokenExpires);
                         edit.putString("device_uuid", mDeviceUUID);
                         edit.putString("secret", mPassphrase);
                         edit.commit();
+                        */
 
                         Toast.makeText(getApplication(),jsonString,Toast.LENGTH_LONG).show();
-                        Log.d("Hello!", jsonString);
+                        Log.d("Hello:", mDeviceUUID);
                     }catch (JSONException e) {
                         e.printStackTrace();
                     }
