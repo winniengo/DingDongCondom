@@ -44,7 +44,7 @@ public class LoginActivity extends Activity {
 
         if(mAccessToken.equals(null)) {
             if(mDeviceUUID.equals(null)) { // new user, call Register Activity
-                Intent i = new Intent(LoginActivity.this, edu.swarthmore.cs.thesexbutton.RegisterActivity.class);
+                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(i);
                 //finish();
             }
@@ -54,7 +54,7 @@ public class LoginActivity extends Activity {
         }
 
         // switch to Request Condom Activity
-        Intent i = new Intent(LoginActivity.this, edu.swarthmore.cs.thesexbutton.RequestCondomActivity.class);
+        Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
         startActivity(i);
     }
 

@@ -2,9 +2,20 @@ package edu.swarthmore.cs.thesexbutton;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wngo1 on 11/29/14.
@@ -12,71 +23,117 @@ import android.os.Handler;
 public class DeliveryStatusActivity extends Activity {
     Bundle b = getIntent().getExtras();
     String mOrderNumber = b.getString("order_number");
-    boolean mOrderAccepted, mOrderDelivered, mOrderFailed;
-    Integer mDeliveryEstimate;
+    String mSessionToken = b.getString("session_token");
+
+    int mDeliveryEstimate = 15;
+    boolean mAccepted = false;
+    boolean mDelivered = false;
+    boolean mFailed = false;
 
     private ProgressDialog mProgressDialog;
-    private Thread mThread; // used to execute code in parallel with UI thread
-    private Handler mHandler; // used to queue code execution on thread
-
+    private Handler mHandler = new Handler(); // used to queue code execution on thread
+    private int mProgressDialogStatus;
+    
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_delivery_status);
 
-        mProgressDialog = new ProgressDialog(DeliveryStatusActivity.this);
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        checkDeliveryStatus(); // check delivery status via JSON
+        if (mAccepted== true) {
+            launchProgressDialog(DeliveryStatusActivity.this);
+        }
+    }
+
+    // launches and loads progress bar
+    public void launchProgressDialog(Context context) {
+        // prepare for a progress bar dialog
+        mProgressDialog = new ProgressDialog(context);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setTitle("Delivering...");
-        mProgressDialog.setMessage("Condoms on their way! Please wait...");
+        mProgressDialog.setMessage("Condom is on its way! Please wait...");
         mProgressDialog.setCancelable(false); // dialog can't be cancelled by pressing back
         mProgressDialog.setIndeterminate(false);
-        //mProgressDialog.setMax(100); // the max number of progress items is 100
         mProgressDialog.setMax(mDeliveryEstimate);
         mProgressDialog.setProgress(0); // set the current progress to zero
         mProgressDialog.show();
 
-        mHandler = new Handler();
-        mThread = new Thread("ProgressDialogThread");
-        mThread.start();
-    }
+        //reset progress bar status
+        mProgressDialogStatus = 0;
 
-    int counter = 0;
+        Thread thread = new Thread(new Runnable() { // used to execute in parallel with UI thread
+            public void run() {
+                while (mProgressDialogStatus < mProgressDialog.getMax()) {
 
-    public void run() {
-        try
-        {
-            synchronized(mThread) // obtain the thread's token
-            {
-                while(counter <= 4)
-                {
-                    mThread.wait(850); // wait 850 milliseconds
-                    counter++; // increment counter
+                    // check delivery status
+                    checkDeliveryStatus();
+                    if(mDelivered == true) {
+                        mProgressDialogStatus = mProgressDialog.getMax();
+                    }
+                    else {
+                        mProgressDialogStatus++;
+                    }
 
-                    mHandler.post(new Runnable() { // update changes to the UI thread
-                        @Override
+                    try { // sleep 10 seconds
+                        Thread.sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    // update the progress bar
+                    mHandler.post(new Runnable() {
                         public void run() {
-                            mProgressDialog.setProgress(counter*25);
+                            mProgressDialog.setProgress(mProgressDialogStatus);
                         }
                     });
                 }
-            }
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                //Close the progress dialog
-                mProgressDialog.dismiss();
+                // condom has been delivered
+                if (mProgressDialogStatus >= mProgressDialog.getMax()) {
+                    try { // sleep 2 seconds, display 100%
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
-                //Call the application's main View
-                setContentView(R.layout.activity_delivery_status);
+                    // close the progress bar dialog
+                    mProgressDialog.dismiss();
+                    setContentView(R.layout.delivery_arrival);
+                    Button restart = (Button) findViewById(R.id.restartButton);
+                    restart.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
+                            startActivity(i);
+                        }
+                    });
+
+                }
             }
         });
 
-        //Try to "kill" the thread, by interrupting its execution
-        synchronized (mThread) {
-            mThread.interrupt();
+        thread.start();
+
+    }
+
+    public void checkDeliveryStatus() {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("session_token", mSessionToken));
+        params.add(new BasicNameValuePair("order_number", mOrderNumber));
+
+        ServerRequest serverRequest = new ServerRequest();
+        JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/delivery/status", params);
+
+        if (json != null) {
+            try {
+                mAccepted = json.getBoolean("order_accepted");
+                mDelivered = json.getBoolean("order_delivered");
+                mFailed = json.getBoolean("order_failed");
+                mDeliveryEstimate = json.getInt("delivery_estimate");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

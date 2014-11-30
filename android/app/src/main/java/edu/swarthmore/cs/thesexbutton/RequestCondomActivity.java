@@ -86,6 +86,7 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
                         Intent i = new Intent(RequestCondomActivity.this, DeliveryStatusActivity.class);
                         Bundle b = new Bundle();
                         b.putString("order_number", orderNumber);
+                        b.putString("session_token", mSessionToken);
                         i.putExtras(b);
                         startActivity(i);
                         //finish();
