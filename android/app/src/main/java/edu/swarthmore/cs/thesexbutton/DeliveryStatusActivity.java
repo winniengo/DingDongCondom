@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -21,9 +22,9 @@ import java.util.List;
  * Created by wngo1 on 11/29/14.
  */
 public class DeliveryStatusActivity extends Activity {
-    Bundle b = getIntent().getExtras();
-    String mOrderNumber = b.getString("order_number");
-    String mSessionToken = b.getString("session_token");
+    String mOrderNumber, mSessionToken;
+
+    SharedPreferences mSharedPreferences;
 
     int mDeliveryEstimate = 15;
     boolean mAccepted = false;
@@ -39,10 +40,23 @@ public class DeliveryStatusActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery_status);
 
-        checkDeliveryStatus(); // check delivery status via JSON
-        if (mAccepted== true) {
-            launchProgressDialog(DeliveryStatusActivity.this);
+        Bundle b = getIntent().getExtras();
+        mOrderNumber = b.getString("order_number");
+        mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+        mSessionToken = mSharedPreferences.getString("session_token", null);
+
+        while (mAccepted==false) {
+            checkDeliveryStatus(); // check delivery status via JSON
+            try { // sleep 5 seconds
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
+        // delivery has been accepted
+        launchProgressDialog(DeliveryStatusActivity.this);
+
     }
 
     // launches and loads progress bar
@@ -67,6 +81,7 @@ public class DeliveryStatusActivity extends Activity {
 
                     // check delivery status
                     checkDeliveryStatus();
+
                     if(mDelivered == true) {
                         mProgressDialogStatus = mProgressDialog.getMax();
                     }
@@ -74,8 +89,8 @@ public class DeliveryStatusActivity extends Activity {
                         mProgressDialogStatus++;
                     }
 
-                    try { // sleep 10 seconds
-                        Thread.sleep(10000);
+                    try { // sleep 5 seconds
+                        Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -122,7 +137,7 @@ public class DeliveryStatusActivity extends Activity {
         params.add(new BasicNameValuePair("order_number", mOrderNumber));
 
         ServerRequest serverRequest = new ServerRequest();
-        JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/delivery/status", params);
+        JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/delivery/status", params);
 
         if (json != null) {
             try {

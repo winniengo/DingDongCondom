@@ -2,6 +2,7 @@ package edu.swarthmore.cs.thesexbutton;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -26,17 +27,22 @@ import java.util.Date;
 import java.util.List;
 
 public class RequestCondomActivity extends Activity implements AdapterView.OnItemSelectedListener {
-    String mSessionToken = SavedSharedPreferences.getSessionToken(RequestCondomActivity.this);
+    String mSessionToken = null;
     String mDormName = null;
-    String mDormNumber = null;
+    String mDormNumberString = null;
     String mDeliveryType = null;
     Button mRequestButton;
+    EditText mDormNumber;
     List<NameValuePair> mParams;
+    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_condom);
+
+        mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+        mSessionToken = mSharedPreferences.getString("session_token", null);
 
         // allow networking in the main thread
         if (android.os.Build.VERSION.SDK_INT > 9)
@@ -51,26 +57,25 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
                 R.array.dorms_array, android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
-        // collect delivery details
-        onRadioButtonClicked(findViewById(R.id.request_condom_delivery_type_radio_group));
         spinner.setOnItemSelectedListener(this);
-        EditText DormNumber = (EditText)findViewById(R.id.dorm_number);
-        mDormNumber = DormNumber.getText().toString();
+
+        mDormNumber = (EditText)findViewById(R.id.dorm_number);
 
         // submit request
         mRequestButton = (Button) findViewById(R.id.request_condom_button);
         mRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDormNumberString = mDormNumber.getText().toString();
+
                 mParams = new ArrayList<NameValuePair>();
                 mParams.add(new BasicNameValuePair("session_token", mSessionToken));
                 mParams.add(new BasicNameValuePair("dorm_name", mDormName));
-                mParams.add(new BasicNameValuePair("dorm_room", mDormNumber));
+                mParams.add(new BasicNameValuePair("dorm_room", mDormNumberString));
                 mParams.add(new BasicNameValuePair("delivery_type", mDeliveryType));
 
                 ServerRequest serverRequest = new ServerRequest();
-                JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/delivery/request", mParams);
+                JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/delivery/request", mParams);
 
                 if (json != null){
                     try{
@@ -79,17 +84,16 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
 
                         Toast.makeText(getApplication(),jsonString,Toast.LENGTH_LONG).show();
                         // send notification email
-                        generateDeliveryEmail(mDormName, mDormNumber, mDeliveryType, orderNumber);
+                        generateDeliveryEmail(mDormName, mDormNumberString, mDeliveryType, orderNumber);
                         Log.d("Order Requested:", orderNumber);
 
                         // call Delivery Status Activity
                         Intent i = new Intent(RequestCondomActivity.this, DeliveryStatusActivity.class);
                         Bundle b = new Bundle();
                         b.putString("order_number", orderNumber);
-                        b.putString("session_token", mSessionToken);
                         i.putExtras(b);
                         startActivity(i);
-                        //finish();
+                        finish();
                     }catch (JSONException e) {
                         e.printStackTrace();
                     }

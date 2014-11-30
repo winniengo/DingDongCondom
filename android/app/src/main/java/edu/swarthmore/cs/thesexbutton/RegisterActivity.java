@@ -5,6 +5,7 @@
 package edu.swarthmore.cs.thesexbutton;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +28,8 @@ public class RegisterActivity extends Activity {
     String mSignupTokenString, mDeviceUUID, mDeviceOS, mPassphrase;
     List<NameValuePair> mParams;
 
-    SavedSharedPreferences mSavedSharedPreferences;
+    //SavedSharedPreferences mSavedSharedPreferences;
+    SharedPreferences mSharedPreferences;
     Context c = RegisterActivity.this;
 
     @Override
@@ -37,6 +39,8 @@ public class RegisterActivity extends Activity {
 
         mSignupToken = (EditText)findViewById(R.id.signupToken);
         mRegister = (Button)findViewById(R.id.registerButton);
+
+        mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
 
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +60,7 @@ public class RegisterActivity extends Activity {
                 mParams.add(new BasicNameValuePair("passphrase", mPassphrase));
 
                 ServerRequest serverRequest = new ServerRequest();
-                JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/register", mParams);
+                JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/register", mParams);
 
                 if(json != null){
                     try{
@@ -64,22 +68,27 @@ public class RegisterActivity extends Activity {
                         String sessionToken = json.getString("session_token");
                         String sessionTokenExpires = json.getString("session_token_expires");
 
+                        /*
                         mSavedSharedPreferences.setSessionToken(c, sessionToken);
                         mSavedSharedPreferences.setSessionTokenExpires(c, sessionTokenExpires);
                         mSavedSharedPreferences.setDeviceUuid(c, mDeviceUUID);
                         mSavedSharedPreferences.setPassphrase(c, mPassphrase);
+                        */
 
-                        /*
                         SharedPreferences.Editor edit = mSharedPreferences.edit();
                         edit.putString("session_token", sessionToken);
                         edit.putString("session_token_expires", sessionTokenExpires);
                         edit.putString("device_uuid", mDeviceUUID);
-                        edit.putString("secret", mPassphrase);
+                        edit.putString("passphrase", mPassphrase);
                         edit.commit();
-                        */
 
                         Toast.makeText(getApplication(),jsonString,Toast.LENGTH_LONG).show();
                         Log.d("Hello:", mDeviceUUID);
+
+                        // switch to Request Condom Activity
+                        Intent i = new Intent(RegisterActivity.this, RequestCondomActivity.class);
+                        startActivity(i);
+
                     }catch (JSONException e) {
                         e.printStackTrace();
                     }
