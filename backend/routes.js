@@ -19,12 +19,14 @@ module.exports = function(app) {
     //   - a persistent device uuid
     //   - an auth_token that was given by the backend
     app.post('/api/login',function(req,res){
-	
+
+	console.log("in /api/login, request: ", req.body);
+
 	var uuid = req.body.device_uuid;
-    var passphrase = req.body.passphrase;
+	var passphrase = req.body.passphrase;
 	
 		login.login(uuid, passphrase, function (result, status) {
-		    console.log(result);
+		    console.log(result + 'status: ', status);
 		    res.status(status).json(result);
 		});
     
@@ -40,6 +42,8 @@ module.exports = function(app) {
 	var signup_token = req.body.signup_token;
 	var device_os = req.body.device_os;
 	
+	console.log("in register, request: ", req.body);
+
 	register.register(device_uuid, passphrase, signup_token, device_os, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);

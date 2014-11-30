@@ -29,6 +29,8 @@ exports.is_authenticated = function (req, res, next) {
 
 	// check if the user is authenticated (i.e. provides a session token)
 	var token = req.body.session_token;
+        
+    console.log("in middleware: ", req.body);
 
 	// check if that token is valid
 	user.find ({session_token : token}, function(err, users) {
@@ -47,6 +49,8 @@ exports.is_authenticated_and_requester = function (req, res, next) {
 	var token = req.body.session_token;
 	var order_number = req.body.order_number;
 
+    console.log("in middleware.is_authenticated_and_requester :" + req.body);
+    console.log('token: ' + token + 'ordernumber: ' + order_number);
 	// check if that token is valid
 	user.find ({session_token : token}, function(err, users) {
 		if (users.length == 0) {

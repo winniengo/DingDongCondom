@@ -22,65 +22,71 @@ exports.request = function (session_token, dorm_name, dorm_room, delivery_type, 
     var now = new Date();
     var oid = shortid.generate();
 
-
+    var device_uuid;
     //get the user's device_uuid
     user.find ({session_token : session_token}, function(err, users) {
-		if (users.length == 0) {
-			callback({'response': 'DELIVERY_REQUEST_ERROR_USER_NOT_FOUND'}, 400);
-		} else {
-			var device_uuid = users[0].device_uuid;
-		}
-	});	
+	if (users.length == 0) {
+	    callback({'response': 'DELIVERY_REQUEST_ERROR_USER_NOT_FOUND'}, 400);
+	} else {
+	    device_uuid = users[0].device_uuid;
+	    
+	        //debug
+	    console.log("request got in at:", new Date());
+	    console.log('request was made by uuid: ' + device_uuid);
 
+	    order.find({order_number:oid}, function (err, orders) {
+		var len = orders.length;
+		if (len == 0) {
+		    var new_order = new order({
+			order_number : oid, 
 
-    //debug
-    console.log("request got in at:", new Date());
-    console.log('request was made by uuid: ' + device_uuid);
+			requester : device_uuid, 
+			deliverer : "",
+			
+			order_received : true, 
+			order_accepted : false,
+			order_delivered : false,
+			order_failed : false,
+			
+			date_requested: now, 
+			date_accepted : null, 
+			date_delivered: null, 
 
-    var new_order = new order({
-		order_number : oid, 
+			delivery_estimate : -1,
 
-		requester : device_uuid, 
-		deliverer : "",
-		
-		order_received : true, 
-		order_accepted : false,
-		order_delivered : false,
-		order_failed : false,
-		
-		date_requested: now, 
-		date_accepted : null, 
-		date_delivered: null, 
-
-		delivery_estimate : -1,
-
-		delivery_destination : {
-		    dorm_name : dorm_name, 
-		    dorm_room : dorm_room, 
-		    delivery_type : delivery_type, 
-		    coordinates : {
+			delivery_destination : {
+			    dorm_name : dorm_name, 
+			    dorm_room : dorm_room, 
+			    delivery_type : delivery_type, 
+			    coordinates : {
 				lat: 0, 
 				lng: 0,
-		    }
+			    }
+			}
+			
+		    });
+
+		    //order doesn't exist, so let's create it
+		    new_order.save(function (err) {
+			if (err) {
+			    console.log('Error saving new order: ' + err);
+			}
+			callback({'response': "DELIVERY_REQUEST_SUCCESS",
+				  'order_number': oid}, 
+			 	 201);
+		    });
+		} else {
+		    callback({'response':"DELIVERY_REQUEST_ERROR_DATABASE_ERROR"}, 500);
 		}
-	
-    });
 
-    order.find({order_number:oid}, function (err, orders) {
-	var len = orders.length;
-	if (len == 0) {
-	    //order doesn't exist, so let's create it
-	    new_order.save(function (err) {
-		callback({'response': "DELIVERY_REQUEST_SUCCESS",
-			      'order_number': oid}, 
-			 	   201);
-		});
-	} else {
-	    callback({'response':"DELIVERY_REQUEST_ERROR_DATABASE_ERROR"}, 500);
+	    });
+
 	}
+    });	
+    
 
-    });
 
+    
 }
 
 
