@@ -164,7 +164,7 @@ exports.all = function(callback) {
 
 }
 
-exports.accept = function(session_token, order_number, callback) {
+exports.accept = function(session_token, order_number, delivery_estimate, callback) {
 
 	//get the user's device_uuid
     user.find ({session_token : session_token}, function(err, users) {
@@ -176,7 +176,8 @@ exports.accept = function(session_token, order_number, callback) {
 			order.findOneAndUpdate({order_number : order_number}, 
 								   {order_accepted:true, 
 								   	deliverer : deliverer,
-								    date_accepted : now}, function(err) {
+								    date_accepted : now, 
+								    delivery_estimate : delivery_estimate }, function(err) {
 										if (err) {
 											console.log(err);
 										}

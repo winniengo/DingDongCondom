@@ -95,8 +95,9 @@ module.exports = function(app) {
 
    	var session_token = req.body.session_token;
    	var order_number = req.body.order_number;
+   	var delivery_estimate = req.body.delivery_estimate;
 
-	order.accept(session_token, order_number, function (result, status) {
+	order.accept(session_token, order_number, delivery_estimate, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
 		});
