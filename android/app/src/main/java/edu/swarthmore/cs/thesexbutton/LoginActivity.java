@@ -6,20 +6,26 @@
 
 package edu.swarthmore.cs.thesexbutton;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class LoginActivity extends Activity {
+//    import com.google.android.gms.common.ConnectionResult;
+//    import com.google.android.gms.common.GooglePlayServicesUtil;
+//    import com.google.android.gms.gcm.GoogleCloudMessaging;
+//    import java.io.IOException;
+//    import java.util.Date;
+//    import java.util.concurrent.atomic.AtomicInteger;
+
     String mAccessToken, mAccessTokenExpires, mDeviceUUID, mPassphrase;
     SharedPreferences mSharedPreferences;
 
@@ -31,7 +37,7 @@ public class LoginActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try { // sleep 1.5 11seconds
+                try {  // sleep 1.5 seconds
                     Thread.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -46,15 +52,15 @@ public class LoginActivity extends Activity {
                         mDeviceUUID = mSharedPreferences.getString("device_uuid", null);
                         mPassphrase = mSharedPreferences.getString("passphrase", null);
 
-                        if(mAccessToken==null) {
-                            if(mDeviceUUID==null) { // new user, call Register Activity
+                        if (mAccessToken == null) {
+                            if (mDeviceUUID == null) {
+                                // New user; call Register Activity
                                 Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
                                 startActivity(i);
                                 finish();
-                            }
-                            else { // call Login Activity, retrieve valid access token
+                            } else {
+                                // Call Login, retrieve access token, call Request Condom Activity
                                 Login(mDeviceUUID, mPassphrase);
-                                // switch to Request Condom Activity
                                 Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
                                 startActivity(i);
                                 finish();
@@ -64,8 +70,6 @@ public class LoginActivity extends Activity {
                 });
             }
         }).start();
-
-
     }
 
     public void Login(String deviceUUID, String passphrase) {
@@ -85,12 +89,10 @@ public class LoginActivity extends Activity {
                 SharedPreferences.Editor edit = mSharedPreferences.edit();
                 edit.putString("session_token", sessionToken);
                 edit.putString("session_token_expires", sessionTokenExpires);
-                edit.commit();
-
+                edit.apply();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-    };
-
+    }
 }

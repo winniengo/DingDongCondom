@@ -1,48 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context=".RegisterActivity" >
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="150px"
-        android:background="#5ba4e5">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none" >
 
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:tools="http://schemas.android.com/tools"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  tools:context=".RegisterActivity" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:background="#5ba4e5">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_2"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/logo_2"/>
+            android:layout_margin="25dp"
+            android:gravity="center"
+            android:textSize = "25sp"
+            android:text="@string/register_about"/>
 
+        <EditText
+            android:id="@+id/signupToken"
+            android:layout_width="220dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:hint="Enter Token Here"/>
+
+        <Button
+            android:id="@+id/registerButton"
+            android:layout_width="220dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:textColor="#ffffff"
+            android:background="@drawable/btn_green"
+            android:text="Register Now!"/>
+        
     </LinearLayout>
-
-    <TextView
-        android:layout_width="600px"
-        android:layout_height="500px"
-        android:layout_gravity="center"
-        android:layout_margin="50px"
-        android:gravity="center"
-        android:textSize = "25sp"
-        android:text="@string/login_about"/>
-    <EditText
-        android:layout_width="440px"
-        android:layout_height="80px"
-        android:layout_gravity="center"
-        android:id="@+id/signupToken"
-        android:layout_marginTop="30px"
-        android:gravity="center"
-        android:hint="Enter Token Here"/>
-    <Button
-        android:layout_width="440px"
-        android:layout_height="80px"
-        android:id="@+id/registerButton"
-        android:layout_gravity="center"
-        android:textColor="#ffffff"
-        android:background="@drawable/btn_green"
-        android:textAlignment="center"
-        android:text="Register Now!"/>
-
-</LinearLayout>
+</ScrollView>

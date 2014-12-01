@@ -2,22 +2,22 @@
 <pre-dex-items>
 
     <item
-        dex="/home/wngo1/cs97/cs97_mobileHealth/android/app/build/intermediates/pre-dexed/debug/mail-e7b4e1b9a3db1ee8beca427dde53c26a85f04d8c.jar"
-        jar="/home/wngo1/cs97/cs97_mobileHealth/android/app/libs/mail.jar"
-        jumboMode="false"
-        revision="20.0.0"
-        sha1="428e267abff0d10802ccde86b915da2c20471160"/>
-    <item
-        dex="/home/wngo1/cs97/cs97_mobileHealth/android/app/build/intermediates/pre-dexed/debug/activation-d71e787f064a1c3353861be80ba9cb6c454c1299.jar"
-        jar="/home/wngo1/cs97/cs97_mobileHealth/android/app/libs/activation.jar"
+        dex="/home/aahn1/cs97_mobileHealth/android/app/build/intermediates/pre-dexed/debug/activation-56901d423cb77af15c76e622fe05153b9bd84ffe.jar"
+        jar="/home/aahn1/cs97_mobileHealth/android/app/libs/activation.jar"
         jumboMode="false"
         revision="20.0.0"
         sha1="d1257cbff6faa44c1f325ae0d9413522d4644383"/>
     <item
-        dex="/home/wngo1/cs97/cs97_mobileHealth/android/app/build/intermediates/pre-dexed/debug/additionnal-4f928e4a684e13d9dfaece5fee65390867b4fcb5.jar"
-        jar="/home/wngo1/cs97/cs97_mobileHealth/android/app/libs/additionnal.jar"
+        dex="/home/aahn1/cs97_mobileHealth/android/app/build/intermediates/pre-dexed/debug/additionnal-b5d16c8f8f43abeae42c4e22dd9872e67cdeacc5.jar"
+        jar="/home/aahn1/cs97_mobileHealth/android/app/libs/additionnal.jar"
         jumboMode="false"
         revision="20.0.0"
         sha1="bd9e8dc422bb8c8405359947fe9f4282b49f57f4"/>
+    <item
+        dex="/home/aahn1/cs97_mobileHealth/android/app/build/intermediates/pre-dexed/debug/mail-d0963c40511c0e308f8263cfcf2684c2097e40b3.jar"
+        jar="/home/aahn1/cs97_mobileHealth/android/app/libs/mail.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="428e267abff0d10802ccde86b915da2c20471160"/>
 
 </pre-dex-items>
