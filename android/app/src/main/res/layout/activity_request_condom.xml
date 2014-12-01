@@ -104,6 +104,7 @@
                 android:layout_height="80px"
                 android:layout_margin="5px"
                 android:hint="###"
+                android:inputType="number"
                 android:id="@+id/dorm_number"/>
 
         </LinearLayout>

@@ -21,9 +21,6 @@ import java.util.List;
 
 public class LoginActivity extends Activity {
     String mAccessToken, mAccessTokenExpires, mDeviceUUID, mPassphrase;
-
-    Context c = LoginActivity.this;
-    //SavedSharedPreferences mSavedSharedPreferences = new SavedSharedPreferences();
     SharedPreferences mSharedPreferences;
 
     @Override
@@ -31,32 +28,44 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-         /*
-        mAccessToken = mSavedSharedPreferences.getSessionToken(c);
-        mAccessTokenExpires = mSavedSharedPreferences.getSessionTokenExpires(c);
-        mDeviceUUID = mSavedSharedPreferences.getDeviceUUID(c);
-        mPassphrase = mSavedSharedPreferences.getPassphrase(c);
-        */
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try { // sleep 1.5 11seconds
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-        mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
-        mAccessToken = mSharedPreferences.getString("access_token", null);
-        mAccessTokenExpires = mSharedPreferences.getString("access_token_expires", null);
-        mDeviceUUID = mSharedPreferences.getString("device_uuid", null);
-        mPassphrase = mSharedPreferences.getString("passphrase", null);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+                        mAccessToken = mSharedPreferences.getString("access_token", null);
+                        mAccessTokenExpires = mSharedPreferences.getString("access_token_expires", null);
+                        mDeviceUUID = mSharedPreferences.getString("device_uuid", null);
+                        mPassphrase = mSharedPreferences.getString("passphrase", null);
 
-        if(mAccessToken==null) {
-            if(mDeviceUUID==null) { // new user, call Register Activity
-                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(i);
-                //finish();
+                        if(mAccessToken==null) {
+                            if(mDeviceUUID==null) { // new user, call Register Activity
+                                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
+                                startActivity(i);
+                                finish();
+                            }
+                            else { // call Login Activity, retrieve valid access token
+                                Login(mDeviceUUID, mPassphrase);
+                                // switch to Request Condom Activity
+                                Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
+                                startActivity(i);
+                                finish();
+                            }
+                        }
+                    }
+                });
             }
-            else { // call Login Activity, retrieve valid access token
-                Login(mDeviceUUID, mPassphrase);
-                // switch to Request Condom Activity
-                Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
-                startActivity(i);
-            }
-        }
+        }).start();
+
+
     }
 
     public void Login(String deviceUUID, String passphrase) {
@@ -72,11 +81,6 @@ public class LoginActivity extends Activity {
                 String jsonString = json.getString("response");
                 String sessionToken = json.getString("session_token");
                 String sessionTokenExpires = json.getString("session_token_expires");
-
-                /*
-                mSavedSharedPreferences.setSessionToken(c, sessionToken);
-                mSavedSharedPreferences.setSessionTokenExpires(c, sessionTokenExpires);
-                */
 
                 SharedPreferences.Editor edit = mSharedPreferences.edit();
                 edit.putString("session_token", sessionToken);
