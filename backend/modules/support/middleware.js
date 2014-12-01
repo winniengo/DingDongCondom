@@ -15,7 +15,7 @@ exports.get_device_uuid = function (req, res) {
 
 	user.find ({session_token : token}, function(err, users) {
 		if (users.length == 0) {
-			res.status(401).end("ERROR_NOT_AUTHENTICATED");
+			res.status(401).json({'response':"ERROR_NOT_AUTHENTICATED"});
 		} else {
 			return users[0].device_uuid;
 		}
@@ -30,12 +30,10 @@ exports.is_authenticated = function (req, res, next) {
 	// check if the user is authenticated (i.e. provides a session token)
 	var token = req.body.session_token;
         
-    console.log("in middleware: ", req.body);
-
 	// check if that token is valid
 	user.find ({session_token : token}, function(err, users) {
 		if (users.length == 0) {
-			res.status(401).end("ERROR_NOT_AUTHENTICATED");
+			res.status(401).json({'response':"ERROR_NOT_AUTHENTICATED"});
 		} else {
 			return next();
 		}
@@ -54,18 +52,18 @@ exports.is_authenticated_and_requester = function (req, res, next) {
 	// check if that token is valid
 	user.find ({session_token : token}, function(err, users) {
 		if (users.length == 0) {
-			res.status(401).end("ERROR_NOT_AUTHENTICATED");
+			res.status(401).json({'response':"ERROR_NOT_AUTHENTICATED"});
 		} else {
 			var device_uuid = users[0].device_uuid;
 			order.find( {order_number : order_number} , function(err, orders) {
 				if (orders.length == 0) {
-					res.status(404).end("ERROR_ORDER_NOT_FOUND");
+					res.status(404).json({'response':"ERROR_ORDER_NOT_FOUND"});
 				} else {
 					console.log('rq:' + orders[0].requester + '  duuid: ' + device_uuid);
 					if (orders[0].requester == device_uuid) {
 						return next();
 					} else {
-						res.status(403).end('ERROR_FORBIDDEN');
+						res.status(403).json({'response':'ERROR_FORBIDDEN'});
 					}
 				}
 
@@ -86,15 +84,15 @@ exports.is_authenticated_and_eligible = function (req, res, next) {
 	user.find ({session_token : token}, function(err, users) {
 		if (err) {
 			console.log(err);
-			callback('DELIVERY_REQUEST_ERROR');
+			res.status(500).json({'response':'DELIVERY_REQUEST_ERROR'});
 			return;
 		}
 		if (users.length == 0) {
-			res.status(401).end("ERROR_NOT_AUTHENTICATED");
+			res.status(401).json({'response':"ERROR_NOT_AUTHENTICATED"});
 		} else {
 			if (err) {
 				console.log(err);
-				callback('DELIVERY_REQUEST_ERROR');
+				res.status(500).json({'response':'DELIVERY_REQUEST_ERROR'});
 				return;
 			}
 
@@ -114,7 +112,7 @@ exports.is_authenticated_and_eligible = function (req, res, next) {
 						date_string = new Date(orders[order].date_requested).toDateString();
 						if (date_string == now_string) {
 							if (!order.order_failed) {
-								res.status(429).end("DELIVERY_REQUEST_ERROR_TOO_MANY_REQUESTS");
+								res.status(429).json({'response':"DELIVERY_REQUEST_ERROR_TOO_MANY_REQUESTS"});
 								return;
 							}
 						}
@@ -138,10 +136,10 @@ exports.is_authenticated_and_admin = function (req, res, next) {
 	// check if that token is valid
 	user.find ({session_token : token}, function(err, users) {
 		if (users.length == 0) {
-			res.status(401).end("ERROR_NOT_AUTHENTICATED");
+			res.status(401).json({'response':"ERROR_NOT_AUTHENTICATED"});
 		} else {
 			if (users[0].role != 'ADMIN'){
-				res.status(403).end("ERROR_NOT_PRIVILEGED");
+				res.status(403).json({'response':"ERROR_NOT_PRIVILEGED"});
 			} else {
 			return next();
 			}

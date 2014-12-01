@@ -138,9 +138,11 @@ module.exports = function(app) {
     app.post('/api/survey/complete', middleware.is_authenticated, function(req, res) {
 	var session_token = req.body.session_token;
 	var campaign_id = req.body.campaign_id;
-	var survey = req.body.survey;
+	var answers = req.body.answers;
+
+	console.log('in routes: ' + answers);
 	
-	survey.complete(session_token, campaign_id, survey, function (result, status) {
+	survey.complete(session_token, campaign_id, answers, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
 		});
