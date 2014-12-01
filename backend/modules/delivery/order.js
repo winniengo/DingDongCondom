@@ -13,7 +13,9 @@ var order = require('./models').orders;
 var user = require('../user/models').users;
 var shortid = require('shortid');
 
-exports.request = function (session_token, dorm_name, dorm_room, delivery_type, date_requested, callback) {
+exports.request = function (session_token, dorm_name, dorm_room, delivery_type,
+							date_requested, callback) {
+
     var dn = dorm_name;
     var dr = dorm_room;
     var dt = delivery_type;
@@ -29,64 +31,56 @@ exports.request = function (session_token, dorm_name, dorm_room, delivery_type, 
 	    callback({'response': 'DELIVERY_REQUEST_ERROR_USER_NOT_FOUND'}, 400);
 	} else {
 	    device_uuid = users[0].device_uuid;
-	    
-	        //debug
-	    console.log("request got in at:", new Date());
-	    console.log('request was made by uuid: ' + device_uuid);
-
+	   
 	    order.find({order_number:oid}, function (err, orders) {
-		var len = orders.length;
-		if (len == 0) {
-		    var new_order = new order({
-			order_number : oid, 
 
-			requester : device_uuid, 
-			deliverer : "",
-			
-			order_received : true, 
-			order_accepted : false,
-			order_delivered : false,
-			order_failed : false,
-			
-			date_requested: now, 
-			date_accepted : null, 
-			date_delivered: null, 
+			if (orders.length == 0) {
+			    var new_order = new order({
+					order_number : oid, 
 
-			delivery_estimate : -1,
+					requester : device_uuid, 
+					deliverer : "",
+					
+					order_received : true, 
+					order_accepted : false,
+					order_delivered : false,
+					order_failed : false,
+					
+					date_requested: now, 
+					date_accepted : null, 
+					date_delivered: null, 
 
-			delivery_destination : {
-			    dorm_name : dorm_name, 
-			    dorm_room : dorm_room, 
-			    delivery_type : delivery_type, 
-			    coordinates : {
-				lat: 0, 
-				lng: 0,
-			    }
+					delivery_estimate : -1,
+
+					delivery_destination : {
+					    dorm_name : dorm_name, 
+					    dorm_room : dorm_room, 
+					    delivery_type : delivery_type, 
+					    coordinates : {
+						lat: 0, 
+						lng: 0,
+					    }
+					}
+				
+			    });
+
+			    //order doesn't exist, so let's create it
+			    new_order.save(function (err) {
+				if (err) {
+				    console.log('Error saving new order: ' + err);
+				}
+				callback({'response': "DELIVERY_REQUEST_SUCCESS",
+					  'order_number': oid}, 
+				 	 201);
+			    });
+			} else {
+			    callback({'response':"DELIVERY_REQUEST_ERROR_DATABASE_ERROR"}, 500);
 			}
-			
-		    });
-
-		    //order doesn't exist, so let's create it
-		    new_order.save(function (err) {
-			if (err) {
-			    console.log('Error saving new order: ' + err);
-			}
-			callback({'response': "DELIVERY_REQUEST_SUCCESS",
-				  'order_number': oid}, 
-			 	 201);
-		    });
-		} else {
-		    callback({'response':"DELIVERY_REQUEST_ERROR_DATABASE_ERROR"}, 500);
-		}
 
 	    });
 
 	}
     });	
-    
-
-
-    
 }
 
 
@@ -134,5 +128,89 @@ exports.status = function(order_number, callback) {
 
 }
 
+exports.all = function(callback) {
+	order.find( function (err, orders){
+		
+		if (err) {
+			callback('DELIVERY_REQUEST_ALL_ERROR_DATABASE_ERROR', 500);
+		} else {
+			var all = [];
+
+			for (order in orders) {
+				order_dict = orders[order];
+				this_order = {
+					'requester' : order_dict.requester,
+					'deliverer' : order_dict.deliverer,
+
+					'order_number' :  order_dict.order_number,
+					
+					'order_accepted' : order_dict.order_accepted,
+					'order_delivered' : order_dict.order_delivered,
+					'order_failed' : order_dict.order_failed,
+					
+					'date_accepted' : order_dict.date_accepted,
+					'date_delivered' : order_dict.date_delivered,
+					
+					'delivery_estimate' : order_dict.delivery_estimate,
+				}
+				all.push(this_order);
+			}
+
+			callback({'response':'DELIVERY_REQUEST_ALL_SUCCESS',
+					  'orders': all}, 200);
+		}
+
+	});
+
+}
+
+exports.accept = function(session_token, order_number, callback) {
+
+	//get the user's device_uuid
+    user.find ({session_token : session_token}, function(err, users) {
+		if (users.length == 0) {
+		    callback({'response': 'DELIVERY_REQUEST_ACCEPT_ERROR_USER_NOT_FOUND'}, 400);
+		} else { 
+			var now = new Date();
+			var deliverer = users[0].device_uuid;
+			order.findOneAndUpdate({order_number : order_number}, 
+								   {order_accepted:true, 
+								   	deliverer : deliverer,
+								    date_accepted : now}, function(err) {
+										if (err) {
+											console.log(err);
+										}
+										callback({'response':'DELIVERY_REQUEST_ACCEPT_SUCCESS'}, 
+												  200);
+									});
+		}
+
+	});
+
+}
 	    
+exports.deliver = function(session_token, order_number, callback) {
+
+	//get the user's device_uuid
+    user.find ({session_token : session_token}, function(err, users) {
+		if (users.length == 0) {
+		    callback({'response': 'DELIVERY_REQUEST_DELIVER_ERROR_USER_NOT_FOUND'}, 400);
+		} else { 
+			var now = new Date();
+			var deliverer = users[0].device_uuid;
+			order.findOneAndUpdate({order_number : order_number}, 
+								   {order_delivered: true,
+								    order_accepted : true, // in case it wasn't 
+								    date_delivered : now}, function(err) {
+										if (err) {
+											console.log(err);
+										}
+										callback({'response':'DELIVERY_REQUEST_DELIVER_SUCCESS'}, 
+												  200);
+									});
+		}
+
+	});
+
+}
 	    

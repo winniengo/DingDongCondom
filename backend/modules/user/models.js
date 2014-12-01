@@ -18,6 +18,7 @@ var userSchema = mongoose.Schema({
 
     register_date : Date,
 
+    role : String,
     //add more fields for various stuff
 
 });
