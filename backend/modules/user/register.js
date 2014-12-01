@@ -22,13 +22,16 @@ exports.register = function(device_uuid, passphrase, signup_token, device_os, ca
     
     var iter = 1000 //num iterations of Hash function
 
+    /*
+      TODO: Reinstate Salt
     try {
 	var s = crypto.randomBytes(10).toString('hex');
     } catch (ex) {
 	// problem generating the salt, should handle this
 	console.log("problem generating salt in register()");
     }
-    
+    */
+    var s = '123'
     try {
 	var hp = crypto.pbkdf2Sync(p, s, iter, 128).toString('hex'); 
     } catch (ex) {
@@ -50,7 +53,7 @@ exports.register = function(device_uuid, passphrase, signup_token, device_os, ca
 		device_os : dos,
 		
 		hashed_passphrase : hp, 
-		salt : s,
+	        salt : s,
 		
 		session_token : t,
 		session_token_expires : t_expiration,
@@ -65,6 +68,10 @@ exports.register = function(device_uuid, passphrase, signup_token, device_os, ca
 	if(len == 0) {
 	    //user doesn't exist yet
 	    new_user.save(function (err) {
+
+		if (err) {
+		    console.log('Error saving new user: ' + err);
+		}
 		callback({'response':"REGISTER_SUCCESS",
 				  'session_token': t,
 				  'session_token_expires' : t_expiration, 
