@@ -41,10 +41,12 @@ module.exports = function(app) {
     var passphrase = req.body.passphrase;
 	var signup_token = req.body.signup_token;
 	var device_os = req.body.device_os;
+	var push_id = req.body.push_id;
 	
 	console.log("in register, request: ", req.body);
 
-	register.register(device_uuid, passphrase, signup_token, device_os, function (result, status) {
+	register.register(device_uuid, passphrase, signup_token, device_os, 
+					  push_id, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
 		});

@@ -7,7 +7,8 @@ var crypto = require('crypto');
 var user = require('./models').users;
 
 
-exports.register = function(device_uuid, passphrase, signup_token, device_os, callback) {
+exports.register = function(device_uuid, passphrase, signup_token, device_os,
+							push_id, callback) {
     var u = device_uuid;
     var p = passphrase;
     var st = signup_token;
@@ -60,7 +61,9 @@ exports.register = function(device_uuid, passphrase, signup_token, device_os, ca
 		
 		register_date : d,
 
-		role: 'USER' //sets the user for default user privileges
+		role: 'USER', //sets the user for default user privileges
+
+		push_id : push_id //is the user's device's push notification id
     });
 
     
