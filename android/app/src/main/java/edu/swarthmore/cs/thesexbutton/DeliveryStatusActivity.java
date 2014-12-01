@@ -45,17 +45,37 @@ public class DeliveryStatusActivity extends Activity {
         mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
         mSessionToken = mSharedPreferences.getString("session_token", null);
 
-        while (mAccepted==false) {
-            checkDeliveryStatus(); // check delivery status via JSON
-            try { // sleep 5 seconds
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (mAccepted==false) {
 
-        // delivery has been accepted
-        launchProgressDialog(DeliveryStatusActivity.this);
+                    checkDeliveryStatus(); // check delivery status via JSON
+                    try { // sleep 5 seconds
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // delivery has been accepted
+                        launchProgressDialog(DeliveryStatusActivity.this);
+                        setContentView(R.layout.delivery_arrival);
+                        Button restart = (Button) findViewById(R.id.restartButton);
+                        restart.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
+                                startActivity(i);
+                            }
+                        });
+                    }
+                });
+            }
+        }).start();
+
 
     }
 
@@ -90,7 +110,7 @@ public class DeliveryStatusActivity extends Activity {
                     }
 
                     try { // sleep 5 seconds
-                        Thread.sleep(5000);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -106,23 +126,13 @@ public class DeliveryStatusActivity extends Activity {
                 // condom has been delivered
                 if (mProgressDialogStatus >= mProgressDialog.getMax()) {
                     try { // sleep 2 seconds, display 100%
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
                     // close the progress bar dialog
                     mProgressDialog.dismiss();
-                    setContentView(R.layout.delivery_arrival);
-                    Button restart = (Button) findViewById(R.id.restartButton);
-                    restart.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
-                            startActivity(i);
-                        }
-                    });
-
                 }
             }
         });

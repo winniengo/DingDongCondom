@@ -31,12 +31,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        try { // sleep 5 seconds
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        /*
+         /*
         mAccessToken = mSavedSharedPreferences.getSessionToken(c);
         mAccessTokenExpires = mSavedSharedPreferences.getSessionTokenExpires(c);
         mDeviceUUID = mSavedSharedPreferences.getDeviceUUID(c);
