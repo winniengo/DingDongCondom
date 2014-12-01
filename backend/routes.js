@@ -53,7 +53,7 @@ module.exports = function(app) {
 
     // request a delivery 
 
-    app.post('/api/delivery/request', middleware.is_authenticated, function(req, res) {
+    app.post('/api/delivery/request', middleware.is_authenticated_and_eligible, function(req, res) {
 	var session_token = req.body.session_token;
 	var dorm_name = req.body.dorm_name;
 	var dorm_room = req.body.dorm_room;
@@ -73,6 +73,45 @@ module.exports = function(app) {
 	var order_number = req.body.order_number;
 	
 	order.status(order_number, function (result, status) {
+	    console.log(result);
+	    res.status(status).json(result);
+		});
+
+    });
+
+
+   	// get a list of all requests
+   	app.post('/api/delivery/request/all', middleware.is_authenticated_and_admin, function(req, res) {
+	
+	order.all(function (result, status) {
+	    console.log(result);
+	    res.status(status).json(result);
+		});
+
+    });
+
+    // accept a request
+   	app.post('/api/delivery/request/accept', middleware.is_authenticated_and_admin, function(req, res) {
+
+   	var session_token = req.body.session_token;
+   	var order_number = req.body.order_number;
+   	var delivery_estimate = req.body.delivery_estimate;
+
+	order.accept(session_token, order_number, delivery_estimate, function (result, status) {
+	    console.log(result);
+	    res.status(status).json(result);
+		});
+
+    });
+
+
+    // accept a request
+   	app.post('/api/delivery/request/deliver', middleware.is_authenticated_and_admin, function(req, res) {
+
+   	var session_token = req.body.session_token;
+   	var order_number = req.body.order_number;
+   	
+	order.deliver(session_token, order_number, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
 		});

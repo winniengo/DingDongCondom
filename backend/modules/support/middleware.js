@@ -75,3 +75,76 @@ exports.is_authenticated_and_requester = function (req, res, next) {
 	});
 
 }
+
+
+exports.is_authenticated_and_eligible = function (req, res, next) {
+
+	// check if the user is authenticated (i.e. provides a session token)
+	var token = req.body.session_token;
+
+	// check if that token is valid
+	user.find ({session_token : token}, function(err, users) {
+		if (err) {
+			console.log(err);
+			callback('DELIVERY_REQUEST_ERROR');
+			return;
+		}
+		if (users.length == 0) {
+			res.status(401).end("ERROR_NOT_AUTHENTICATED");
+		} else {
+			if (err) {
+				console.log(err);
+				callback('DELIVERY_REQUEST_ERROR');
+				return;
+			}
+
+			var device_uuid = users[0].device_uuid;
+
+			order.find( { requester : device_uuid } , function(err, orders) {
+				if (orders.length == 0) {
+					next();
+				} else {
+
+					var now = new Date();
+					var now_string = now.toDateString();
+
+					var date_string;
+
+					for (order in orders) {
+						date_string = new Date(orders[order].date_requested).toDateString();
+						if (date_string == now_string) {
+							if (!order.order_failed) {
+								res.status(429).end("DELIVERY_REQUEST_ERROR_TOO_MANY_REQUESTS");
+								return;
+							}
+						}
+					
+					}
+					next();
+				}
+
+			});
+		}
+			
+	});
+
+}
+
+exports.is_authenticated_and_admin = function (req, res, next) {
+
+	// check if the user is authenticated (i.e. provides a session token)
+	var token = req.body.session_token;
+
+	// check if that token is valid
+	user.find ({session_token : token}, function(err, users) {
+		if (users.length == 0) {
+			res.status(401).end("ERROR_NOT_AUTHENTICATED");
+		} else {
+			if (users[0].role != 'ADMIN'){
+				res.status(403).end("ERROR_NOT_PRIVILEGED");
+			} else {
+			return next();
+			}
+		}
+	});
+}

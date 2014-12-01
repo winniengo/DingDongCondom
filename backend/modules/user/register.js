@@ -59,6 +59,8 @@ exports.register = function(device_uuid, passphrase, signup_token, device_os, ca
 		session_token_expires : t_expiration,
 		
 		register_date : d,
+
+		role: 'USER' //sets the user for default user privileges
     });
 
     

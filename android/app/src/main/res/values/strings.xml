@@ -24,14 +24,16 @@
         <item>Parrish</item>
         <item>Pittenger</item>
         <item>Roberts</item>
-        <item>Wharton</item>
+        <item>Wharton A</item>
+        <item>Wharton B</item>
+        <item>Wharton C</item>
+        <item>Wharton D</item>
+        <item>Wharton E</item>
+        <item>Wharton F</item>
         <item>Willets</item>
         <item>Woolman</item>
         <item>Worth</item>
     </string-array>
-
-
-    <string name="login_about">blah\nblah\nblah\nblah\nblah</string>
-
+    <string name="register_about">blah\nblah\nblah\nblah\nblah</string>
     <string name="action_settings">Settings</string>
 </resources>

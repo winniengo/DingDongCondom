@@ -14,7 +14,6 @@ var User = require('../user/models').users;
 
 exports.retrieve = function (session_token, campaign_id, callback) {
 
-	// retrieve the campaign for the given campaign_id
 	var campaign;
 	var user;
 	var survey_prototype;
