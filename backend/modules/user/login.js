@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 var user = require('./models').users;
 
 
-exports.login = function(device_uuid, input_passphrase, callback) {
+exports.login = function(device_uuid, input_passphrase, push_id, callback) {
 	
     user.find( {device_uuid: device_uuid}, function (err, users) {
 	
@@ -25,19 +25,34 @@ exports.login = function(device_uuid, input_passphrase, callback) {
 	    // generate hash from secret input
 	    try {
 			var input_hashed_passphrase = 
-				crypto.pbkdf2Sync(passphrase, salt, iterations, 128).toString('hex');
+				crypto.pbkdf2Sync(input_passphrase, salt, iterations, 128).toString('hex');
 		} catch (err) {
 		//error lol
 		console.log("error hashing in /login: " + err);
 	    }
 
+	    var user = users[0];
+
 	    if (hashed_passphrase == input_hashed_passphrase){
 	    	// TODO: generate new session token and reassign it appropriately:
-		
-			callback({'response' : "LOGIN_SUCCESS",
-				  'session_token' : session_token,
-				  'session_token_expires' : session_token_expires,
-				 }, 201);
+			
+	    	user.push_id = push_id;
+
+	    	user.save(function(err){
+	    		if (err) {
+	    			console.log('in login (43): ' + err);
+	    			callback({'response': 'LOGIN_ERROR_DATABASE_ERROR'}, 500);
+	    		} else {
+	    			callback({'response' : "LOGIN_SUCCESS",
+					  'session_token' : session_token,
+					  'session_token_expires' : session_token_expires,
+				 	          }, 201);
+
+	    		}
+	    	});
+
+
+
 	    } else {
 			callback({'response' : "LOGIN_ERROR_INVALID_PASSPHRASE", },
 				400);
