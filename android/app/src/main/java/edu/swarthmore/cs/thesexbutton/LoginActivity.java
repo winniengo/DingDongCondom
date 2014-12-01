@@ -106,31 +106,6 @@ public class LoginActivity extends Activity {
     }
 
 
-    public void Login(String deviceUUID, String passphrase) {
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("device_uuid", deviceUUID));
-        params.add(new BasicNameValuePair("passphrase", passphrase));
-
-        ServerRequest serverRequest = new ServerRequest();
-        JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/login", params);
-
-        if (json != null) {
-            try {
-                String jsonString = json.getString("response");
-                String sessionToken = json.getString("session_token");
-                String sessionTokenExpires = json.getString("session_token_expires");
-
-                SharedPreferences.Editor edit = mSharedPreferences.edit();
-                edit.putString("session_token", sessionToken);
-                edit.putString("session_token_expires", sessionTokenExpires);
-                edit.apply();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
     /**
      * Check the device to make sure it has the Google Play Services APK. If it doesn't, display a
      * dialog that allows users to enable it or download it from the Play Store.
@@ -256,5 +231,35 @@ public class LoginActivity extends Activity {
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
         editor.apply();
+    }
+
+
+    /**
+     * Requests login to our server, sending deviceID, passphrase, and gcm regid.
+     * Server sends back an authorization token that is stored in sharedPreferences.
+     */
+    public void Login(String deviceUUID, String passphrase) {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("device_uuid", deviceUUID));
+        params.add(new BasicNameValuePair("passphrase", passphrase));
+        params.add(new BasicNameValuePair("push_id", regid));
+
+        ServerRequest serverRequest = new ServerRequest();
+        JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/login", params);
+
+        if (json != null) {
+            try {
+                String jsonString = json.getString("response");
+                String sessionToken = json.getString("session_token");
+                String sessionTokenExpires = json.getString("session_token_expires");
+
+                SharedPreferences.Editor edit = mSharedPreferences.edit();
+                edit.putString("session_token", sessionToken);
+                edit.putString("session_token_expires", sessionTokenExpires);
+                edit.apply();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
