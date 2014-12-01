@@ -152,6 +152,8 @@ exports.all = function(callback) {
 					'date_delivered' : order_dict.date_delivered,
 					
 					'delivery_estimate' : order_dict.delivery_estimate,
+
+					'delivery_destination' : order_dict.delivery_destination
 				}
 				all.push(this_order);
 			}
