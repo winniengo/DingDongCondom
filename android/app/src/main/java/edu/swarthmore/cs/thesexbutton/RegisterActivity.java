@@ -59,8 +59,8 @@ public class RegisterActivity extends Activity {
                 ServerRequest serverRequest = new ServerRequest();
                 JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/register", mParams);
 
-                if(json != null){
-                    try{
+                if (json != null) {
+                    try {
                         String jsonString = json.getString("response");
                         String sessionToken = json.getString("session_token");
                         String sessionTokenExpires = json.getString("session_token_expires");
@@ -86,7 +86,7 @@ public class RegisterActivity extends Activity {
                         Intent i = new Intent(RegisterActivity.this, RequestCondomActivity.class);
                         startActivity(i);
 
-                    }catch (JSONException e) {
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
