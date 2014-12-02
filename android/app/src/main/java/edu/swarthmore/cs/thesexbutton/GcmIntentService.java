@@ -29,7 +29,6 @@ public class GcmIntentService extends IntentService {
         super("GcmIntentService");
     }
     public static final String TAG = "GcmIntentService";
-    private JSONObject mSurveyJson;
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -48,8 +47,8 @@ public class GcmIntentService extends IntentService {
             // Filter messages based on message type
             if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 Log.i(TAG, "Received: " + extras.toString());
-                mSurveyJson = retrieveSurvey(extras.toString());
-                sendNotification("New survey available. Click here to take it!", mSurveyJson);
+                JSONObject surveyJson = retrieveSurvey(extras.toString());
+                sendNotification("New survey available. Click here to take it!", surveyJson);
             }
         }
 

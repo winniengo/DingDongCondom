@@ -57,7 +57,7 @@
  					if (err) {
  						console.log(err);
  					}
- 					console.log(result);
+ 					callback(err, "All done");
  				});
  			});
 
@@ -68,3 +68,16 @@
  	});
 
  }
+
+
+exports.do_test_sendout =  function (callback) {
+
+	Campaign.findOne({campaign_id:"TestCampaign1"}, function(err, campaign){
+		var eligible_users = campaign.eligible_users;
+
+		module.exports.survey_sendout(eligible_users, "TestCampaign1", function(err, result) {
+			console.log(result);
+		})
+	});
+
+}
