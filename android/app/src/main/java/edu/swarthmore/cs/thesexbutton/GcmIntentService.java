@@ -75,9 +75,6 @@ public class GcmIntentService extends IntentService {
      * Notifies the user that a survey is available
      */
     private void sendNotification(String msg, JSONObject survey) {
-        NotificationManager notificationManager =
-                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-
         // Pending intent launches SurveyActivity when user clicks on notification
         Intent i = new Intent(this, SurveyActivity.class);
         i.putExtra("survey", survey.toString());
@@ -90,11 +87,13 @@ public class GcmIntentService extends IntentService {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.noti_icon)
-                .setContentTitle("DingDong: Condom!")
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
-                .setContentText(msg);
+                .setContentTitle("DingDong: Condom!")
+                .setContentText(msg)
+                .setContentIntent(contentIntent);
 
-        builder.setContentIntent(contentIntent);
+        NotificationManager notificationManager =
+                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 }
