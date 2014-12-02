@@ -45,10 +45,9 @@
 	 					}
 	 					if (user) {
 	 						if (user.device_os == 'ANDROID_OS') {
-	 							console.log('in done noew');
 								sender.send(message, [user.push_id] , 4, function(err, result) {
 									if (err) {
-										console.log('Sender: ' + err);
+										console.log('Sender err: ' + err);
 									}
 									callback(err, "All done");
 								});			
@@ -76,8 +75,10 @@ exports.do_test_sendout =  function (callback) {
 		var eligible_users = campaign.eligible_users;
 
 		module.exports.survey_sendout(eligible_users, "TestCampaign1", function(err, result) {
-			console.log(result);
-			console.log('err: ' + err);
+			console.log('sender result: ': result);
+			if (err) {
+				console.log('err: ' + err);
+			}
 		})
 	});
 
