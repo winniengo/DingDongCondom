@@ -6,11 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -24,7 +25,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class LoginActivity extends Activity {
@@ -36,10 +36,9 @@ public class LoginActivity extends Activity {
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static String TAG = "LoginActivity";
-    String SENDER_ID = "zippy-tiger-769";  // GCM project number
-    TextView mDisplay;
+    String SENDER_ID = "764780160177";  // GCM project number
     GoogleCloudMessaging gcm;
-    AtomicInteger msgId = new AtomicInteger();
+    //AtomicInteger msgId = new AtomicInteger();
     SharedPreferences prefs;
     Context context;
     String regid;
@@ -70,16 +69,24 @@ public class LoginActivity extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        // Check device for Play Services APK
-//                        if (checkPlayServices()) {
-//                            // GCM Registration
-//                            regid = getRegistrationId(context);
-//                            if (regid.isEmpty()) {
-//                                registerInBackground();
-//                            }
-//                        } else {
-//                            Log.i(TAG, "No valid Google Play Services APK found.");
-//                        }
+                        // Make sure device has internet connectivity
+                        if (!checkInternet()) {
+                            Log.i(TAG, "No network connectivity.");
+                            finish();
+                        }
+
+                        // Make sure device has Play Services APK and register for GCM
+                        if (checkPlayServices()) {
+                            regid = getRegistrationId(context);
+                            if (regid.isEmpty()) {
+                                registerInBackground();
+                            } else {
+                                Log.i(TAG, "Prev gcm regid found: " + regid);
+                            }
+                        } else {
+                            Log.i(TAG, "No valid Google Play Services APK found.");
+                            finish();
+                        }
 
                         // Look for previous registration
                         mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
@@ -107,35 +114,20 @@ public class LoginActivity extends Activity {
     }
 
 
-    public void Login(String deviceUUID, String passphrase) {
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("device_uuid", deviceUUID));
-        params.add(new BasicNameValuePair("passphrase", passphrase));
-
-        ServerRequest serverRequest = new ServerRequest();
-        JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/login", params);
-
-        if (json != null) {
-            try {
-                String jsonString = json.getString("response");
-                String sessionToken = json.getString("session_token");
-                String sessionTokenExpires = json.getString("session_token_expires");
-
-                SharedPreferences.Editor edit = mSharedPreferences.edit();
-                edit.putString("session_token", sessionToken);
-                edit.putString("session_token_expires", sessionTokenExpires);
-                edit.apply();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+    /**
+     * Check the device's connectivity status.
+     */
+    private boolean checkInternet() {
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return (activeNetwork != null && activeNetwork.isConnected());
     }
 
 
     /**
-     * Check the device to make sure it has the Google Play Services APK. If
-     * it doesn't, display a dialog that allows users to download the APK from
-     * the Google Play Store or enable it in the device's system settings.
+     * Check the device to make sure it has the Google Play Services APK. If it doesn't, display a
+     * dialog that allows users to enable it or download it from the Play Store.
      */
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
@@ -160,7 +152,7 @@ public class LoginActivity extends Activity {
      * @return registration ID, or empty string if there is no existing registration ID.
      */
     private String getRegistrationId(Context context) {
-        final SharedPreferences prefs = getGCMPreferences(context);
+        prefs = getGCMPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
             Log.i(TAG, "Registration not found.");
@@ -184,14 +176,13 @@ public class LoginActivity extends Activity {
      * return Application's sharedPreferences.
      */
     private SharedPreferences getGCMPreferences(Context context) {
-        // Persists the registration ID in shared preferences
         return getSharedPreferences(RequestCondomActivity.class.getSimpleName(),
                 Context.MODE_PRIVATE);
     }
 
 
     /**
-     * return Application's version code from the code PackageManager.
+     * return Application's version code from the PackageManager.
      */
     private static int getAppVersion(Context context) {
         try {
@@ -212,38 +203,25 @@ public class LoginActivity extends Activity {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                String msg = "";
+                String msg;
                 try {
                     if (gcm == null) {
                         gcm = GoogleCloudMessaging.getInstance(context);
                     }
                     regid = gcm.register(SENDER_ID);
-                    msg = "Device registered, registration ID=" + regid;
-
-                    sendRegistrationIdToBackend();
+                    msg = "Device registered; regid=" + regid;
                     storeRegistrationId(context, regid);  // persist the regID
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
                     // If there is an error, don't just keep trying to register.
                     // Require the user to click a button again, or perform
                     // exponential back-off.
+                    finish();
                 }
+                Log.i(TAG, msg);
                 return msg;
             }
-
-            @Override
-            protected void onPostExecute(String msg) {
-                mDisplay.append(msg + "\n");
-            }
         }.execute(null, null, null);
-    }
-
-
-    /**
-     * Sends the registration ID to your server over HTTP
-     */
-    private void sendRegistrationIdToBackend() {
-        // Your implementation here.
     }
 
 
@@ -255,12 +233,42 @@ public class LoginActivity extends Activity {
      * @param regId registration ID
      */
     private void storeRegistrationId(Context context, String regId) {
-        final SharedPreferences prefs = getGCMPreferences(context);
+        prefs = getGCMPreferences(context);
         int appVersion = getAppVersion(context);
         Log.i(TAG, "Saving regId on app version " + appVersion);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
         editor.apply();
+    }
+
+
+    /**
+     * Requests login to our server, sending deviceID, passphrase, and gcm regid.
+     * Server sends back an authorization token that is stored in sharedPreferences.
+     */
+    public void Login(String deviceUUID, String passphrase) {
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("device_uuid", deviceUUID));
+        params.add(new BasicNameValuePair("passphrase", passphrase));
+        params.add(new BasicNameValuePair("push_id", regid));
+
+        ServerRequest serverRequest = new ServerRequest();
+        JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/login", params);
+
+        if (json != null) {
+            try {
+                String jsonString = json.getString("response");
+                String sessionToken = json.getString("session_token");
+                String sessionTokenExpires = json.getString("session_token_expires");
+
+                SharedPreferences.Editor edit = mSharedPreferences.edit();
+                edit.putString("session_token", sessionToken);
+                edit.putString("session_token_expires", sessionTokenExpires);
+                edit.apply();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

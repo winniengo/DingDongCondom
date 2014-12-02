@@ -24,8 +24,10 @@ module.exports = function(app) {
 
 	var uuid = req.body.device_uuid;
 	var passphrase = req.body.passphrase;
+	var push_id = req.body.push_id;
+
 	
-		login.login(uuid, passphrase, function (result, status) {
+		login.login(uuid, passphrase, push_id, function (result, status) {
 		    console.log(result + 'status: ', status);
 		    res.status(status).json(result);
 		});
@@ -35,15 +37,13 @@ module.exports = function(app) {
     // register with the backend by supplying 
     //     - a (persistent) device uuid
     //     - a signup_code that is distributed to each user
-    app.post('/api/register',function(req,res){
+    app.post('/api/register', function(req,res) {
 	
 	var device_uuid = req.body.device_uuid;
     var passphrase = req.body.passphrase;
 	var signup_token = req.body.signup_token;
 	var device_os = req.body.device_os;
 	
-	console.log("in register, request: ", req.body);
-
 	register.register(device_uuid, passphrase, signup_token, device_os, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
@@ -138,14 +138,17 @@ module.exports = function(app) {
     app.post('/api/survey/complete', middleware.is_authenticated, function(req, res) {
 	var session_token = req.body.session_token;
 	var campaign_id = req.body.campaign_id;
-	var survey = req.body.survey;
+	var answers = req.body.answers;
+
+	console.log('in routes: ' + answers);
 	
-	survey.complete(session_token, campaign_id, survey, function (result, status) {
+	survey.complete(session_token, campaign_id, answers, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
 		});
 
     });
+
 
 
     // for testing purposes

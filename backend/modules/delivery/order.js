@@ -10,7 +10,7 @@
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 var order = require('./models').orders;
-var user = require('../user/models').users;
+var user = require('../user/models').User;
 var shortid = require('shortid');
 
 exports.request = function (session_token, dorm_name, dorm_room, delivery_type,
@@ -152,6 +152,8 @@ exports.all = function(callback) {
 					'date_delivered' : order_dict.date_delivered,
 					
 					'delivery_estimate' : order_dict.delivery_estimate,
+
+					'delivery_destination' : order_dict.delivery_destination
 				}
 				all.push(this_order);
 			}

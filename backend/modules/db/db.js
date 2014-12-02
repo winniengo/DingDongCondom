@@ -31,5 +31,5 @@ process.on('SIGINT', function() {
 
 
 // INCLUDE ANY SCHEMAS AND MODELS HERE
-require('../user/models.js').users;
+require('../user/models.js').User;
 require('../delivery/models.js').orders;

@@ -10,6 +10,8 @@ var userSchema = mongoose.Schema({
     device_uuid : String,
     device_os : String, 
 
+    push_id : String, // field for GCM/APN ID
+
     hashed_passphrase: String,
     salt : String,
 
@@ -26,5 +28,5 @@ var userSchema = mongoose.Schema({
 
 // export the different schemas as models
 module.exports = {
-    users : mongoose.model('User', userSchema),
+    User : mongoose.model('User', userSchema),
 };
