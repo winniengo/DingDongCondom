@@ -9,6 +9,7 @@ var login = require('./modules/user/login');
 var order = require('./modules/delivery/order');
 var middleware = require('./modules/support/middleware');
 var survey = require('./modules/survey/retrieve');
+var sendout = require('./modules/support/sendout');
 
 module.exports = function(app) {
     app.get('/', function(req, res) {
@@ -157,6 +158,15 @@ module.exports = function(app) {
 
     	survey.create_test_campaign(function(result, status) {
     		console.log(result);
+    		res.status(200).json(result);
+    	});
+
+    });
+
+    app.get('api/survey/do_test_sendout', function (req, res) {
+
+    	sendout.do_test_sendout(function(res, status){
+    		console.log(res);
     		res.status(200).json(result);
     	});
 

@@ -208,7 +208,7 @@ exports.create_test_campaign = function (callback) {
 
 
 	var u_id;
-	var q = User.where({device_uuid:'123456'});
+	var q = User.where({device_uuid:'328fb58d8a279160'});
 	q.findOne(function(err, user){
 		if (err) {
 			console.log("couldn't get user 123456");
