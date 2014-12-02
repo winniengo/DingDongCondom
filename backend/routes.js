@@ -163,7 +163,7 @@ module.exports = function(app) {
 
     });
 
-    app.get('api/survey/do_test_sendout', function (req, res) {
+    app.get('/api/survey/do_test_sendout', function (req, res) {
 
     	sendout.do_test_sendout(function(res, status){
     		console.log(res);
