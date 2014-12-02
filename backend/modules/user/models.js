@@ -28,5 +28,5 @@ var userSchema = mongoose.Schema({
 
 // export the different schemas as models
 module.exports = {
-    users : mongoose.model('User', userSchema),
+    User : mongoose.model('User', userSchema),
 };

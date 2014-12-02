@@ -5,7 +5,7 @@
 
 var crypto = require('crypto');
 var mongoose = require('mongoose');
-var user = require('./models').users;
+var user = require('./models').User;
 
 
 exports.login = function(device_uuid, input_passphrase, push_id, callback) {

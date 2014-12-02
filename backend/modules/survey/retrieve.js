@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 var SurveyPrototype = require('./models').SurveyPrototype;
 var Survey = require('./models').Survey;
 var Campaign = require('./models').SurveyCampaign;
-var User = require('../user/models').users;
+var User = require('../user/models').User;
 
 // import crontab here too
 

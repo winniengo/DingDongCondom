@@ -10,7 +10,7 @@
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 var order = require('./models').orders;
-var user = require('../user/models').users;
+var user = require('../user/models').User;
 var shortid = require('shortid');
 
 exports.request = function (session_token, dorm_name, dorm_room, delivery_type,
