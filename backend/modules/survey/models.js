@@ -47,7 +47,7 @@ var surveySchema = mongoose.Schema({
     participant_most_recent_order_number : String,
 
     // specifics
-    survey_body : [ {question_id : String, question_title: String, question: String, response: String} ],
+    survey_body : [ {question_id : String, question_title:String, question: String, response: String} ],
 
 });
 

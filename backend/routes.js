@@ -24,8 +24,10 @@ module.exports = function(app) {
 
 	var uuid = req.body.device_uuid;
 	var passphrase = req.body.passphrase;
+	var push_id = req.body.push_id;
+
 	
-		login.login(uuid, passphrase, function (result, status) {
+		login.login(uuid, passphrase, push_id, function (result, status) {
 		    console.log(result + 'status: ', status);
 		    res.status(status).json(result);
 		});
@@ -35,18 +37,14 @@ module.exports = function(app) {
     // register with the backend by supplying 
     //     - a (persistent) device uuid
     //     - a signup_code that is distributed to each user
-    app.post('/api/register',function(req,res){
+    app.post('/api/register', function(req,res) {
 	
 	var device_uuid = req.body.device_uuid;
     var passphrase = req.body.passphrase;
 	var signup_token = req.body.signup_token;
 	var device_os = req.body.device_os;
-	var push_id = req.body.push_id;
 	
-	console.log("in register, request: ", req.body);
-
-	register.register(device_uuid, passphrase, signup_token, device_os, 
-					  push_id, function (result, status) {
+	register.register(device_uuid, passphrase, signup_token, device_os, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
 		});
@@ -150,6 +148,7 @@ module.exports = function(app) {
 		});
 
     });
+
 
 
     // for testing purposes
