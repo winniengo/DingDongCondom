@@ -1,3 +1,7 @@
+/**
+ * Created by wngo1 on 11/23/14.
+ */
+
 package edu.swarthmore.cs.thesexbutton;
 
 import android.os.AsyncTask;
@@ -49,7 +53,7 @@ public class ServerRequest {
             String line;
 
             while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line).append("\n");
+                stringBuilder.append(line + "\n");
             }
             mInputStream.close();
             mJson = stringBuilder.toString();
@@ -92,7 +96,8 @@ public class ServerRequest {
         @Override
         protected JSONObject doInBackground(Params... args) {
             ServerRequest request = new ServerRequest();
-            return request.getJSONFromUrl(args[0].url,args[0].params);
+            JSONObject json = request.getJSONFromUrl(args[0].url,args[0].params);
+            return json;
         }
         @Override
         protected void onPostExecute(JSONObject json) {
