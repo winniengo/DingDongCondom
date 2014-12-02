@@ -6,7 +6,7 @@
 
 var mongoose = require('mongoose');
 var user = require('../user/models').User;
-var order = require('../delivery/models').orders;
+var Order = require('../delivery/models').orders;
 
 
 
@@ -55,7 +55,7 @@ exports.is_authenticated_and_requester = function (req, res, next) {
 			res.status(401).json({'response':"ERROR_NOT_AUTHENTICATED"});
 		} else {
 			var device_uuid = users[0].device_uuid;
-			order.find( {order_number : order_number} , function(err, orders) {
+			Order.find( {order_number : order_number} , function(err, orders) {
 				if (orders.length == 0) {
 					res.status(404).json({'response':"ERROR_ORDER_NOT_FOUND"});
 				} else {
@@ -98,7 +98,7 @@ exports.is_authenticated_and_eligible = function (req, res, next) {
 
 			var device_uuid = users[0].device_uuid;
 
-			order.find( { requester : device_uuid } , function(err, orders) {
+			Order.find( { requester : device_uuid } , function(err, orders) {
 				if (orders.length == 0) {
 					next();
 				} else {

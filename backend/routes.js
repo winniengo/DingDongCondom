@@ -9,6 +9,7 @@ var login = require('./modules/user/login');
 var order = require('./modules/delivery/order');
 var middleware = require('./modules/support/middleware');
 var survey = require('./modules/survey/retrieve');
+var sendout = require('./modules/support/sendout');
 
 module.exports = function(app) {
     app.get('/', function(req, res) {
@@ -43,8 +44,9 @@ module.exports = function(app) {
     var passphrase = req.body.passphrase;
 	var signup_token = req.body.signup_token;
 	var device_os = req.body.device_os;
+	var push_id = req.body.push_id;
 	
-	register.register(device_uuid, passphrase, signup_token, device_os, function (result, status) {
+	register.register(device_uuid, passphrase, signup_token, device_os, push_id, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
 		});
@@ -156,6 +158,15 @@ module.exports = function(app) {
 
     	survey.create_test_campaign(function(result, status) {
     		console.log(result);
+    		res.status(200).json(result);
+    	});
+
+    });
+
+    app.get('api/survey/do_test_sendout', function (req, res) {
+
+    	sendout.do_test_sendout(function(res, status){
+    		console.log(res);
     		res.status(200).json(result);
     	});
 
