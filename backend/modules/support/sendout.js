@@ -75,7 +75,7 @@ exports.do_test_sendout =  function (callback) {
 	Campaign.findOne({campaign_id:"TestCampaign1"}, function(err, campaign){
 		var eligible_users = campaign.eligible_users;
 
-		survey_sendout(eligible_users, "TestCampaign1", function(err, result) {
+		module.exports.survey_sendout(eligible_users, "TestCampaign1", function(err, result) {
 			console.log(result);
 		})
 	});
