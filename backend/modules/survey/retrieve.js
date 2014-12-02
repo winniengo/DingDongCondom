@@ -41,6 +41,7 @@ exports.retrieve = function (session_token, campaign_id, callback) {
 						if (err) {
 							callback({'response' : 'SURVEY_RETRIEVE_DATABASE_ERROR'}, 500);
 						}
+						console.log('found :' + found);
 						if (found) {
 							var survey_prototype = found;
 							var survey_prototype_body = [];

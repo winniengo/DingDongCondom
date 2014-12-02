@@ -75,7 +75,7 @@ exports.do_test_sendout =  function (callback) {
 		var eligible_users = campaign.eligible_users;
 
 		module.exports.survey_sendout(eligible_users, "TestCampaign1", function(err, result) {
-			console.log('sender result: ': result);
+			console.log('sender result: '+ result);
 			if (err) {
 				console.log('err: ' + err);
 			}
