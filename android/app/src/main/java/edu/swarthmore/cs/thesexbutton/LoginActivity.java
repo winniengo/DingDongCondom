@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -23,7 +25,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class LoginActivity extends Activity {
@@ -37,7 +38,7 @@ public class LoginActivity extends Activity {
     private static String TAG = "LoginActivity";
     String SENDER_ID = "764780160177";  // GCM project number
     GoogleCloudMessaging gcm;
-    AtomicInteger msgId = new AtomicInteger();
+    //AtomicInteger msgId = new AtomicInteger();
     SharedPreferences prefs;
     Context context;
     String regid;
@@ -68,6 +69,12 @@ public class LoginActivity extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        // Make sure device has internet connectivity
+                        if (!checkInternet()) {
+                            Log.i(TAG, "No network connectivity.");
+                            finish();
+                        }
+
                         // Make sure device has Play Services APK and register for GCM
                         if (checkPlayServices()) {
                             regid = getRegistrationId(context);
@@ -78,6 +85,7 @@ public class LoginActivity extends Activity {
                             }
                         } else {
                             Log.i(TAG, "No valid Google Play Services APK found.");
+                            finish();
                         }
 
                         // Look for previous registration
@@ -103,6 +111,17 @@ public class LoginActivity extends Activity {
                 });
             }
         }).start();
+    }
+
+
+    /**
+     * Check the device's connectivity status.
+     */
+    private boolean checkInternet() {
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return (activeNetwork != null && activeNetwork.isConnected());
     }
 
 
@@ -133,7 +152,7 @@ public class LoginActivity extends Activity {
      * @return registration ID, or empty string if there is no existing registration ID.
      */
     private String getRegistrationId(Context context) {
-        final SharedPreferences prefs = getGCMPreferences(context);
+        prefs = getGCMPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
             Log.i(TAG, "Registration not found.");
@@ -191,8 +210,6 @@ public class LoginActivity extends Activity {
                     }
                     regid = gcm.register(SENDER_ID);
                     msg = "Device registered; regid=" + regid;
-
-                    sendRegistrationIdToBackend();
                     storeRegistrationId(context, regid);  // persist the regID
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
@@ -209,14 +226,6 @@ public class LoginActivity extends Activity {
 
 
     /**
-     * Sends the registration ID to your server over HTTP
-     */
-    private void sendRegistrationIdToBackend() {
-        // Your implementation here.
-    }
-
-
-    /**
      * Stores the registration ID and app versionCode in the application's
      * SharedPreferences
      *
@@ -224,7 +233,7 @@ public class LoginActivity extends Activity {
      * @param regId registration ID
      */
     private void storeRegistrationId(Context context, String regId) {
-        final SharedPreferences prefs = getGCMPreferences(context);
+        prefs = getGCMPreferences(context);
         int appVersion = getAppVersion(context);
         Log.i(TAG, "Saving regId on app version " + appVersion);
         SharedPreferences.Editor editor = prefs.edit();
