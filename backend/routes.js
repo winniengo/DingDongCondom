@@ -54,8 +54,8 @@ module.exports = function(app) {
 
 
     // request a delivery 
-
-    app.post('/api/delivery/request', middleware.is_authenticated_and_eligible, function(req, res) {
+    ///TODO: Add eligibility
+    app.post('/api/delivery/request', middleware.is_authenticated, function(req, res) {
 	var session_token = req.body.session_token;
 	var dorm_name = req.body.dorm_name;
 	var dorm_room = req.body.dorm_room;
