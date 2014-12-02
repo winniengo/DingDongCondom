@@ -156,9 +156,6 @@ exports.complete = function (session_token, campaign_id, answers, callback) {
 										}
 									});
 
-
-
-
 								} 
 
 							});
