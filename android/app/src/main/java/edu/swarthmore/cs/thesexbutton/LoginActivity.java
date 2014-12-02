@@ -42,6 +42,9 @@ public class LoginActivity extends Activity {
     Context context;
     String mRegid;
 
+    private boolean mHasPlayServices;
+    private boolean mHasInternetConnection;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class LoginActivity extends Activity {
                         if (!checkInternet()) {
                             Log.i(TAG, "No internet connection!");
                             showErrorPopup("No internet connection!");
+                            mHasInternetConnection = false;
                         }
 
                         // Make sure device has Play Services APK and register for GCM
@@ -79,32 +83,38 @@ public class LoginActivity extends Activity {
                             mRegid = getRegistrationId(context);
                             if (mRegid.isEmpty()) {
                                 registerInBackground();
+                                mHasPlayServices = true;
                             } else {
                                 Log.i(TAG, "Prev gcm regid found: " + mRegid);
+                                mHasPlayServices = true;
                             }
                         } else {
                             Log.i(TAG, "No valid Google Play Services APK found.");
                             showErrorPopup("No valid Google Play Services APK found.");
+                            mHasPlayServices = false;
                         }
 
-                        // Look for previous registration
-                        mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
-                        mAccessToken = mSharedPreferences.getString("access_token", null);
-                        mAccessTokenExpires = mSharedPreferences.getString("access_token_expires", null);
-                        mDeviceUUID = mSharedPreferences.getString("device_uuid", null);
-                        mPassphrase = mSharedPreferences.getString("passphrase", null);
-                        if (mAccessToken == null) {
-                            if (mDeviceUUID == null) {
-                                // New user; call Register Activity
-                                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
-                                i.putExtra("push_id", mRegid);
-                                startActivity(i);
-                                finish();
-                            } else {
-                                Login(mDeviceUUID, mPassphrase, mRegid);
-                                Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
-                                startActivity(i);
-                                finish();
+
+                        if (mHasInternetConnection && mHasPlayServices) {
+                            // Look for previous registration
+                            mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+                            mAccessToken = mSharedPreferences.getString("access_token", null);
+                            mAccessTokenExpires = mSharedPreferences.getString("access_token_expires", null);
+                            mDeviceUUID = mSharedPreferences.getString("device_uuid", null);
+                            mPassphrase = mSharedPreferences.getString("passphrase", null);
+                            if (mAccessToken == null) {
+                                if (mDeviceUUID == null) {
+                                    // New user; call Register Activity
+                                    Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
+                                    i.putExtra("push_id", mRegid);
+                                    startActivity(i);
+                                    finish();
+                                } else {
+                                    Login(mDeviceUUID, mPassphrase, mRegid);
+                                    Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
+                                    startActivity(i);
+                                    finish();
+                                }
                             }
                         }
                     }
