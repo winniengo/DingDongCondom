@@ -1,15 +1,8 @@
-/**
- * Created by wngo1 on 11/23/14.
- */
-
 package edu.swarthmore.cs.thesexbutton;
-import java.io.InputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
+
+import android.os.AsyncTask;
+import android.util.Log;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -19,8 +12,14 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.os.AsyncTask;
-import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ServerRequest {
     static InputStream mInputStream = null;
@@ -50,7 +49,7 @@ public class ServerRequest {
             String line;
 
             while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line + "\n");
+                stringBuilder.append(line).append("\n");
             }
             mInputStream.close();
             mJson = stringBuilder.toString();
@@ -93,8 +92,7 @@ public class ServerRequest {
         @Override
         protected JSONObject doInBackground(Params... args) {
             ServerRequest request = new ServerRequest();
-            JSONObject json = request.getJSONFromUrl(args[0].url,args[0].params);
-            return json;
+            return request.getJSONFromUrl(args[0].url,args[0].params);
         }
         @Override
         protected void onPostExecute(JSONObject json) {

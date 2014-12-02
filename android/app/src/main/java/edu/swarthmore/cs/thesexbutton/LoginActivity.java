@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class LoginActivity extends Activity {
     String mAccessToken, mAccessTokenExpires, mDeviceUUID, mPassphrase;
     SharedPreferences mSharedPreferences;
@@ -41,7 +40,7 @@ public class LoginActivity extends Activity {
     //AtomicInteger msgId = new AtomicInteger();
     SharedPreferences prefs;
     Context context;
-    String regid;
+    String mRegid;
 
 
     @Override
@@ -71,21 +70,21 @@ public class LoginActivity extends Activity {
                     public void run() {
                         // Make sure device has internet connectivity
                         if (!checkInternet()) {
-                            Log.i(TAG, "No network connectivity.");
-                            finish();
+                            Log.i(TAG, "No internet connection!");
+                            showErrorPopup("No internet connection!");
                         }
 
                         // Make sure device has Play Services APK and register for GCM
                         if (checkPlayServices()) {
-                            regid = getRegistrationId(context);
-                            if (regid.isEmpty()) {
+                            mRegid = getRegistrationId(context);
+                            if (mRegid.isEmpty()) {
                                 registerInBackground();
                             } else {
-                                Log.i(TAG, "Prev gcm regid found: " + regid);
+                                Log.i(TAG, "Prev gcm regid found: " + mRegid);
                             }
                         } else {
                             Log.i(TAG, "No valid Google Play Services APK found.");
-                            finish();
+                            showErrorPopup("No valid Google Play Services APK found.");
                         }
 
                         // Look for previous registration
@@ -98,10 +97,11 @@ public class LoginActivity extends Activity {
                             if (mDeviceUUID == null) {
                                 // New user; call Register Activity
                                 Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
+                                i.putExtra("push_id", mRegid);
                                 startActivity(i);
                                 finish();
                             } else {
-                                Login(mDeviceUUID, mPassphrase);
+                                Login(mDeviceUUID, mPassphrase, mRegid);
                                 Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
                                 startActivity(i);
                                 finish();
@@ -152,7 +152,7 @@ public class LoginActivity extends Activity {
      * @return registration ID, or empty string if there is no existing registration ID.
      */
     private String getRegistrationId(Context context) {
-        prefs = getGCMPreferences(context);
+        prefs = getGCMPreferences();
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
             Log.i(TAG, "Registration not found.");
@@ -175,7 +175,7 @@ public class LoginActivity extends Activity {
     /**
      * return Application's sharedPreferences.
      */
-    private SharedPreferences getGCMPreferences(Context context) {
+    private SharedPreferences getGCMPreferences() {
         return getSharedPreferences(RequestCondomActivity.class.getSimpleName(),
                 Context.MODE_PRIVATE);
     }
@@ -208,9 +208,9 @@ public class LoginActivity extends Activity {
                     if (gcm == null) {
                         gcm = GoogleCloudMessaging.getInstance(context);
                     }
-                    regid = gcm.register(SENDER_ID);
-                    msg = "Device registered; regid=" + regid;
-                    storeRegistrationId(context, regid);  // persist the regID
+                    mRegid = gcm.register(SENDER_ID);
+                    msg = "Device registered; regid=" + mRegid;
+                    storeRegistrationId(context, mRegid);  // persist the regID
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
                     // If there is an error, don't just keep trying to register.
@@ -233,7 +233,7 @@ public class LoginActivity extends Activity {
      * @param regId registration ID
      */
     private void storeRegistrationId(Context context, String regId) {
-        prefs = getGCMPreferences(context);
+        prefs = getGCMPreferences();
         int appVersion = getAppVersion(context);
         Log.i(TAG, "Saving regId on app version " + appVersion);
         SharedPreferences.Editor editor = prefs.edit();
@@ -247,7 +247,7 @@ public class LoginActivity extends Activity {
      * Requests login to our server, sending deviceID, passphrase, and gcm regid.
      * Server sends back an authorization token that is stored in sharedPreferences.
      */
-    public void Login(String deviceUUID, String passphrase) {
+    public void Login(String deviceUUID, String passphrase, String regid) {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("device_uuid", deviceUUID));
         params.add(new BasicNameValuePair("passphrase", passphrase));
@@ -258,7 +258,6 @@ public class LoginActivity extends Activity {
 
         if (json != null) {
             try {
-                String jsonString = json.getString("response");
                 String sessionToken = json.getString("session_token");
                 String sessionTokenExpires = json.getString("session_token_expires");
 
@@ -270,5 +269,12 @@ public class LoginActivity extends Activity {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     *
+     */
+    public void showErrorPopup(String msg) {
+
     }
 }

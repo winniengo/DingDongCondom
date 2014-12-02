@@ -15,4 +15,10 @@
         android:layout_gravity="center"
         android:src="@drawable/logo_1" />
 
+    <Button
+        android:id="@+id/popupbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
 </LinearLayout>

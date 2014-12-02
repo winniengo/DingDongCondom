@@ -18,9 +18,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by wngo1 on 11/29/14.
- */
 public class DeliveryStatusActivity extends Activity {
     String mOrderNumber, mSessionToken;
 
@@ -34,7 +31,10 @@ public class DeliveryStatusActivity extends Activity {
     private ProgressDialog mProgressDialog;
     private Handler mHandler = new Handler(); // used to queue code execution on thread
     private int mProgressDialogStatus;
-    
+
+    public DeliveryStatusActivity() {
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +48,7 @@ public class DeliveryStatusActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (mAccepted==false) {
+                while (!mAccepted) {
 
                     checkDeliveryStatus(); // check delivery status via JSON
                     try { // sleep 5 seconds
@@ -102,7 +102,7 @@ public class DeliveryStatusActivity extends Activity {
                     // check delivery status
                     checkDeliveryStatus();
 
-                    if(mDelivered == true) {
+                    if(mDelivered) {
                         mProgressDialogStatus = mProgressDialog.getMax();
                     }
                     else {
@@ -136,9 +136,7 @@ public class DeliveryStatusActivity extends Activity {
                 }
             }
         });
-
         thread.start();
-
     }
 
     public void checkDeliveryStatus() {

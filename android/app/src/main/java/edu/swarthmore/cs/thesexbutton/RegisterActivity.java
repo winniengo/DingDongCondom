@@ -1,36 +1,31 @@
-/**
- * Created by wngo1 on 11/23/14.
- */
-
 package edu.swarthmore.cs.thesexbutton;
+
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
-import android.provider.Settings.Secure;
 import java.util.UUID;
 
 public class RegisterActivity extends Activity {
     EditText mSignupToken;
     Button mRegister;
-    String mSignupTokenString, mDeviceUUID, mDeviceOS, mPassphrase;
+    String mSignupTokenString, mDeviceUUID, mDeviceOS, mPassphrase, mRegid;
     List<NameValuePair> mParams;
-
-    //SavedSharedPreferences mSavedSharedPreferences;
     SharedPreferences mSharedPreferences;
-    Context c = RegisterActivity.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +44,17 @@ public class RegisterActivity extends Activity {
                 mDeviceOS = "ANDROID_OS";
                 mPassphrase = UUID.randomUUID().toString();
                 mDeviceUUID = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
-                if(mDeviceUUID.equals(null)) {
+                if(mDeviceUUID == null) {
                     mDeviceUUID = UUID.randomUUID().toString();
                 }
+                mRegid = getIntent().getStringExtra("push_id");
 
                 mParams = new ArrayList<NameValuePair>();
                 mParams.add(new BasicNameValuePair("signup_token", mSignupTokenString));
                 mParams.add(new BasicNameValuePair("device_uuid", mDeviceUUID));
                 mParams.add(new BasicNameValuePair("device_os", mDeviceOS));
                 mParams.add(new BasicNameValuePair("passphrase", mPassphrase));
+                mParams.add(new BasicNameValuePair("push_id", mRegid));
 
                 ServerRequest serverRequest = new ServerRequest();
                 JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/register", mParams);
@@ -80,7 +77,7 @@ public class RegisterActivity extends Activity {
                         edit.putString("session_token_expires", sessionTokenExpires);
                         edit.putString("device_uuid", mDeviceUUID);
                         edit.putString("passphrase", mPassphrase);
-                        edit.commit();
+                        edit.apply();
 
                         Toast.makeText(getApplication(),jsonString,Toast.LENGTH_LONG).show();
                         Log.d("Hello:", mDeviceUUID);
