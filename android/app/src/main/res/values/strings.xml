@@ -7,7 +7,7 @@
     <string name="request_condom_button_text">I\'m Feeling Lucky!</string>
     <string name="request_condom_dorm_name">Dorm Name:</string>
     <string name="request_condom_dorm_room">Dorm Room:</string>
-    <string name="request_condom_delivery_type">Where do you want the condom delivered:</string>
+    <string name="request_condom_delivery_type">Where do you want the condom delivered?</string>
     <string name="request_condom_delivery_type_to_room">To My Room</string>
     <string name="request_condom_delivery_type_to_lounge">To My Lounge</string>
     <string name="request_condom_delivery_type_to_dorm">To My Dorm</string>

@@ -114,11 +114,12 @@
 
                 <Button
                     android:id="@+id/request_condom_button"
-                    android:background="@drawable/btn_green"
+                    android:background="@drawable/btn_grey"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:layout_gravity="bottom"
+                    android:enabled="false"
                     android:text="@string/request_condom_button_text"
                     android:textColor="#ffffff" />
             </LinearLayout>
