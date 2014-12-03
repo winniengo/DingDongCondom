@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoginActivity extends Activity {
-    String mAccessToken, mAccessTokenExpires, mDeviceUUID, mPassphrase;
+    String mAccessToken, mAccessTokenExpires, mDeviceUUID, mPassphrase, mOrderNumber;
     SharedPreferences mSharedPreferences;
 
     // GCM vars
@@ -93,6 +93,8 @@ public class LoginActivity extends Activity {
                         mAccessTokenExpires = mSharedPreferences.getString("access_token_expires", null);
                         mDeviceUUID = mSharedPreferences.getString("device_uuid", null);
                         mPassphrase = mSharedPreferences.getString("passphrase", null);
+                        mOrderNumber = mSharedPreferences.getString("order_number", null);
+
                         if (mAccessToken == null) {
                             if (mDeviceUUID == null) {
                                 // New user; call Register Activity
@@ -102,7 +104,15 @@ public class LoginActivity extends Activity {
                                 finish();
                             } else {
                                 Login(mDeviceUUID, mPassphrase, mRegid);
-                                Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
+                                Intent i;
+                                if(mOrderNumber!=null) { // user has placed an order before
+                                    if(CheckOrderStatus(mAccessToken, mOrderNumber)) { // check order status
+                                    i = new Intent(LoginActivity.this, DeliveryStatusActivity.class);
+                                    startActivity(i);
+                                    finish();
+                                    }
+                                }
+                                i = new Intent(LoginActivity.this, RequestCondomActivity.class);
                                 startActivity(i);
                                 finish();
                             }
@@ -113,6 +123,20 @@ public class LoginActivity extends Activity {
         }).start();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Intent i;
+        if (CheckOrderStatus(mAccessToken, mOrderNumber)) {
+            i = new Intent(LoginActivity.this, DeliveryStatusActivity.class);
+            startActivity(i);
+            finish();
+        } else {
+            i = new Intent(LoginActivity.this, RequestCondomActivity.class);
+            startActivity(i);
+            finish();
+        }
+    }
 
     /**
      * Check the device's connectivity status.
@@ -268,6 +292,33 @@ public class LoginActivity extends Activity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public boolean CheckOrderStatus(String sessionToken, String orderNumber) {
+        boolean delivered = false;
+        //boolean failed = false;
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("session_token", sessionToken));
+        params.add(new BasicNameValuePair("order_number", orderNumber));
+
+        ServerRequest serverRequest = new ServerRequest();
+        JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/delivery/status", params);
+
+        if (json != null) {
+            try {
+                delivered = json.getBoolean("order_delivered");
+                //failed = json.getBoolean("order_failed");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(delivered) { // open order
+            return true;
+        } else { // old, closed order
+            return false;
         }
     }
 
