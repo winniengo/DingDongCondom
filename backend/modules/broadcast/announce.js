@@ -8,22 +8,77 @@
 
 
 var Announcement = require('./models').Announcement; 
+var User = require('../user/models.js').User;
 
+var gcm = require('node-gcm');
 
 exports.set_announcement = function(message, open_for_business, callback) {
+	var sender = new gcm.Sender('AIzaSyChUqVv6OSHR58eElHGTYOYJj3IbXgCZ5Y');
+
+ 	// or with object values
+	var gcmMessage = new gcm.Message({
+	    collapseKey: 'DingDong:Condom',
+	    delayWhileIdle: true,
+	    timeToLive: 3,
+	    data: {
+	    	type: 'broadcast',
+	        message : message,	    
+		}
+		
+	});
+
+	var open_for_business_bool;
+	if (open_for_business) {
+		open_for_business_bool = true;
+	} else {
+		open_for_business_bool = false;
+	}
+
+	console.log('msg in announce: ' + message);
 
 	// set the annoucement 
 	Announcement.findOneAndUpdate({announcement_id: 'ANDROID_ANNOUNCEMENT'}, 
-		{message: message, open_for_business: open_for_business}, function(err, announcement){
+		{message: message, open_for_delivery: open_for_business_bool}, function(err, announcement){
 			if (err) {
 				console.log('Error in set_announcement: ' + err);
 				callback({'response' : 'ANNOUNCEMENT_SETANNOUNCEMENT_ERROR'}, 500);
 			} 
 			if (announcement) {
 				console.log('Set new announcement: ' + announcement);
-				callback({'response' : 'ANNOUNCEMENT_SETANNOUNCEMENT_ERROR'}, 500);
+				fetchAllUserPushIDs(function(push_ids) {
+					sender.send(gcmMessage, push_ids , 4, function(err, result) {
+									if (err) {
+										console.log('Broadcast sender err: ' + err);
+									} else {
+										console.log("Broadcast send: All done.");
+									}
+								});			
+
+				});
+			
+				callback({'response' : 'ANNOUNCEMENT_SETANNOUNCEMENT_SUCCESS'}, 200);
 			}
 		});
+}
+
+function fetchAllUserPushIDs (callback) {
+	// send a GCM notification to everyone 
+
+	User.find({}, function (err, users){
+		var push_ids = [];
+
+		if (err) {
+			console.log('in set_announcement: ' + err);
+		} 
+		for (i=0; i<users.length; i++) {
+			var id = users[i].push_id;
+			if (id) {
+				push_ids.push(users[i].push_id);
+			}
+		}
+
+		callback(push_ids);
+	});
 }
 
 

@@ -23,6 +23,9 @@ var survey_test = require('./modules/survey/testing');
 // GCM sendout module
 var sendout = require('./modules/support/sendout');
 
+// broadcast
+var announce = require('./modules/broadcast/announce');
+
 
 module.exports = function(app) {
     app.get('/', function(req, res) {
@@ -165,6 +168,19 @@ module.exports = function(app) {
 
     });
 
+
+    app.post('/api/broadcast/announcement', middleware.is_authenticated, function(req,res) {
+
+    	var message = req.body.message;
+    	console.log('msg: ' + message);
+    	var open_for_business = req.body.open_for_business;
+
+    	announce.set_announcement(message, open_for_business, function(result, status) {
+    		console.log(result);
+    		res.status(200).json(result);
+    	});
+
+    });
 
 
     // for testing purposes
