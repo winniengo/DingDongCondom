@@ -108,8 +108,8 @@ exports.is_authenticated_and_eligible = function (req, res, next) {
 
 					var date_string;
 
-					for (order in orders) {
-						date_string = new Date(orders[order].date_requested).toDateString();
+					for (i in orders) {
+						date_string = new Date(orders[i].date_requested).toDateString();
 						if (date_string == now_string) {
 							if (!order.order_failed) {
 								res.status(429).json({'response':"DELIVERY_REQUEST_ERROR_TOO_MANY_REQUESTS"});
