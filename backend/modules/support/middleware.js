@@ -6,7 +6,7 @@
 
 var mongoose = require('mongoose');
 var user = require('../user/models').User;
-var Order = require('../delivery/models').orders;
+var Order = require('../delivery/models');
 
 
 
