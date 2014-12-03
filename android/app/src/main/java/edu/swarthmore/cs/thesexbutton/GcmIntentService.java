@@ -75,9 +75,11 @@ public class GcmIntentService extends IntentService {
      * Notifies the user that a survey is available
      */
     private void sendNotification(String msg, JSONObject survey) {
-        // Pending intent launches SurveyActivity when user clicks on notification
+        // Add JSON to intent
         Intent i = new Intent(this, SurveyActivity.class);
         i.putExtra("survey", survey.toString());
+
+        // Pending intent launches SurveyActivity when user clicks on notification
         PendingIntent contentIntent =
                 PendingIntent.getActivity(this, 0, i, 0);
         try {

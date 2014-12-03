@@ -28,8 +28,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="20dp"
         android:autoLink="web"
-        android:linksClickable="true"
-        android:layout_margin="20dp" />
+        android:linksClickable="true" />
 
 </LinearLayout>
