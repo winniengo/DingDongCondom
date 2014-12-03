@@ -3,6 +3,7 @@ package edu.swarthmore.cs.thesexbutton;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -30,16 +31,18 @@ public class RequestActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
 
-        mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
-        mSessionToken = mSharedPreferences.getString("session_token", null);
-        mParams = new ArrayList<NameValuePair>();
-        mParams.add(new BasicNameValuePair("session_token", mSessionToken));
-
         FragmentManager fm = getFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
 
-        if (fragment == null) { // TODO
+        if (fragment == null) { //
             // create instance of RequestFragment
+            Intent i = getIntent();
+            String orderNumber = i.getStringExtra("order_number");
+            mSessionToken = i.getStringExtra("session_token");
+            fragment = RequestFragment.newInstance(orderNumber, mSessionToken);
+            fm.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
+
+            /*
             ServerRequest sr = new ServerRequest();
             JSONObject json = sr.getJSON(API + "delivery/requests/all", mParams);
 
@@ -59,6 +62,7 @@ public class RequestActivity extends Activity {
                     e.printStackTrace();
                 }
             }
+            */
 
 
         }

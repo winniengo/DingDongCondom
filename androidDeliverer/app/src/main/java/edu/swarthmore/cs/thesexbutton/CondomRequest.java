@@ -24,6 +24,7 @@ public class CondomRequest { // constructor
     private Date mDateDelivered;
 
     private int mDeliveryEstimate;
+
     private String mDeliveryDestination;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
@@ -40,15 +41,29 @@ public class CondomRequest { // constructor
         String acceptedStr = json.getString("date_accepted");
         String deliveredStr = json.getString("date_delivered");
         try {
-            mDateRequested = sdf.parse(requestedStr);
-            mDateAccepted = sdf.parse(acceptedStr);
-            mDateDelivered = sdf.parse(deliveredStr);
+            if (mDateRequested!=null) {
+                mDateRequested = sdf.parse(requestedStr);
+            } else { mDateRequested = new Date(); }
+            if (mDateAccepted!=null) {
+                mDateAccepted = sdf.parse(acceptedStr);
+            } else {mDateAccepted = new Date(); }
+            if (mDateDelivered!=null) {
+                mDateDelivered = sdf.parse(deliveredStr);
+            } else {mDateDelivered = new Date(); }
         } catch (ParseException e) {
             Log.e("DateTime Parser", "Problem parsing: " + requestedStr + acceptedStr + deliveredStr);
         }
 
         mDeliveryEstimate = json.getInt("delivery_estimate");
-        mDeliveryDestination = json.getString("delivery_destination"); //TODO parse destination
+
+        // parse destination object into string
+        JSONObject des = json.getJSONObject("delivery_destination");
+        mDeliveryDestination = des.getString("dorm_name") +
+                " - " + des.getString("delivery_type") +
+                " - " + des.getString("dorm_room");
+
+        Log.i("CondomRequest", "" + mOrderNumber + mDeliveryDestination);
+
     }
 
     public String getOrderNumber() {
@@ -121,20 +136,5 @@ public class CondomRequest { // constructor
 
     public void setDeliveryDestination(String deliveryDestination) {
         mDeliveryDestination = deliveryDestination;
-    }
-
-    public JSONObject toJSON() throws JSONException {
-        JSONObject json = new JSONObject();
-        json.put("order_number", mOrderNumber);
-        json.put("order_accepted", mOrderAccepted);
-        json.put("oder_delivered", mOrderDelivered);
-        json.put("order_failed", mOrderFailed);
-        json.put("date_requested", mDateRequested);
-        json.put("date_accepted", mDateAccepted);
-        json.put("date_delivered", mDateDelivered);
-        json.put("delivery_estimate", mDeliveryEstimate);
-        json.put("delivery_destination", mDeliveryDestination);
-
-        return json;
     }
 }
