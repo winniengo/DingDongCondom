@@ -2,16 +2,16 @@
 <pre-dex-items>
 
     <item
-        dex="/home/dfeista1/TheSexButton/android/app/build/intermediates/pre-dexed/debug/support-v4-19.1.0-66d0179a76f1fed644c499e640a13df93a265fa0.jar"
+        dex="/home/wngo1/cs97/cs97_mobileHealth/android/app/build/intermediates/pre-dexed/debug/classes-8762bfb90ba35cf093d22da9b35e12b632bd1c57.jar"
+        jar="/home/wngo1/cs97/cs97_mobileHealth/android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/5.2.08/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="1ed7a7a05185651f9af41ad93711cb96b66f331c"/>
+    <item
+        dex="/home/wngo1/cs97/cs97_mobileHealth/android/app/build/intermediates/pre-dexed/debug/support-v4-19.1.0-66d0179a76f1fed644c499e640a13df93a265fa0.jar"
         jar="/usr/local/android-studio/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar"
         jumboMode="false"
         revision="20.0.0"
         sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
-    <item
-        dex="/home/dfeista1/TheSexButton/android/app/build/intermediates/pre-dexed/debug/classes-79fa4705369ca1007188b080e13731c70a782bb7.jar"
-        jar="/home/dfeista1/TheSexButton/android/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/5.2.08/classes.jar"
-        jumboMode="false"
-        revision="20.0.0"
-        sha1="1ed7a7a05185651f9af41ad93711cb96b66f331c"/>
 
 </pre-dex-items>

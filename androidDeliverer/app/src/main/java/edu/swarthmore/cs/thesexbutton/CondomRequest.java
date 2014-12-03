@@ -14,20 +14,17 @@ import java.util.Date;
  */
 public class CondomRequest { // constructor
     private String mOrderNumber;
+    private String mDeliveryDestination;
 
     private boolean mOrderAccepted;
     private boolean mOrderDelivered;
     private boolean mOrderFailed;
 
-    private Date mDateRequested;
-    private Date mDateAccepted;
-    private Date mDateDelivered;
+    private String mDateRequested;
+    private String mDateAccepted;
+    private String mDateDelivered;
 
     private int mDeliveryEstimate;
-
-    private String mDeliveryDestination;
-
-    SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
 
     public CondomRequest(JSONObject json) throws JSONException {
         mOrderNumber = json.getString("order_number");
@@ -35,24 +32,9 @@ public class CondomRequest { // constructor
         mOrderDelivered = json.getBoolean("order_delivered");
         mOrderFailed = json.getBoolean("order_failed");
 
-        //mDateRequested = new Date(json.getLong("date_requested"));
-
-        String requestedStr = json.getString("date_requested");
-        String acceptedStr = json.getString("date_accepted");
-        String deliveredStr = json.getString("date_delivered");
-        try {
-            if (mDateRequested!=null) {
-                mDateRequested = sdf.parse(requestedStr);
-            } else { mDateRequested = new Date(); }
-            if (mDateAccepted!=null) {
-                mDateAccepted = sdf.parse(acceptedStr);
-            } else {mDateAccepted = new Date(); }
-            if (mDateDelivered!=null) {
-                mDateDelivered = sdf.parse(deliveredStr);
-            } else {mDateDelivered = new Date(); }
-        } catch (ParseException e) {
-            Log.e("DateTime Parser", "Problem parsing: " + requestedStr + acceptedStr + deliveredStr);
-        }
+        mDateRequested = json.getString("date_requested");
+        mDateAccepted = json.getString("date_accepted");
+        mDateDelivered = json.getString("date_delivered");
 
         mDeliveryEstimate = json.getInt("delivery_estimate");
 
@@ -72,6 +54,14 @@ public class CondomRequest { // constructor
 
     public void setOrderNumber(String orderNumber) {
         mOrderNumber = orderNumber;
+    }
+
+    public String getDeliveryDestination() {
+        return mDeliveryDestination;
+    }
+
+    public void setDeliveryDestination(String deliveryDestination) {
+        mDeliveryDestination = deliveryDestination;
     }
 
     public boolean isOrderAccepted() {
@@ -98,27 +88,27 @@ public class CondomRequest { // constructor
         mOrderFailed = orderFailed;
     }
 
-    public Date getDateRequested() {
+    public String getDateRequested() {
         return mDateRequested;
     }
 
-    public void setDateRequested(Date dateRequested) {
+    public void setDateRequested(String dateRequested) {
         mDateRequested = dateRequested;
     }
 
-    public Date getDateAccepted() {
+    public String getDateAccepted() {
         return mDateAccepted;
     }
 
-    public void setDateAccepted(Date dateAccepted) {
+    public void setDateAccepted(String dateAccepted) {
         mDateAccepted = dateAccepted;
     }
 
-    public Date getDateDelivered() {
+    public String getDateDelivered() {
         return mDateDelivered;
     }
 
-    public void setDateDelivered(Date dateDelivered) {
+    public void setDateDelivered(String dateDelivered) {
         mDateDelivered = dateDelivered;
     }
 
@@ -128,13 +118,5 @@ public class CondomRequest { // constructor
 
     public void setDeliveryEstimate(int deliveryEstimate) {
         mDeliveryEstimate = deliveryEstimate;
-    }
-
-    public String getDeliveryDestination() {
-        return mDeliveryDestination;
-    }
-
-    public void setDeliveryDestination(String deliveryDestination) {
-        mDeliveryDestination = deliveryDestination;
     }
 }
