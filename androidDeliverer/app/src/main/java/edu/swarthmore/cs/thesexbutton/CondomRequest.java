@@ -43,13 +43,13 @@ public class CondomRequest { // constructor
         try {
             if (mDateRequested!=null) {
                 mDateRequested = sdf.parse(requestedStr);
-            }
+            } else { mDateRequested = new Date(); }
             if (mDateAccepted!=null) {
                 mDateAccepted = sdf.parse(acceptedStr);
-            }
+            } else {mDateAccepted = new Date(); }
             if (mDateDelivered!=null) {
                 mDateDelivered = sdf.parse(deliveredStr);
-            }
+            } else {mDateDelivered = new Date(); }
         } catch (ParseException e) {
             Log.e("DateTime Parser", "Problem parsing: " + requestedStr + acceptedStr + deliveredStr);
         }

@@ -24,16 +24,14 @@
         <item>Parrish</item>
         <item>Pittenger</item>
         <item>Roberts</item>
-        <item>Wharton A</item>
-        <item>Wharton B</item>
-        <item>Wharton C</item>
-        <item>Wharton D</item>
-        <item>Wharton E</item>
-        <item>Wharton F</item>
+        <item>Wharton AB</item>
+        <item>Wharton CD</item>
+        <item>Wharton EF</item>
         <item>Willets</item>
         <item>Woolman</item>
         <item>Worth</item>
     </string-array>
     <string name="register_about">blah\nblah\nblah\nblah\nblah</string>
     <string name="action_settings">Settings</string>
+    <string name="survey_title">Morning After Survey</string>
 </resources>

@@ -38,6 +38,7 @@ public class RequestFragment extends Fragment {
     private CheckBox mAcceptedCheckBox, mDeliveredCheckBox, mFailedCheckBox;
     private Button mConfirm;
 
+    boolean deliveryIsChecked, acceptedIsChecked;
     private static final String TAG = "RequestFragment";
     private static final String API = "http://tsb.sccs.swarthmore.edu:8080/api/";
 
@@ -74,11 +75,12 @@ public class RequestFragment extends Fragment {
 
         // fill condom request details
         mOrderNumber = (TextView) v.findViewById(R.id.order_number);
-
         mDeliveryDestination = (TextView) v.findViewById(R.id.delivery_destination);
         mDateRequested = (TextView) v.findViewById(R.id.date_requested);
 
         mOrderNumber.setText(mCondomRequest.getOrderNumber());
+        mOrderNumberString = mOrderNumber.getText().toString();
+
         mDeliveryDestination.setText(mCondomRequest.getDeliveryDestination());
         mDateRequested.setText(mCondomRequest.getDateRequested().toString());
 
@@ -98,66 +100,71 @@ public class RequestFragment extends Fragment {
         mDeliveredCheckBox.setChecked(mCondomRequest.isOrderDelivered());
         mFailedCheckBox.setChecked(mCondomRequest.isOrderFailed());
 
+        mAcceptedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                acceptedIsChecked = isChecked;
+                Log.d(TAG, mOrderNumberString + "is accepted");
+            }
+        });
+
+        mDeliveredCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                deliveryIsChecked = isChecked;
+                Log.d(TAG, mOrderNumberString + "is delivered");
+            }
+        });
+
+        mFailedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mCondomRequest.setOrderDelivered(isChecked);
+                Log.d(TAG, mOrderNumberString + "failed");
+            }
+        });
+
 
         mConfirm = (Button) v.findViewById(R.id.confirm_button);
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // set up POST
+                Log.i(TAG, "Confirm button clicked");
                 mParams = new ArrayList<NameValuePair>();
                 final ServerRequest serverRequest = new ServerRequest();
-                mOrderNumberString = mOrderNumber.getText().toString();
+                mParams.add(new BasicNameValuePair("session_token", mSessionToken));
+                mParams.add(new BasicNameValuePair("order_number", mOrderNumberString));
 
                 // update condom request fields
-                mAcceptedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        mCondomRequest.setOrderAccepted(isChecked);
+                if(acceptedIsChecked) {
+                    mCondomRequest.setOrderAccepted(acceptedIsChecked);
+                    mDeliveryEstimateString = mDeliveryEstimate.getText().toString();
+                    mParams.add(new BasicNameValuePair("delivery_estimate", mDeliveryEstimateString));
 
-                        mDeliveryEstimateString = mDeliveryEstimate.getText().toString();
-                        mParams.add(new BasicNameValuePair("session_token", mSessionToken));
-                        mParams.add(new BasicNameValuePair("order_number", mOrderNumberString));
-                        mParams.add(new BasicNameValuePair("delivery_estimate", mDeliveryEstimateString));
-
-                        JSONObject json = serverRequest.getJSON(API + "delivery/status/accepted", mParams);
-                        if(json!=null) {
-                            try{
-                                String jsonString = json.getString("response");
-                            }catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                    JSONObject json = serverRequest.getJSON(API + "delivery/request/accept", mParams);
+                    if (json != null) {
+                        try {
+                            String jsonString = json.getString("response");
+                            Log.d(TAG, mOrderNumberString + "POST accepted");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-
-                        Log.d(TAG, mOrderNumberString + "accepted");
                     }
+                }
 
-                });
-                mDeliveredCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        mCondomRequest.setOrderDelivered(isChecked);
-                        mParams.add(new BasicNameValuePair("session_token", mSessionToken));
-                        mParams.add(new BasicNameValuePair("order_number", mOrderNumberString));
-
-                        JSONObject json = serverRequest.getJSON(API + "delivery/status/delivered", mParams);
-                        if(json!=null) {
-                            try{
-                                String jsonString = json.getString("response");
-                            }catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+                if(deliveryIsChecked) {
+                    mCondomRequest.setOrderDelivered(deliveryIsChecked);
+                    JSONObject json = serverRequest.getJSON(API + "delivery/request/deliver", mParams);
+                    if(json!=null) {
+                        try{
+                            String jsonString = json.getString("response");
+                            Log.d(TAG, mOrderNumberString + "POST delivered");
+                        }catch (JSONException e) {
+                            e.printStackTrace();
                         }
-
-                        Log.d(TAG, mOrderNumberString + "delivered");
                     }
-                });
-                mFailedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        mCondomRequest.setOrderDelivered(isChecked);
-                        Log.d(TAG, mOrderNumberString + "failed");
-                    }
-                });
+                }
             }
         });
 

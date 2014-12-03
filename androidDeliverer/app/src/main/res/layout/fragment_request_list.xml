@@ -3,10 +3,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,6 +12,7 @@
         android:textSize="15sp"
         android:paddingLeft="4dp"
         android:text="Condom Request #"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,6 +22,7 @@
         android:textSize="15sp"
         android:layout_below="@+id/requestListOrderNumber"
         android:text="Date Requested"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,6 +34,7 @@
         android:layout_below="@+id/requestListDateRequested"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
+
     <CheckBox
         android:id="@+id/requestListAccepted"
         android:text="Accepted"
@@ -44,8 +43,7 @@
         android:gravity="center"
         android:layout_below="@+id/requestListDestination"
         android:enabled="false"
-        android:focusable="false"
-        />
+        android:focusable="false"/>
 
     <CheckBox
         android:id="@+id/requestListDelivered"
@@ -58,5 +56,5 @@
         android:layout_alignTop="@+id/requestListAccepted"
         android:layout_toRightOf="@+id/requestListAccepted"
         android:layout_toEndOf="@+id/requestListAccepted"/>
-    </RelativeLayout>
+
 </RelativeLayout>

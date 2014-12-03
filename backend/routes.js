@@ -54,8 +54,8 @@ module.exports = function(app) {
 
 
     // request a delivery 
-
-    app.post('/api/delivery/request', middleware.is_authenticated_and_eligible, function(req, res) {
+    ///TODO: Add eligibility
+    app.post('/api/delivery/request', middleware.is_authenticated, function(req, res) {
 	var session_token = req.body.session_token;
 	var dorm_name = req.body.dorm_name;
 	var dorm_room = req.body.dorm_room;
@@ -126,7 +126,8 @@ module.exports = function(app) {
     app.post('/api/survey/retrieve', middleware.is_authenticated, function(req, res) {
 	var session_token = req.body.session_token;
 	var campaign_id = req.body.campaign_id;
-	
+
+	console.log('retrieve :' + req.body.campaign_id);	
 	survey.retrieve(session_token, campaign_id, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
@@ -163,7 +164,7 @@ module.exports = function(app) {
 
     });
 
-    app.get('api/survey/do_test_sendout', function (req, res) {
+    app.get('/api/survey/do_test_sendout', function (req, res) {
 
     	sendout.do_test_sendout(function(res, status){
     		console.log(res);

@@ -63,17 +63,17 @@ public class RequestListFragment extends ListFragment{ // displays all condom re
     private class CondomRequestAdapter extends ArrayAdapter<CondomRequest> {
         public CondomRequestAdapter(ArrayList<CondomRequest> condomRequests) {
             super(getActivity(), 0, condomRequests);
-            Log.i(TAG, "create CondomRequestAdapter");
+            Log.i(TAG, "Create CondomRequestAdapter " + condomRequests.size());
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             // check to see if a recycled view was passed in, if not inflate one
-            if (convertView==null) {
+            if (convertView == null) {
                 convertView = getActivity().getLayoutInflater()
                         .inflate(R.layout.fragment_request_list, null);
             }
-            Log.i(TAG, "Adapter getView");
+            Log.i(TAG, "Adapter getView " + position);
             CondomRequest cr = getItem(position); // get CondomRequest for current view
 
             // fill view with condom request details

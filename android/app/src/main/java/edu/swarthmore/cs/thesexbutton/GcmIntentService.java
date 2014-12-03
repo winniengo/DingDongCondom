@@ -36,24 +36,24 @@ public class GcmIntentService extends IntentService {
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         String messageType = gcm.getMessageType(intent);
+        String campaignId;
 
         if (!extras.isEmpty()) {
-//            if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-//                sendNotification("Send error: " + extras.toString());
-//            } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
-//                sendNotification("Deleted messages on server: " + extras.toString());
-//        } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-
             // Filter messages based on message type
             if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                Log.i(TAG, "Received: " + extras.toString());
-                JSONObject surveyJson = retrieveSurvey(extras.toString());
-                sendNotification("New survey available. Click here to take it!", surveyJson);
-            }
-        }
+                campaignId = extras.getString("campaign_id");
+                Log.i(TAG, "CampaignId: " + campaignId);
 
-        // Release the wake lock provided by the WakefulBroadcastReceiver
-        GcmBroadcastReceiver.completeWakefulIntent(intent);
+                // Retrieve survey
+                JSONObject surveyJson = retrieveSurvey(campaignId);
+
+                // Notify user
+                sendNotification("We had your back, and now we're asking you to have ours. Click here to take our survey.", surveyJson);
+            }
+
+            // Release the wake lock provided by the WakefulBroadcastReceiver
+            GcmBroadcastReceiver.completeWakefulIntent(intent);
+        }
     }
 
     /**
@@ -68,27 +68,32 @@ public class GcmIntentService extends IntentService {
         params.add(new BasicNameValuePair("session_token", token));
 
         ServerRequest serverRequest = new ServerRequest();
-        return serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/server/retrieve", params);
+        return serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/survey/retrieve", params);
     }
 
     /**
      * Notifies the user that a survey is available
      */
     private void sendNotification(String msg, JSONObject survey) {
-        NotificationManager notificationManager =
-                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        // TODO: create a survey activity
+        // Pending intent launches SurveyActivity when user clicks on notification
+        Intent i = new Intent(this, SurveyActivity.class);
+        i.putExtra("survey", survey.toString());
         PendingIntent contentIntent =
-                PendingIntent.getActivity(this, 0, new Intent(this, RequestCondomActivity.class), 0);
+                PendingIntent.getActivity(this, 0, i, 0);
+        try {
+            contentIntent.send();
+        } catch (PendingIntent.CanceledException e) {
+        }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.logo_1)
-                .setContentTitle("GCM Notification")
+                .setSmallIcon(R.drawable.noti_icon)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
-                .setContentText(msg);
+                .setContentTitle("DingDong: Condom!")
+                .setContentText(msg)
+                .setContentIntent(contentIntent);
 
-        builder.setContentIntent(contentIntent);
+        NotificationManager notificationManager =
+                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 }

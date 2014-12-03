@@ -32,23 +32,22 @@ public class CondomRequestStore {
             mParams = new ArrayList<NameValuePair>();
             final ServerRequest serverRequest = new ServerRequest();
 
-            Log.i(TAG, "Session token in CondomRequestStore:" + sessionToken);
+            Log.i(TAG, "SessionToken: " + sessionToken);
             mParams.add(new BasicNameValuePair("session_token", sessionToken));
             JSONObject json = serverRequest.getJSON(API + "delivery/request/all", mParams);
             if (json != null) {
                 try {
                     // retrieves array of orders and parses it into list of Condom Requests
                     JSONArray jsonArray = json.getJSONArray("orders");
+                    mCondomRequests = new ArrayList<CondomRequest>();
                     if(jsonArray!=null) {
+                        Log.i(TAG, "Total orders " + jsonArray.length());
                         JSONObject jsonObject;
-                        Log.i(TAG, "" + jsonArray.length());
+                        CondomRequest cr;
                         for(int i=0; i < jsonArray.length(); i++) {
                             jsonObject = jsonArray.getJSONObject(i);
-                            Log.i(TAG, "get JSONObject " + i);
-
-                            CondomRequest cr = new CondomRequest((jsonObject));
-                            Log.i(TAG, "CR" + cr.getOrderNumber() + cr.getDeliveryDestination());
-                            //mCondomRequests.add(new CondomRequest((jsonObject)));
+                            cr = new CondomRequest((jsonObject));
+                            mCondomRequests.add(cr);
                         }
                     }
                 } catch (JSONException e) {

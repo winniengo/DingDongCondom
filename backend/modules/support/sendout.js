@@ -32,34 +32,33 @@
  		if (err) {
  			console.log('(Sendout.js): Error: ' + err);
  		}
+
  		if (campaign) {
  			var eligible_users = campaign.eligible_users;
  			var android_push_ids = [];
  			var ios_push_ids = [];
-
- 			Promise.map(eligible_users, function(user_id) {
- 				User.findOne({ _id : user_id }, function(err, user){
- 					if (err) {
- 						console.log('(Sendout.js): Error: ' + err);
- 					}
- 					if (user) {
- 						if (user.device_os == 'ANDROID_OS') {
- 							return android_push_ids.push(user.push_id);
- 						} else if (user.device_os == 'IOS') {
- 							return ios_push_ids.push(user.push_id);
- 						}
- 					} else {
- 						console.log('(Sendout.js): Error: User not found (ID ' + eligible_users[i] + ')');
- 					}
- 				});
- 			}).done(function (){
- 				sender.send(message, android_push_ids, 4, function(err, result) {
- 					if (err) {
- 						console.log(err);
- 					}
- 					callback(err, "All done");
- 				});
- 			});
+ 				
+ 			for (i=0;i<eligible_users.length;i++) {
+	 			User.findOne({ _id : eligible_users[i] }, function(err, user){
+	 					if (err) {
+	 						console.log('(Sendout.js): Error: ' + err);
+	 					}
+	 					if (user) {
+	 						if (user.device_os == 'ANDROID_OS') {
+								sender.send(message, [user.push_id] , 4, function(err, result) {
+									if (err) {
+										console.log('Sender err: ' + err);
+									}
+									callback(err, "All done");
+								});			
+	 						} else if (user.device_os == 'IOS') {
+	 							ios_push_ids.push(user.push_id);
+	 						}
+	 					} else {
+	 						console.log('(Sendout.js): Error: User not found (ID ' + eligible_users[i] + ')');
+	 					}
+	 				});
+	 		}
 
  		} else {
  			console.log('(Sendout.js): Error: Campaign ID' + campaign_id + ' not found.');
@@ -76,7 +75,10 @@ exports.do_test_sendout =  function (callback) {
 		var eligible_users = campaign.eligible_users;
 
 		module.exports.survey_sendout(eligible_users, "TestCampaign1", function(err, result) {
-			console.log(result);
+			console.log('sender result: '+ result);
+			if (err) {
+				console.log('err: ' + err);
+			}
 		})
 	});
 
