@@ -43,13 +43,13 @@ public class GcmIntentService extends IntentService {
             if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 String type = extras.getString("type");
 
-                if (type.equals("survey")) {
+                if (type.equals("broadcast")) {
                     String msg = extras.getString("message");
                     Log.i(TAG, "Broadcast message: " + msg);
 
                     // Notify user about app availability status
                     sendBroadcastNotification(msg);
-                } else if (type.equals("broadcast")) {
+                } else if (type.equals("survey")) {
                     campaignId = extras.getString("campaign_id");
                     Log.i(TAG, "CampaignId: " + campaignId);
 
