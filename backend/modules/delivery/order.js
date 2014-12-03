@@ -9,7 +9,7 @@
 
 var mongoose = require('mongoose');
 var crypto = require('crypto');
-var order = require('./models').orders;
+var Order = require('./models');
 var user = require('../user/models').User;
 var shortid = require('shortid');
 
@@ -32,7 +32,7 @@ exports.request = function (session_token, dorm_name, dorm_room, delivery_type,
 	} else {
 	    device_uuid = users[0].device_uuid;
 	   
-	    order.find({order_number:oid}, function (err, orders) {
+	    Order.find({order_number:oid}, function (err, orders) {
 
 			if (orders.length == 0) {
 			    var new_order = new order({
@@ -88,7 +88,7 @@ exports.status = function(order_number, callback) {
 
     var oid = order_number;
 
-    order.find({order_number:oid}, function (err, orders) {
+    Order.find({order_number:oid}, function (err, orders) {
 	var len = orders.length;
 
 
@@ -129,15 +129,15 @@ exports.status = function(order_number, callback) {
 }
 
 exports.all = function(callback) {
-	order.find( function (err, orders){
+	Order.find( function (err, orders){
 		
 		if (err) {
 			callback('DELIVERY_REQUEST_ALL_ERROR_DATABASE_ERROR', 500);
 		} else {
 			var all = [];
 
-			for (order in orders) {
-				order_dict = orders[order];
+			for (i in orders) {
+				order_dict = orders[i];
 				this_order = {
 					'requester' : order_dict.requester,
 					'deliverer' : order_dict.deliverer,
@@ -175,7 +175,7 @@ exports.accept = function(session_token, order_number, delivery_estimate, callba
 		} else { 
 			var now = new Date();
 			var deliverer = users[0].device_uuid;
-			order.findOneAndUpdate({order_number : order_number}, 
+			Order.findOneAndUpdate({order_number : order_number}, 
 								   {order_accepted:true, 
 								   	deliverer : deliverer,
 								    date_accepted : now, 
@@ -201,7 +201,7 @@ exports.deliver = function(session_token, order_number, callback) {
 		} else { 
 			var now = new Date();
 			var deliverer = users[0].device_uuid;
-			order.findOneAndUpdate({order_number : order_number}, 
+			Order.findOneAndUpdate({order_number : order_number}, 
 								   {order_delivered: true,
 								    order_accepted : true, // in case it wasn't 
 								    date_delivered : now}, function(err) {
