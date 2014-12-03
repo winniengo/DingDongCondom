@@ -9,8 +9,10 @@
 
 var mongoose = require('mongoose');
 var crypto = require('crypto');
-var Order = require('./models');
-var user = require('../user/models').User;
+
+var Order = require('./models').Order;
+var User = require('../user/models').User;
+
 var shortid = require('shortid');
 
 exports.request = function (session_token, dorm_name, dorm_room, delivery_type,
@@ -26,7 +28,7 @@ exports.request = function (session_token, dorm_name, dorm_room, delivery_type,
 
     var device_uuid;
     //get the user's device_uuid
-    user.find ({session_token : session_token}, function(err, users) {
+    User.find ({session_token : session_token}, function(err, users) {
 	if (users.length == 0) {
 	    callback({'response': 'DELIVERY_REQUEST_ERROR_USER_NOT_FOUND'}, 400);
 	} else {
@@ -170,7 +172,7 @@ exports.all = function(callback) {
 exports.accept = function(session_token, order_number, delivery_estimate, callback) {
 
 	//get the user's device_uuid
-    user.find ({session_token : session_token}, function(err, users) {
+    User.find ({session_token : session_token}, function(err, users) {
 		if (users.length == 0) {
 		    callback({'response': 'DELIVERY_REQUEST_ACCEPT_ERROR_USER_NOT_FOUND'}, 400);
 		} else { 
@@ -196,7 +198,7 @@ exports.accept = function(session_token, order_number, delivery_estimate, callba
 exports.deliver = function(session_token, order_number, callback) {
 
 	//get the user's device_uuid
-    user.find ({session_token : session_token}, function(err, users) {
+    User.find ({session_token : session_token}, function(err, users) {
 		if (users.length == 0) {
 		    callback({'response': 'DELIVERY_REQUEST_DELIVER_ERROR_USER_NOT_FOUND'}, 400);
 		} else { 

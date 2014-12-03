@@ -5,12 +5,13 @@
 
 var crypto = require('crypto');
 var mongoose = require('mongoose');
-var user = require('./models').User;
+
+var User = require('./models').User;
 
 
 exports.login = function(device_uuid, input_passphrase, push_id, callback) {
 	
-    user.find( {device_uuid: device_uuid}, function (err, users) {
+    User.find( {device_uuid: device_uuid}, function (err, users) {
 	
 	if(users.length != 0){
 	    var hashed_passphrase = users[0].hashed_passphrase;
@@ -38,7 +39,7 @@ exports.login = function(device_uuid, input_passphrase, push_id, callback) {
 			
 	    	user.push_id = push_id;
 
-	    	user.save(function(err){
+	    	User.save(function(err){
 	    		if (err) {
 	    			console.log('in login (43): ' + err);
 	    			callback({'response': 'LOGIN_ERROR_DATABASE_ERROR'}, 500);

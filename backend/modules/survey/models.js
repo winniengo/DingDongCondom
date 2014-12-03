@@ -5,7 +5,7 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var User = require('../user/models');
+var User = require('../user/models').User;
 
 
 var prototypeSurveySchema = mongoose.Schema({
@@ -22,12 +22,12 @@ var surveyCampaignSchema = mongoose.Schema({
         campaign_id : String,
         campaign_title : String, 
 
-        prototype_survey_id : {type: Schema.ObjectId, ref: 'SurveyPrototype'}, 
+        prototype_survey_id : {type: Schema.ObjectId, ref: 'prototypeSurveySchema'}, 
         completed_survey_ids : [{type: Schema.ObjectId, ref: 'surveySchema'}],
 
-        eligible_users : [{type: Schema.ObjectId, ref: 'User'}],
-        pending_users : [{type: Schema.ObjectId, ref: 'User'}],
-        completed_users : [{type: Schema.ObjectId, ref: 'User'}],
+        eligible_users : [{type: Schema.ObjectId, ref: 'userSchema'}],
+        pending_users : [{type: Schema.ObjectId, ref: 'userSchema'}],
+        completed_users : [{type: Schema.ObjectId, ref: 'userSchema'}],
 
         crontab : String, //the crontab on which this campaign gets executed
 

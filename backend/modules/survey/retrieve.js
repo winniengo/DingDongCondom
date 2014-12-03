@@ -147,7 +147,7 @@ exports.complete = function (session_token, campaign_id, answers, callback) {
 									pending_users.remove(user._id);
 									completed_users.push(user._id);
 
-									campaign.save(function(err) {
+									Campaign.save(function(err) {
 										if (err) {
 											console.log('in retrieve.js(139): ' + err);
 											return callback({'response' : 'SURVEY_COMPLETE_DATABASE_ERROR'}, 500);
