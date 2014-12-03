@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoginActivity extends Activity {
-    String mAccessToken, mAccessTokenExpires, mDeviceUUID, mPassphrase, mOrderNumber;
+    String mSessionToken, mSessionTokenExpires, mDeviceUUID, mPassphrase, mOrderNumber;
     SharedPreferences mSharedPreferences;
 
     // GCM vars
@@ -47,6 +47,9 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        Log.i(TAG, "onCreate");
+
         context = getApplicationContext();
         gcm = GoogleCloudMessaging.getInstance(this);
 
@@ -87,35 +90,28 @@ public class LoginActivity extends Activity {
                             showErrorPopup("No valid Google Play Services APK found.");
                         }
 
-                        // Look for previous registration
+                        // Retrieve from previous registration
                         mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
-                        mAccessToken = mSharedPreferences.getString("access_token", null);
-                        mAccessTokenExpires = mSharedPreferences.getString("access_token_expires", null);
+                        mSessionToken = mSharedPreferences.getString("session_token", null);
+                        mSessionTokenExpires = mSharedPreferences.getString("session_token_expires", null);
                         mDeviceUUID = mSharedPreferences.getString("device_uuid", null);
                         mPassphrase = mSharedPreferences.getString("passphrase", null);
                         mOrderNumber = mSharedPreferences.getString("order_number", null);
 
-                        if (mAccessToken == null) {
+                        Log.i(TAG, "onCreate: " + mSessionToken + " " + mOrderNumber + " " + mDeviceUUID);
+
+                        if (mSessionToken == null) {
                             if (mDeviceUUID == null) {
                                 // New user; call Register Activity
+                                Log.i(TAG, "starting Register Activity");
                                 Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
                                 i.putExtra("push_id", mRegid);
                                 startActivity(i);
                                 finish();
-                            } else {
-                                Login(mDeviceUUID, mPassphrase, mRegid);
-                                Intent i;
-                                if(mOrderNumber!=null) { // user has placed an order before
-                                    if(CheckOrderStatus(mAccessToken, mOrderNumber)) { // check order status
-                                    i = new Intent(LoginActivity.this, DeliveryStatusActivity.class);
-                                    startActivity(i);
-                                    finish();
-                                    }
-                                }
-                                i = new Intent(LoginActivity.this, RequestCondomActivity.class);
-                                startActivity(i);
-                                finish();
                             }
+                        } else {
+                            Log.i(TAG, "logging in");
+                            Login(mDeviceUUID, mPassphrase, mRegid); // also handles request and status
                         }
                     }
                 });
@@ -126,16 +122,7 @@ public class LoginActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        Intent i;
-        if (CheckOrderStatus(mAccessToken, mOrderNumber)) {
-            i = new Intent(LoginActivity.this, DeliveryStatusActivity.class);
-            startActivity(i);
-            finish();
-        } else {
-            i = new Intent(LoginActivity.this, RequestCondomActivity.class);
-            startActivity(i);
-            finish();
-        }
+        Log.i(TAG, "onResume");
     }
 
     /**
@@ -272,6 +259,7 @@ public class LoginActivity extends Activity {
      * Server sends back an authorization token that is stored in sharedPreferences.
      */
     public void Login(String deviceUUID, String passphrase, String regid) {
+        Log.i(TAG, "Login " + deviceUUID);
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("device_uuid", deviceUUID));
         params.add(new BasicNameValuePair("passphrase", passphrase));
@@ -282,20 +270,39 @@ public class LoginActivity extends Activity {
 
         if (json != null) {
             try {
-                String sessionToken = json.getString("session_token");
-                String sessionTokenExpires = json.getString("session_token_expires");
+                mSessionToken = json.getString("session_token");
+                mSessionTokenExpires = json.getString("session_token_expires");
 
                 SharedPreferences.Editor edit = mSharedPreferences.edit();
-                edit.putString("session_token", sessionToken);
-                edit.putString("session_token_expires", sessionTokenExpires);
+                edit.putString("session_token", mSessionToken);
+                edit.putString("session_token_expires", mSessionTokenExpires);
                 edit.apply();
+                Log.i(TAG, "Obtained session token: " + mSessionToken);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+
+        if(mOrderNumber!=null) { // user has placed an order before
+            Log.i(TAG, "checking for open orders");
+            boolean open = CheckOrderStatus(mSessionToken, mOrderNumber);
+            Log.i(TAG, "open order: " + open);
+            if (open) { // check order status
+                Intent i = new Intent(LoginActivity.this, DeliveryStatusActivity.class);
+                startActivity(i);
+                finish();
+            }
+        } else {
+            Log.i(TAG, "starting Request Condom Activity");
+            Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
+            startActivity(i);
+            finish();
+        }
     }
 
     public boolean CheckOrderStatus(String sessionToken, String orderNumber) {
+        Log.d(TAG, "CheckOrderStatus: " + orderNumber + " for " + sessionToken);
         boolean delivered = false;
         //boolean failed = false;
 
@@ -315,10 +322,10 @@ public class LoginActivity extends Activity {
             }
         }
 
-        if(delivered) { // open order
-            return true;
-        } else { // old, closed order
+        if(delivered) { // old, closed order
             return false;
+        } else { // open order
+            return true;
         }
     }
 

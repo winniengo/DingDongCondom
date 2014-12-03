@@ -37,11 +37,14 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
     Button mRequestButton;
     List<NameValuePair> mParams;
     SharedPreferences mSharedPreferences;
+    private static String TAG = "RequestCondomActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_condom);
+
+        Log.i(TAG, "onCreate");
 
         mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
         mSessionToken = mSharedPreferences.getString("session_token", null);
@@ -99,9 +102,11 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
 
                 ServerRequest serverRequest = new ServerRequest();
                 JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/delivery/request", mParams);
+                Log.i("RequestCondomActivity", mSessionToken + mDormName + mDormNumberString + mDeliveryType);
+                if (json != null){
+                    try{
+                        Log.i("RequestCondomActivity", json.toString());
 
-                if (json != null) {
-                    try {
                         String jsonString = json.getString("response");
                         String orderNumber = json.getString("order_number");
                         Log.d("Order Requested:", orderNumber);
