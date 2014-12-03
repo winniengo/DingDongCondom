@@ -87,11 +87,13 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
                         generateDeliveryEmail(mDormName, mDormNumberString, mDeliveryType, orderNumber);
                         Log.d("Order Requested:", orderNumber);
 
+                        // save current oder details
+                        SharedPreferences.Editor edit = mSharedPreferences.edit();
+                        edit.putString("order_number", orderNumber);
+                        edit.apply();
+
                         // call Delivery Status Activity
                         Intent i = new Intent(RequestCondomActivity.this, DeliveryStatusActivity.class);
-                        Bundle b = new Bundle();
-                        b.putString("order_number", orderNumber);
-                        i.putExtras(b);
                         startActivity(i);
                         finish();
                     }catch (JSONException e) {
