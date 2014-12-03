@@ -108,7 +108,7 @@ module.exports = function(app) {
 
 
     // accept a request
-   	app.post('/api/delivery/request/accept', middleware.is_authenticated_and_admin, function(req, res) {
+   	app.post('/api/delivery/request/deliver', middleware.is_authenticated_and_admin, function(req, res) {
 
    	var session_token = req.body.session_token;
    	var order_number = req.body.order_number;
