@@ -41,19 +41,43 @@ public class GcmIntentService extends IntentService {
         if (!extras.isEmpty()) {
             // Filter messages based on message type
             if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                campaignId = extras.getString("campaign_id");
-                Log.i(TAG, "CampaignId: " + campaignId);
+                String type = extras.getString("type");
 
-                // Retrieve survey
-                JSONObject surveyJson = retrieveSurvey(campaignId);
+                if (type.equals("broadcast")) {
+                    String msg = extras.getString("message");
+                    Log.i(TAG, "Broadcast message: " + msg);
 
-                // Notify user
-                sendNotification("We had your back, and now we're asking you to have ours. Click here to take our survey.", surveyJson);
+                    // Notify user about app availability status
+                    sendBroadcastNotification(msg);
+                } else if (type.equals("survey")) {
+                    campaignId = extras.getString("campaign_id");
+                    Log.i(TAG, "CampaignId: " + campaignId);
+
+                    // Retrieve survey and notify user
+                    JSONObject surveyJson = retrieveSurvey(campaignId);
+                    sendSurveyNotification("We had your back, and now we're asking you to have ours. Click here to take our survey.", surveyJson);
+                }
             }
 
             // Release the wake lock provided by the WakefulBroadcastReceiver
             GcmBroadcastReceiver.completeWakefulIntent(intent);
         }
+    }
+
+    /**
+     * Notifies user about the availability status of the app
+     */
+    private void sendBroadcastNotification(String msg) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.noti_icon)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+                .setContentTitle("DingDong: Condom!")
+                .setContentText(msg)
+                .setAutoCancel(true);
+
+        NotificationManager notificationManager =
+                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
     /**
@@ -74,7 +98,7 @@ public class GcmIntentService extends IntentService {
     /**
      * Notifies the user that a survey is available
      */
-    private void sendNotification(String msg, JSONObject survey) {
+    private void sendSurveyNotification(String msg, JSONObject survey) {
         // Add JSON to intent
         Intent i = new Intent(this, SurveyActivity.class);
         i.putExtra("survey", survey.toString());

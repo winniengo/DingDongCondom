@@ -24,9 +24,10 @@
 	    delayWhileIdle: true,
 	    timeToLive: 3,
 	    data: {
-	        campaign_id : campaign_id,
-		survey_link : 'google.com'	    
-}
+	    	type: 'survey',
+	        campaign_id : campaign_id,	    
+		}
+		
 	});
 
  	Campaign.findOne({ campaign_id : campaign_id }, function(err, campaign){

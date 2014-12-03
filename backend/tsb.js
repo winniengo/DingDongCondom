@@ -40,6 +40,11 @@ require('./routes.js')(app);
 //app.listen(port);
 
 
+// initialize TSB broadcast
+var broadcast = require('./modules/broadcast/announce');
+broadcast.initialize_annoucement();
+
+
 // Set up the servers
 var httpServer = http.createServer(app);
 httpServer.listen(port);
