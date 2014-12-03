@@ -39,7 +39,7 @@ exports.login = function(device_uuid, input_passphrase, push_id, callback) {
 			
 	    	user.push_id = push_id;
 
-	    	User.save(function(err){
+	    	user.save(function(err){
 	    		if (err) {
 	    			console.log('in login (43): ' + err);
 	    			callback({'response': 'LOGIN_ERROR_DATABASE_ERROR'}, 500);

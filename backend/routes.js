@@ -179,6 +179,7 @@ module.exports = function(app) {
 
     app.get('/api/survey/do_test_sendout', function (req, res) {
 
+    	console.log('doing test sendout');
     	sendout.do_test_sendout(function(res, status){
     		console.log(res);
     		res.status(200).json(result);

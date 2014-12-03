@@ -2,6 +2,7 @@ package edu.swarthmore.cs.thesexbutton;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -10,7 +11,7 @@ import org.json.JSONObject;
 public class SurveyActivity extends Activity
 {
     private JSONObject mSurveyJson;
-    private String mResponse;
+    // private String mResponse;  // use to debug
     private String mSurveyBody;
     private TextView mTextView;
 
@@ -32,7 +33,10 @@ public class SurveyActivity extends Activity
             }
         }
 
-        mTextView = (TextView) findViewById(R.id.survey_link);
-        mTextView.setText(mSurveyBody);
+        if (mSurveyBody != null) {
+            Log.i("Survey", mSurveyBody);
+            mTextView = (TextView) findViewById(R.id.survey_link);
+            mTextView.setText(mSurveyBody);
+        }
     }
 }
