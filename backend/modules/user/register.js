@@ -4,7 +4,7 @@
 
 var mongoose = require('mongoose');
 var crypto = require('crypto');
-var user = require('./models').User;
+var User = require('./models').User;
 
 
 exports.register = function(device_uuid, passphrase, signup_token, device_os, 
@@ -51,7 +51,7 @@ exports.register = function(device_uuid, passphrase, signup_token, device_os,
 			    
 
 			    var d = new Date();
-			    var new_user = new user({
+			    var new_user = new User({
 					device_uuid : u, 
 					device_os : dos,
 					
@@ -71,7 +71,7 @@ exports.register = function(device_uuid, passphrase, signup_token, device_os,
 
 
 				//check if user exists
-			    user.find({ device_uuid : u }, function (err, users) {
+			    User.find({ device_uuid : u }, function (err, users) {
 			    	console.log('users: ' + users);
 			    	if (err) {
 			    		console.log(err);

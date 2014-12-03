@@ -285,6 +285,7 @@ public class LoginActivity extends Activity {
      *
      */
     public void showErrorPopup(String msg) {
-
+        Intent i = new Intent(LoginActivity.this, PopupActivity.class);
+        startActivity(i);
     }
 }

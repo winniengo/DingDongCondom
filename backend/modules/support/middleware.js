@@ -5,15 +5,15 @@
 
 
 var mongoose = require('mongoose');
-var user = require('../user/models').User;
-var Order = require('../delivery/models');
+var User = require('../user/models').User;
+var Order = require('../delivery/models').Order;
 
 
 
 exports.get_device_uuid = function (req, res) {
 	var token = req.body.session_token
 
-	user.find ({session_token : token}, function(err, users) {
+	User.find ({session_token : token}, function(err, users) {
 		if (users.length == 0) {
 			res.status(401).json({'response':"ERROR_NOT_AUTHENTICATED"});
 		} else {
@@ -31,7 +31,7 @@ exports.is_authenticated = function (req, res, next) {
 	var token = req.body.session_token;
         
 	// check if that token is valid
-	user.find ({session_token : token}, function(err, users) {
+	User.find ({session_token : token}, function(err, users) {
 		if (users.length == 0) {
 			res.status(401).json({'response':"ERROR_NOT_AUTHENTICATED"});
 		} else {
@@ -50,7 +50,7 @@ exports.is_authenticated_and_requester = function (req, res, next) {
     console.log("in middleware.is_authenticated_and_requester :" + req.body);
     console.log('token: ' + token + 'ordernumber: ' + order_number);
 	// check if that token is valid
-	user.find ({session_token : token}, function(err, users) {
+	User.find ({session_token : token}, function(err, users) {
 		if (users.length == 0) {
 			res.status(401).json({'response':"ERROR_NOT_AUTHENTICATED"});
 		} else {
@@ -81,7 +81,7 @@ exports.is_authenticated_and_eligible = function (req, res, next) {
 	var token = req.body.session_token;
 
 	// check if that token is valid
-	user.find ({session_token : token}, function(err, users) {
+	User.find ({session_token : token}, function(err, users) {
 		if (err) {
 			console.log(err);
 			res.status(500).json({'response':'DELIVERY_REQUEST_ERROR'});
@@ -134,7 +134,7 @@ exports.is_authenticated_and_admin = function (req, res, next) {
 	var token = req.body.session_token;
 
 	// check if that token is valid
-	user.find ({session_token : token}, function(err, users) {
+	User.find ({session_token : token}, function(err, users) {
 		if (users.length == 0) {
 			res.status(401).json({'response':"ERROR_NOT_AUTHENTICATED"});
 		} else {
