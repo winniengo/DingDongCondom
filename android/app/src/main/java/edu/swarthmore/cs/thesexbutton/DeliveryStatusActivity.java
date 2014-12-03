@@ -40,10 +40,9 @@ public class DeliveryStatusActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery_status);
 
-        Bundle b = getIntent().getExtras();
-        mOrderNumber = b.getString("order_number");
         mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
         mSessionToken = mSharedPreferences.getString("session_token", null);
+        mOrderNumber = mSharedPreferences.getString("order_number", null);
 
         new Thread(new Runnable() {
             @Override
@@ -75,9 +74,9 @@ public class DeliveryStatusActivity extends Activity {
                 });
             }
         }).start();
-
-
     }
+
+
 
     // launches and loads progress bar
     public void launchProgressDialog(Context context) {

@@ -65,13 +65,6 @@ public class RegisterActivity extends Activity {
                         String sessionToken = json.getString("session_token");
                         String sessionTokenExpires = json.getString("session_token_expires");
 
-                        /*
-                        mSavedSharedPreferences.setSessionToken(c, sessionToken);
-                        mSavedSharedPreferences.setSessionTokenExpires(c, sessionTokenExpires);
-                        mSavedSharedPreferences.setDeviceUuid(c, mDeviceUUID);
-                        mSavedSharedPreferences.setPassphrase(c, mPassphrase);
-                        */
-
                         SharedPreferences.Editor edit = mSharedPreferences.edit();
                         edit.putString("session_token", sessionToken);
                         edit.putString("session_token_expires", sessionTokenExpires);
