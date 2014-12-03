@@ -41,4 +41,4 @@ var orderLifecycleSchema = mongoose.Schema({
 
 
 // export the different schemas as models
-module.exports = mongoose.model('order', orderLifecycleSchema);
+module.exports = mongoose.model('orderLifecycle', orderLifecycleSchema);
