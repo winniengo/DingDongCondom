@@ -26,11 +26,14 @@ public class RegisterActivity extends Activity {
     String mSignupTokenString, mDeviceUUID, mDeviceOS, mPassphrase, mRegid;
     List<NameValuePair> mParams;
     SharedPreferences mSharedPreferences;
+    private static String TAG = "RegisterActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        Log.i(TAG, "onCreate");
 
         mSignupToken = (EditText)findViewById(R.id.signupToken);
         mRegister = (Button)findViewById(R.id.registerButton);
@@ -43,10 +46,13 @@ public class RegisterActivity extends Activity {
                 mSignupTokenString = mSignupToken.getText().toString();
                 mDeviceOS = "ANDROID_OS";
                 mPassphrase = UUID.randomUUID().toString();
-                mDeviceUUID = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+                mDeviceUUID = UUID.randomUUID().toString();
+
+                //TODO
+                /*mDeviceUUID = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
                 if(mDeviceUUID == null) {
                     mDeviceUUID = UUID.randomUUID().toString();
-                }
+                }*/
                 mRegid = getIntent().getStringExtra("push_id");
 
                 mParams = new ArrayList<NameValuePair>();
@@ -64,13 +70,6 @@ public class RegisterActivity extends Activity {
                         String jsonString = json.getString("response");
                         String sessionToken = json.getString("session_token");
                         String sessionTokenExpires = json.getString("session_token_expires");
-
-                        /*
-                        mSavedSharedPreferences.setSessionToken(c, sessionToken);
-                        mSavedSharedPreferences.setSessionTokenExpires(c, sessionTokenExpires);
-                        mSavedSharedPreferences.setDeviceUuid(c, mDeviceUUID);
-                        mSavedSharedPreferences.setPassphrase(c, mPassphrase);
-                        */
 
                         SharedPreferences.Editor edit = mSharedPreferences.edit();
                         edit.putString("session_token", sessionToken);
