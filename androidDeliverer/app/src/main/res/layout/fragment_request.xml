@@ -63,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/delivery_estimate"
                 android:hint="Enter delivery estimate"
+                android:inputType="number"
                 android:layout_margin="5dp"/>
             <CheckBox
                 android:layout_width="match_parent"
