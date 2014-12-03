@@ -3,17 +3,30 @@
  * Defines the overall form of our API
  */
 
-// modules
+// middleware module
+var middleware = require('./modules/support/middleware');
+
+// user modules
 var register = require('./modules/user/register');
 var login = require('./modules/user/login');
+
+// delivery modules
 var order = require('./modules/delivery/order');
-var middleware = require('./modules/support/middleware');
-var survey = require('./modules/survey/retrieve');
+var deliverer = require('./modules/delivery/deliverer');
+var status = require('./modules/delivery/status');
+
+// survey modules
+var retrieve = require('./modules/survey/retrieve');
+var complete = require('./modules/survey/complete');
+var survey_test = require('./modules/survey/testing');
+
+// GCM sendout module
 var sendout = require('./modules/support/sendout');
+
 
 module.exports = function(app) {
     app.get('/', function(req, res) {
-	res.end("TSB Backend v0.0.1");
+		res.end("TSB Backend v0.0.1");
     });
 
     // authenticate with the backend by supplying
@@ -74,7 +87,7 @@ module.exports = function(app) {
 	var session_token = req.body.session_token;
 	var order_number = req.body.order_number;
 	
-	order.status(order_number, function (result, status) {
+	status.status(order_number, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
 		});
@@ -85,7 +98,7 @@ module.exports = function(app) {
    	// get a list of all requests
    	app.post('/api/delivery/request/all', middleware.is_authenticated_and_admin, function(req, res) {
 	
-	order.all(function (result, status) {
+	deliverer.all(function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
 		});
@@ -99,7 +112,7 @@ module.exports = function(app) {
    	var order_number = req.body.order_number;
    	var delivery_estimate = req.body.delivery_estimate;
 
-	order.accept(session_token, order_number, delivery_estimate, function (result, status) {
+	deliverer.accept(session_token, order_number, delivery_estimate, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
 		});
@@ -113,7 +126,7 @@ module.exports = function(app) {
    	var session_token = req.body.session_token;
    	var order_number = req.body.order_number;
    	
-	order.deliver(session_token, order_number, function (result, status) {
+	deliverer.deliver(session_token, order_number, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
 		});
@@ -128,7 +141,7 @@ module.exports = function(app) {
 	var campaign_id = req.body.campaign_id;
 
 	console.log('retrieve :' + req.body.campaign_id);	
-	survey.retrieve(session_token, campaign_id, function (result, status) {
+	retrieve.retrieve(session_token, campaign_id, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
 		});
@@ -145,7 +158,7 @@ module.exports = function(app) {
 
 	console.log('in routes: ' + answers);
 	
-	survey.complete(session_token, campaign_id, answers, function (result, status) {
+	complete.complete(session_token, campaign_id, answers, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
 		});
@@ -157,7 +170,7 @@ module.exports = function(app) {
     // for testing purposes
     app.get('/api/survey/create_test_campaign', function (req, res) {
 
-    	survey.create_test_campaign(function(result, status) {
+    	survey_test.create_test_campaign(function(result, status) {
     		console.log(result);
     		res.status(200).json(result);
     	});
