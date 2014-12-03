@@ -35,7 +35,7 @@ exports.request = function (session_token, dorm_name, dorm_room, delivery_type,
 	    Order.find({order_number:oid}, function (err, orders) {
 
 			if (orders.length == 0) {
-			    var new_order = new order({
+			    var new_order = new Order({
 					order_number : oid, 
 
 					requester : device_uuid, 
