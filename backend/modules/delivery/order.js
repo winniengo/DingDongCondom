@@ -148,6 +148,7 @@ exports.all = function(callback) {
 					'order_delivered' : order_dict.order_delivered,
 					'order_failed' : order_dict.order_failed,
 					
+					'date_requested' : order_dict.date_requested,
 					'date_accepted' : order_dict.date_accepted,
 					'date_delivered' : order_dict.date_delivered,
 					
