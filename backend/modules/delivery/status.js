@@ -6,6 +6,15 @@
  */
 
 
+var mongoose = require('mongoose');
+var crypto = require('crypto');
+
+var Order = require('./models').Order;
+var User = require('../user/models').User;
+
+var shortid = require('shortid');
+
+
 exports.status = function(order_number, callback) {
 
     var oid = order_number;
