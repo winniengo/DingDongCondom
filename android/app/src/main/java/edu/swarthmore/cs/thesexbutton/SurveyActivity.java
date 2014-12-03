@@ -18,6 +18,7 @@ public class SurveyActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_survey);
 
         try {
             mSurveyJson = new JSONObject(getIntent().getStringExtra("survey"));
@@ -34,7 +35,7 @@ public class SurveyActivity extends Activity
         }
 
         if (mSurveyBody != null) {
-            Log.i("Survey", mSurveyBody);
+            Log.i("Survey body TEXT:", mSurveyBody);
             mTextView = (TextView) findViewById(R.id.survey_link);
             mTextView.setText(mSurveyBody);
         }

@@ -82,10 +82,6 @@ public class GcmIntentService extends IntentService {
         // Pending intent launches SurveyActivity when user clicks on notification
         PendingIntent contentIntent =
                 PendingIntent.getActivity(this, 0, i, 0);
-        try {
-            contentIntent.send();
-        } catch (PendingIntent.CanceledException e) {
-        }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.noti_icon)
