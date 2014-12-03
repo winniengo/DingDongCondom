@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -105,11 +104,9 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
                     try {
                         String jsonString = json.getString("response");
                         String orderNumber = json.getString("order_number");
-
-                        Toast.makeText(getApplication(),jsonString,Toast.LENGTH_LONG).show();
                         Log.d("Order Requested:", orderNumber);
 
-                        // save current oder details
+                        // save current order details
                         SharedPreferences.Editor edit = mSharedPreferences.edit();
                         edit.putString("order_number", orderNumber);
                         edit.apply();
