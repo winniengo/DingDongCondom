@@ -32,26 +32,26 @@ import java.util.jar.Attributes;
  */
 public class RequestFragment extends Fragment {
     private CondomRequest mCondomRequest;
-
     private TextView mOrderNumber, mDeliveryDestination, mDateRequested, mDateAccepted, mDateDelivered;
     private EditText mDeliveryEstimate;
-    private String mDeliveryEstimateString, mSessionToken, mOrderNumberString;
+    private String mDeliveryEstimateString, mOrderNumberString , mSessionToken;
     private CheckBox mAcceptedCheckBox, mDeliveredCheckBox, mFailedCheckBox;
     private Button mConfirm;
 
     private static final String TAG = "RequestFragment";
-    private static final String API = "http:///tsb.sccs.swarthmore.edu:8080/api/";
-    SharedPreferences mSharedPreferences;
+    private static final String API = "http://tsb.sccs.swarthmore.edu:8080/api/";
+
     List<NameValuePair> mParams;
 
     // accepts an order number, creates an argument bundle, creates fragment instance, then
     // attaches the arguments to the fragment
-    public static RequestFragment newInstance(String orderNumber) {
-        Bundle args = new Bundle();
-        args.putSerializable("order_number", orderNumber);
+    public static RequestFragment newInstance(String orderNumber, String sessionToken) {
+        Bundle bundle = new Bundle();
+        bundle.putString("order_number", orderNumber);
+        bundle.putString("session_token", sessionToken);
 
         RequestFragment fragment = new RequestFragment();
-        fragment.setArguments(args);
+        fragment.setArguments(bundle);
 
         return fragment;
     }
@@ -59,7 +59,13 @@ public class RequestFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO RequestEvent
+        mSessionToken = getArguments().getString("session_token");
+        String orderNumber = getArguments().getString("order_number");
+
+        CondomRequestStore store = CondomRequestStore.get(mSessionToken);
+        mCondomRequest = store.getCondomRequest(orderNumber);
+
+        Log.d(TAG, mCondomRequest.getOrderNumber());
     }
 
     @Override
@@ -68,7 +74,6 @@ public class RequestFragment extends Fragment {
 
         // fill condom request details
         mOrderNumber = (TextView) v.findViewById(R.id.order_number);
-
 
         mDeliveryDestination = (TextView) v.findViewById(R.id.delivery_destination);
         mDateRequested = (TextView) v.findViewById(R.id.date_requested);
@@ -101,16 +106,15 @@ public class RequestFragment extends Fragment {
                 // set up POST
                 mParams = new ArrayList<NameValuePair>();
                 final ServerRequest serverRequest = new ServerRequest();
-                // TODO get mSessionToken from sharedPreferences
                 mOrderNumberString = mOrderNumber.getText().toString();
 
                 // update condom request fields
-                mDeliveryEstimateString = mDeliveryEstimate.getText().toString();
-
                 mAcceptedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         mCondomRequest.setOrderAccepted(isChecked);
+
+                        mDeliveryEstimateString = mDeliveryEstimate.getText().toString();
                         mParams.add(new BasicNameValuePair("session_token", mSessionToken));
                         mParams.add(new BasicNameValuePair("order_number", mOrderNumberString));
                         mParams.add(new BasicNameValuePair("delivery_estimate", mDeliveryEstimateString));
@@ -124,7 +128,7 @@ public class RequestFragment extends Fragment {
                             }
                         }
 
-                        Log.d(TAG, "accepted");
+                        Log.d(TAG, mOrderNumberString + "accepted");
                     }
 
                 });
@@ -144,14 +148,14 @@ public class RequestFragment extends Fragment {
                             }
                         }
 
-                        Log.d(TAG, "delivered");
+                        Log.d(TAG, mOrderNumberString + "delivered");
                     }
                 });
                 mFailedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         mCondomRequest.setOrderDelivered(isChecked);
-                        Log.d(TAG, "failed");
+                        Log.d(TAG, mOrderNumberString + "failed");
                     }
                 });
             }

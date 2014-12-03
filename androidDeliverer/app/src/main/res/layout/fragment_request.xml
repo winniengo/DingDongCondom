@@ -106,6 +106,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/confirm_button"
+            android:textColor="#ffffff"
+            android:background="@drawable/btn_blue"
             android:text="CONFIRM"/>
 
     </LinearLayout>
