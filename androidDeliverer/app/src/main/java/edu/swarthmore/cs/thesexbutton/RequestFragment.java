@@ -1,5 +1,6 @@
 package edu.swarthmore.cs.thesexbutton;
 
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.app.Fragment;
 import android.content.SharedPreferences;
@@ -94,8 +95,17 @@ public class RequestFragment extends Fragment {
         mDeliveredCheckBox = (CheckBox) v.findViewById(R.id.order_delivered);
         mFailedCheckBox = (CheckBox) v. findViewById(R.id.order_failed);
 
-        mDateAccepted.setText(mCondomRequest.getDateAccepted().toString());
-        mDateDelivered.setText(mCondomRequest.getDateDelivered().toString());
+        String dateAccepted = mCondomRequest.getDateAccepted();
+        String dateDelivered = mCondomRequest.getDateDelivered();
+
+        if (dateAccepted!=null) {
+            mDateAccepted.setText(dateAccepted);
+        }
+        if (dateDelivered!=null) {
+            mDateDelivered.setText(dateDelivered);
+        }
+
+        // checkbox
         mAcceptedCheckBox.setChecked(mCondomRequest.isOrderAccepted());
         mDeliveredCheckBox.setChecked(mCondomRequest.isOrderDelivered());
         mFailedCheckBox.setChecked(mCondomRequest.isOrderFailed());
@@ -104,7 +114,7 @@ public class RequestFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 acceptedIsChecked = isChecked;
-                Log.d(TAG, mOrderNumberString + "is accepted");
+                Log.d(TAG, mOrderNumberString + " accepted checked");
             }
         });
 
@@ -112,7 +122,7 @@ public class RequestFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 deliveryIsChecked = isChecked;
-                Log.d(TAG, mOrderNumberString + "is delivered");
+                Log.d(TAG, mOrderNumberString + " delivered checked");
             }
         });
 
@@ -120,13 +130,15 @@ public class RequestFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mCondomRequest.setOrderDelivered(isChecked);
-                Log.d(TAG, mOrderNumberString + "failed");
+                Log.d(TAG, mOrderNumberString + " failed checked");
             }
         });
 
 
         mConfirm = (Button) v.findViewById(R.id.confirm_button);
         mConfirm.setOnClickListener(new View.OnClickListener() {
+            Activity activity = getActivity();
+
             @Override
             public void onClick(View view) {
                 // set up POST
@@ -146,7 +158,8 @@ public class RequestFragment extends Fragment {
                     if (json != null) {
                         try {
                             String jsonString = json.getString("response");
-                            Log.d(TAG, mOrderNumberString + "POST accepted");
+                            Toast.makeText(activity,jsonString,Toast.LENGTH_LONG).show();
+                            Log.d(TAG, mOrderNumberString + " POST accepted");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -159,7 +172,8 @@ public class RequestFragment extends Fragment {
                     if(json!=null) {
                         try{
                             String jsonString = json.getString("response");
-                            Log.d(TAG, mOrderNumberString + "POST delivered");
+                            Toast.makeText(activity,jsonString,Toast.LENGTH_LONG).show();
+                            Log.d(TAG, mOrderNumberString + " POST delivered");
                         }catch (JSONException e) {
                             e.printStackTrace();
                         }

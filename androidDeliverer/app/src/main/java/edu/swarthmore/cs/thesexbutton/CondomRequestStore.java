@@ -69,6 +69,11 @@ public class CondomRequestStore {
         return sCondomRequestStore;
     }
 
+    public static CondomRequestStore update(String sessionToken) {
+        sCondomRequestStore = new CondomRequestStore(sessionToken);
+        return sCondomRequestStore;
+    }
+
     public ArrayList<CondomRequest> getCondomRequests() {
         return mCondomRequests;
     }

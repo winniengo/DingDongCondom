@@ -19,13 +19,14 @@ import java.util.ArrayList;
 public class RequestListFragment extends ListFragment{ // displays all condom requests
     String mSessionToken;
     ArrayList<CondomRequest> mCondomRequests;
+    CondomRequestAdapter mCondomRequestAdapter;
     private static final String TAG = "RequestListFragment";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.i(TAG, "At the top of onCreate");
+        Log.i(TAG, "created");
 
         Bundle bundle = getArguments();
         mSessionToken = bundle.getString("session_token", null);
@@ -36,14 +37,21 @@ public class RequestListFragment extends ListFragment{ // displays all condom re
 
         Log.i(TAG, "Got list of condom requests");
 
-        CondomRequestAdapter adapter = new CondomRequestAdapter(mCondomRequests);
-        setListAdapter(adapter);
+        mCondomRequestAdapter = new CondomRequestAdapter(mCondomRequests);
+        setListAdapter(mCondomRequestAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        ((CondomRequestAdapter)getListAdapter()).notifyDataSetChanged();
+
+        CondomRequestStore store = CondomRequestStore.update(mSessionToken);
+        mCondomRequests = store.getCondomRequests();
+
+        Log.i(TAG, "Got updated list of condom requests");
+
+        mCondomRequestAdapter = new CondomRequestAdapter(mCondomRequests);
+        setListAdapter(mCondomRequestAdapter);
     }
 
     @Override

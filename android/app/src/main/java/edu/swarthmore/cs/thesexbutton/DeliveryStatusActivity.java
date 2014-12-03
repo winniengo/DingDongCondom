@@ -85,7 +85,7 @@ public class DeliveryStatusActivity extends Activity {
         mProgressDialog = new ProgressDialog(context);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setTitle("Delivering...");
-        mProgressDialog.setMessage("Condom is on its way! Please wait...");
+        mProgressDialog.setMessage("Condom is on its way! Please wait...\n Estimated delivery time: " + mDeliveryEstimate + " min.");
         mProgressDialog.setCancelable(false); // dialog can't be cancelled by pressing back
         mProgressDialog.setIndeterminate(false);
         mProgressDialog.setMax(mDeliveryEstimate);
@@ -97,36 +97,38 @@ public class DeliveryStatusActivity extends Activity {
 
         Thread thread = new Thread(new Runnable() { // used to execute in parallel with UI thread
             public void run() {
-                while (mProgressDialogStatus < mProgressDialog.getMax()) {
-
-                    // check delivery status
+                int counter = 0;
+                while (!mDelivered) {
+                    // check delivery status every 20 seconds
                     checkDeliveryStatus();
 
                     if(mDelivered) {
                         mProgressDialogStatus = mProgressDialog.getMax();
                     }
                     else {
-                        mProgressDialogStatus++;
+                        if(counter%3==0) { // set status every minute
+                            mProgressDialogStatus++;
+                            // update the progress bar
+                            mHandler.post(new Runnable() {
+                                public void run() {
+                                    mProgressDialog.setProgress(mProgressDialogStatus);
+                                }
+                            });
+                        }
                     }
 
-                    try { // sleep 5 seconds
-                        Thread.sleep(1000);
+                    try { // sleep 20 seconds
+                        Thread.sleep(20000);
+                        counter++;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
-                    // update the progress bar
-                    mHandler.post(new Runnable() {
-                        public void run() {
-                            mProgressDialog.setProgress(mProgressDialogStatus);
-                        }
-                    });
                 }
 
                 // condom has been delivered
                 if (mProgressDialogStatus >= mProgressDialog.getMax()) {
-                    try { // sleep 2 seconds, display 100%
-                        Thread.sleep(1000);
+                    try { // sleep 1.5 seconds, display 100%
+                        Thread.sleep(1500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

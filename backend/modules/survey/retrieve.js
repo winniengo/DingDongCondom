@@ -70,7 +70,7 @@ exports.retrieve = function (session_token, campaign_id, callback) {
 							// so they know what they're posting back to
 							callback({'response' : 'SURVEY_RETRIEVE_SUCCESS',
 								 'campaign_id' : campaign.campaign_id, 
-								 'survey_body' : survey_prototype_body,
+								 'survey_body' : 'https://www.google.com',
 								}, 200);
 
 						} else {
