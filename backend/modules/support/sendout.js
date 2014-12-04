@@ -8,6 +8,8 @@
 
  var gcm = require('node-gcm');
  var Promise = require('bluebird');
+ var async = require('async');
+
 
  // models we need
  var Campaign = require('../survey/models.js').SurveyCampaign;
@@ -29,47 +31,112 @@
 		}
 		
 	});
+	
+	fetchAllEligibleUserPushIDs (campaign_id, function(push_ids) {
+		if (!push_ids) {
+			callback('No eligible users to send out', 'none sent');
+		} else {
+			console.log('sending to: ' + push_ids);
+			sender.send(message, push_ids , 4, function(err, result) {
+				if (err) {
+					console.log(campaign_id + 'Sender err: ' + err);
+				} 
+				
+				callback(err, 'Successfuly sent out push notifications');
+			});
+		}
+	});
+		
+ }
 
- 	Campaign.findOne({ campaign_id : campaign_id }, function(err, campaign){
+
+function fetchAllEligibleUserPushIDs (campaign_id, callback) {
+	// send a GCM notification to everyone 
+
+	var push_ids = [];
+
+	Campaign.findOne({ campaign_id : campaign_id }, function(err, campaign){
  		if (err) {
  			console.log('(Sendout.js): Error: ' + err);
  		}
-
- 		if (campaign) {
+		if (campaign) {
  			var eligible_users = campaign.eligible_users;
- 			var android_push_ids = [];
- 			var ios_push_ids = [];
- 				
- 			for (i=0;i<eligible_users.length;i++) {
-	 			User.findOne({ _id : eligible_users[i] }, function(err, user){
-	 					if (err) {
-	 						console.log('(Sendout.js): Error: ' + err);
-	 					}
-	 					if (user) {
-	 						if (user.device_os == 'ANDROID_OS') {
-								sender.send(message, [user.push_id] , 4, function(err, result) {
-									if (err) {
-										console.log('Sender err: ' + err);
-									}
-									callback(err, "All done");
-								});			
-	 						} else if (user.device_os == 'IOS') {
-	 							ios_push_ids.push(user.push_id);
-	 						}
-	 					} else {
-	 						console.log('(Sendout.js): Error: User not found (ID ' + eligible_users[i] + ')');
-	 					}
-	 				});
-	 		}
+			
+ 			async.map(eligible_users, function(user_id, done) {
+ 				User.findOne({_id : user_id}, function (err, user){
+					if (err) {
+						console.log('in set_announcement: ' + err);
+					} else if (user) {
+						var id = user.push_id;
+						if (id) {
+							done(id);
+						}
+					}
+				});
+ 			}, function(err, push_ids) {
+ 				if(err) {
+ 					console.log('error in fetchAllEligibleUserPushIDs: ' + err);
+ 				}
+ 				callback(push_ids);
+ 			});			
+		}
+	});
+}
 
- 		} else {
- 			console.log('(Sendout.js): Error: Campaign ID' + campaign_id + ' not found.');
- 		}
 
- 	});
 
- }
+exports.do_post_order_sendout = function (callback) {
 
+	Campaign.findOne({campaign_id:"POST_ORDER_CAMPAIGN"}, function(err, campaign){
+		var eligible_users = campaign.eligible_users;
+
+		module.exports.survey_sendout(eligible_users, "POST_ORDER_CAMPAIGN", function(err, result) {
+			console.log('eligible users: ' + eligible_users);
+			console.log('sender result: '+ result);
+			if (err) {
+				console.log('err: ' + err);
+			}
+		})
+	});
+
+
+}
+
+
+exports.initialize_post_order_campaign = function (callback) {
+
+	Campaign.findOne({campaign_id: 'POST_ORDER_CAMPAIGN'}, function(err, campaign) {
+
+		if (err) {
+			console.log('Error in initialize_post_order_campaign: ' + err);
+		}
+		if (campaign) {
+			console.log('Post-Campaign for Android exists, is: ' + campaign.campaign_id);
+		} else {
+			var new_campaign = new Campaign({
+
+				campaign_id : 'POST_ORDER_CAMPAIGN',
+		        campaign_title : 'POST_ORDER_CAMPAIGN', 
+
+		        eligible_users : [],
+		        pending_users : [],
+		        completed_users : [],
+
+		        crontab : "* * * * *", //the crontab on which this campaign gets executed
+				});
+
+			new_campaign.save(function(err){
+				if (err) {
+					console.log('Error saving a new announcement: ' + err);
+				} else {
+					console.log('New Android annoucement saved: ' + new_campaign);
+				}
+			});
+		}
+
+	});
+
+}
 
 exports.do_test_sendout =  function (callback) {
 

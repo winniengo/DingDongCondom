@@ -11,6 +11,7 @@ var crypto = require('crypto');
 
 var Order = require('./models').Order;
 var User = require('../user/models').User;
+var Campaign = require('../survey/models').SurveyCampaign;
 
 var shortid = require('shortid');
 
@@ -109,6 +110,38 @@ exports.deliver = function(session_token, order_number, callback) {
 									});
 		}
 
+	});
+
+    // add the user to the eligible post order survey users
+	Order.findOne({order_number: order_number}, function(err, order) {
+		if (err) {
+			console.log('In deliver: ' + err);
+		}
+		if (order) {
+
+			var requester = order.requester;
+			User.findOne({device_uuid : requester}, function(err, user) {
+				if (err) {
+					console.log('In deliver: ' + err);
+				}
+				if (user) {
+					var id = user._id;
+					
+					Campaign.findOne({campaign_id:'POST_ORDER_CAMPAIGN'}, function(err, campaign) { 
+											  	if (err) {
+											  		console.log('In deliver: ' + err);
+											  	}
+											  	if (campaign) {
+											  	console.log('user id: ' + id);
+
+											  		campaign.eligible_users.push(id);
+											  		campaign.save();
+											  	}
+
+											  });
+				}
+			}); 
+		}
 	});
 
 }
