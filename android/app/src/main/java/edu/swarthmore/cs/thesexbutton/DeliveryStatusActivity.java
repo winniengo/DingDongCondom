@@ -53,7 +53,7 @@ public class DeliveryStatusActivity extends Activity {
 
                     checkDeliveryStatus(); // check delivery status via JSON
                     try { // sleep 10 seconds
-                        Thread.sleep(10000);
+                        Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -116,18 +116,19 @@ public class DeliveryStatusActivity extends Activity {
                             });
                             mProgressDialogStatus++;
                         }
+                        try { // sleep 10 seconds
+                            Thread.sleep(10000);
+                            counter++;
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
 
-                    try { // sleep 10 seconds
-                        Thread.sleep(10000);
-                        counter++;
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+
                 }
 
                 // condom has been delivered
-                mProgressDialog.setMessage("Thanks for waiting!");
+                //mProgressDialog.setMessage("Thanks for waiting!");
                 try { // sleep 1.5 seconds, display 100%
                     Thread.sleep(1500);
                 } catch (InterruptedException e) {

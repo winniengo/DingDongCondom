@@ -170,12 +170,12 @@ public class LoginActivity extends Activity {
                 Intent i = new Intent(LoginActivity.this, DeliveryStatusActivity.class);
                 startActivity(i);
                 finish();
+            } else {
+                Log.i(TAG, "starting Request Condom Activity");
+                Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
+                startActivity(i);
+                finish();
             }
-
-        Log.i(TAG, "starting Request Condom Activity");
-        Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
-        startActivity(i);
-        finish();
         }
     }
 
