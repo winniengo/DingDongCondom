@@ -69,7 +69,7 @@ function fetchAllEligibleUserPushIDs (campaign_id, callback) {
 					} else if (user) {
 						var id = user.push_id;
 						if (id) {
-							done(id);
+							done(null, id);
 						}
 					}
 				});
@@ -77,6 +77,7 @@ function fetchAllEligibleUserPushIDs (campaign_id, callback) {
  				if(err) {
  					console.log('error in fetchAllEligibleUserPushIDs: ' + err);
  				}
+
  				callback(push_ids);
  			});			
 		}
@@ -85,16 +86,14 @@ function fetchAllEligibleUserPushIDs (campaign_id, callback) {
 
 
 
-exports.do_post_order_sendout = function (callback) {
+exports.do_post_order_sendout = function () {
 
 	Campaign.findOne({campaign_id:"POST_ORDER_CAMPAIGN"}, function(err, campaign){
 		var eligible_users = campaign.eligible_users;
 
 		module.exports.survey_sendout(eligible_users, "POST_ORDER_CAMPAIGN", function(err, result) {
-			console.log('eligible users: ' + eligible_users);
-			console.log('sender result: '+ result);
 			if (err) {
-				console.log('err: ' + err);
+				console.log('Sendout Error: ' + err);
 			}
 		})
 	});
@@ -121,6 +120,8 @@ exports.initialize_post_order_campaign = function (callback) {
 		        eligible_users : [],
 		        pending_users : [],
 		        completed_users : [],
+
+		        survey_link : 'https://tinyurl.com/dingdongc',
 
 		        crontab : "* * * * *", //the crontab on which this campaign gets executed
 				});

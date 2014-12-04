@@ -13,6 +13,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -106,9 +107,15 @@ public class GcmIntentService extends IntentService {
      * Notifies the user that a survey is available
      */
     private void sendSurveyNotification(String msg, JSONObject survey) {
+
+        // get the link from the JSON object
+        String link;
+
+        link = survey.getString("survey_body");
+
         // Add JSON to intent
         Intent i = new Intent(this, SurveyActivity.class);
-        i.putExtra("survey", survey.toString());
+        i.putExtra("survey", link);
 
         // Pending intent launches SurveyActivity when user clicks on notification
         PendingIntent contentIntent =
