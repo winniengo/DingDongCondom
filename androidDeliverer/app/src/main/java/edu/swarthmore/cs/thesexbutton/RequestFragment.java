@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.graphics.AvoidXfermode;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,6 +89,26 @@ public class RequestFragment extends Fragment {
 
         // fill deliverer options
         mDeliveryEstimate = (EditText) v.findViewById(R.id.delivery_estimate);
+        mDeliveryEstimate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mDeliveryEstimateString = s.toString();
+                Log.i(TAG, "delivery estimate changed");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                /*
+                if (s.length() <= 0) {
+                } */
+            }
+        });
+
 
         mDateAccepted = (TextView) v.findViewById(R.id.date_accepted);
         mDateDelivered = (TextView) v.findViewById(R.id.date_delivered);
@@ -97,13 +119,6 @@ public class RequestFragment extends Fragment {
 
         String dateAccepted = mCondomRequest.getDateAccepted();
         String dateDelivered = mCondomRequest.getDateDelivered();
-
-        if (dateAccepted!=null) {
-            mDateAccepted.setText(dateAccepted);
-        }
-        if (dateDelivered!=null) {
-            mDateDelivered.setText(dateDelivered);
-        }
 
         // checkbox
         mAcceptedCheckBox.setChecked(mCondomRequest.isOrderAccepted());
@@ -152,7 +167,8 @@ public class RequestFragment extends Fragment {
                 if(acceptedIsChecked) {
                     mCondomRequest.setOrderAccepted(acceptedIsChecked);
                     mDeliveryEstimateString = mDeliveryEstimate.getText().toString();
-                    mParams.add(new BasicNameValuePair("delivery_estimate ", mDeliveryEstimateString));
+                    Log.i(TAG, "posted estimate delivery time: " + mDeliveryEstimateString);
+                    mParams.add(new BasicNameValuePair("delivery_estimate", mDeliveryEstimateString));
 
                     JSONObject json = serverRequest.getJSON(API + "delivery/request/accept", mParams);
                     if (json != null) {

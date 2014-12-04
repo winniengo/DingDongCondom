@@ -157,7 +157,7 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
             mRequestButton.setEnabled(true);
             mRequestButton.setBackgroundResource(R.drawable.btn_green);
         } else {
-            mRequestButton.setEnabled(true);
+            mRequestButton.setEnabled(false);
             mRequestButton.setBackgroundResource(R.drawable.btn_grey);
         }
     }

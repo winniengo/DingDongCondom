@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -24,10 +25,10 @@ public class DeliveryStatusActivity extends Activity {
 
     SharedPreferences mSharedPreferences;
 
-    int mDeliveryEstimate = 15;
-    boolean mAccepted = false;
-    boolean mDelivered = false;
-    boolean mFailed = false;
+    int mDeliveryEstimate;
+    boolean mAccepted;
+    boolean mDelivered;
+    boolean mFailed;
 
     private ProgressDialog mProgressDialog;
     private Handler mHandler = new Handler(); // used to queue code execution on thread
@@ -51,8 +52,8 @@ public class DeliveryStatusActivity extends Activity {
                 while (!mAccepted) {
 
                     checkDeliveryStatus(); // check delivery status via JSON
-                    try { // sleep 5 seconds
-                        Thread.sleep(5000);
+                    try { // sleep 10 seconds
+                        Thread.sleep(10000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -97,7 +98,7 @@ public class DeliveryStatusActivity extends Activity {
 
         Thread thread = new Thread(new Runnable() { // used to execute in parallel with UI thread
             public void run() {
-                int counter = 0;
+                int counter = 1;
                 while (!mDelivered) {
                     // check delivery status every 10 seconds
                     checkDeliveryStatus();
@@ -107,18 +108,18 @@ public class DeliveryStatusActivity extends Activity {
                     }
                     else { // if loading bar isn't full, update every minute
                         if(mProgressDialogStatus < mProgressDialog.getMax() && counter%6 == 0) {
-                            mProgressDialogStatus++;
                             // update the progress bar
                             mHandler.post(new Runnable() {
                                 public void run() {
                                     mProgressDialog.setProgress(mProgressDialogStatus);
                                 }
                             });
+                            mProgressDialogStatus++;
                         }
                     }
 
                     try { // sleep 10 seconds
-                        Thread.sleep(00000);
+                        Thread.sleep(10000);
                         counter++;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -154,6 +155,10 @@ public class DeliveryStatusActivity extends Activity {
                 mDelivered = json.getBoolean("order_delivered");
                 mFailed = json.getBoolean("order_failed");
                 mDeliveryEstimate = json.getInt("delivery_estimate");
+
+                if (mDeliveryEstimate == -1) {
+                    mDeliveryEstimate = 15;
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
