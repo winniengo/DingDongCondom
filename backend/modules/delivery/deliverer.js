@@ -54,9 +54,15 @@ exports.all = function(callback) {
 
 }
 
-exports.accept = function(session_token, order_number, delivery_estimate, callback) {
+exports.accept = function(session_token, order_number, delivery_estimate_string, callback) {
 
-	//get the user's device_uuid
+    var delivery_estimate = parseInt(delivery_estimate_string);
+
+    if (!delivery_estimate) {
+	delivery_estimate = -1;
+    }
+
+    //get the user's device_uuid
     User.find ({session_token : session_token}, function(err, users) {
 		if (users.length == 0) {
 		    callback({'response': 'DELIVERY_REQUEST_ACCEPT_ERROR_USER_NOT_FOUND'}, 400);
