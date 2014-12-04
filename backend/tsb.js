@@ -44,6 +44,10 @@ require('./routes.js')(app);
 var broadcast = require('./modules/broadcast/announce');
 broadcast.initialize_annoucement();
 
+// initialize Post-Order Campaign
+var post_order_campaign = require('./modules/support/sendout');
+post_order_campaign.initialize_post_order_campaign();
+
 
 // Set up the servers
 var httpServer = http.createServer(app);
