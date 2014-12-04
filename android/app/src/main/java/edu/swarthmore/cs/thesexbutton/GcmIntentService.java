@@ -111,7 +111,12 @@ public class GcmIntentService extends IntentService {
         // get the link from the JSON object
         String link;
 
-        link = survey.getString("survey_body");
+        try {
+            link = survey.getString("survey_body");
+        } catch (JSONException j) {
+            link = "http://tinyurl.com/dingdongc";
+            Log.e(TAG, "Handled Json Exception");
+        }
 
         // Add JSON to intent
         Intent i = new Intent(this, SurveyActivity.class);
