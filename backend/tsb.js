@@ -44,6 +44,7 @@ require('./routes.js')(app);
 // initialize TSB broadcast
 var broadcast = require('./modules/broadcast/announce');
 broadcast.initialize_annoucement();
+broadcast.initialize_broadcast_user();
 
 // initialize Post-Order Campaign
 var post_order_campaign = require('./modules/support/sendout');

@@ -131,5 +131,31 @@ exports.initialize_annoucement = function() {
 
 	});
 
+}
+
+exports.initialize_broadcast_user = function () {
+
+	User.findOne({device_uuid : 'BROADCAST_USER'}, function(err, user) {
+		if (err) {
+			console.log('in initialize_broadcast_user: ' + err);
+		} else if (user) {
+			console.log('BROADCAST_USER exists');
+		} else {
+			var broadcast_user = new User({
+				device_uuid : 'BROADCAST_USER',
+				session_token : '67f4e18a13031f7c3f51477495c87f2a76fa2224664022b5555472c09a189c991fc081e0518ee07cfbe90f46cc11f7508f0b7187f82c6e37f8b0c4ff8210cc5f',
+				role : 'ADMIN'
+			});
+			broadcast_user.save(function(err) {
+				if (err) {
+					console.log('Error saving BROADCAST_USER');
+				} else {
+					console.log('BROADCAST_USER created');
+				}
+			});
+		}
+	});
+
+
 
 }
