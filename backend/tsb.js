@@ -50,7 +50,7 @@ var post_order_campaign = require('./modules/support/sendout');
 post_order_campaign.initialize_post_order_campaign();
 
 
-schedule.scheduleJob({minute: 15}, function(){
+schedule.scheduleJob({minute: 10}, function(){
     sendout.do_post_order_sendout();
 });
 

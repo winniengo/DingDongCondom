@@ -42,6 +42,7 @@ exports.retrieve = function (session_token, campaign_id, callback) {
 					campaign.save(function(err){
 						if(err) {
 							console.log('in retrieve: '+ err);
+						}
 					});
 					
 
@@ -51,16 +52,11 @@ exports.retrieve = function (session_token, campaign_id, callback) {
 						 'campaign_id' : campaign.campaign_id, 
 						 'survey_body' : campaign.survey_link,
 						}, 200);
-
-					} else {
-						callback({'response' : 'SURVEY_RETRIEVE_ERROR_SURVEY_NOT_FOUND'}, 404);
-					}
 					
-				}
-				else {
+				} else {
 					callback({'response' : 'SURVEY_RETRIEVE_ERROR_CAMPAIGN_NOT_FOUND'}, 404);
 				}
-			});
+			});	
 		} else {
 			callback({'response' : 'SURVEY_RETRIEVE_USER_NOT_FOUND'}, 403);
 		}
