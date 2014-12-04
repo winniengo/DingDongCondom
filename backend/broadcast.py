@@ -28,3 +28,6 @@ def send_broadcast(message):
 
 	print r.read()
 
+
+main()
+
