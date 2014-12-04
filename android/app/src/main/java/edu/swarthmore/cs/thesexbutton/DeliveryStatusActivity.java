@@ -72,6 +72,15 @@ public class DeliveryStatusActivity extends Activity {
                                 startActivity(i);
                             }
                         });
+
+                        Button guide = (Button) findViewById(R.id.guideButton);
+                        guide.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i = new Intent(DeliveryStatusActivity.this, MenuGuideActivity.class);
+                                startActivity(i);
+                            }
+                        });
                     }
                 });
             }
@@ -85,7 +94,7 @@ public class DeliveryStatusActivity extends Activity {
         mProgressDialog = new ProgressDialog(context);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setTitle("Delivering...");
-        mProgressDialog.setMessage("Condom is on its way!\nEstimated delivery time: " +
+        mProgressDialog.setMessage("Condoms are on their way!\nEstimated delivery time: " +
                         mDeliveryEstimate + " min.");
         mProgressDialog.setCancelable(false); // dialog can't be cancelled by pressing back
         mProgressDialog.setIndeterminate(false);
