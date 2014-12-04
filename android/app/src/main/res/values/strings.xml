@@ -37,7 +37,7 @@
         <item>Worth</item>
     </string-array>
     <string name="register_about">Thanks for downloading Ding Dong: Condom!\n\nWith this app you now
-        have access to our\nfree\non-demand\non-campus\ncondom delivery service.</string>
+        have access to our\nfree, on-demand, on-campus\ncondom delivery service.</string>
 
     <string name="project_purpose">\tWe built this app for our Computer Science Senior Conference project.
         This year\'s topic is Mobile Health and we wanted our project to be about something that\'s
@@ -49,13 +49,13 @@
         personally identifiable data (eg. phone numbers, emails). You register below with the
         provided token. We are only collecting data from the orders placed and responses to our
         day-after surveys.
-
-        \n\tTo use this service you must specify whether you want
+        \n\tBest Winnie, Awjin, Daniel</string>
+    <string name="service_how_to">
+        \tTo use this service you must specify whether you want
         it delivered to your room or to your lounge. In response, one of us will drop off
         an envelope containing 3 condoms to your designated destination within 15 minutes.
-        Limit 1 order per night. Please use responsibly.
+        Limit 1 order per night. Please use responsibly.</string>
 
-        \n\tBest Winnie, Awjin, Daniel</string>
     <string name="action_settings">Settings</string>
     <string name="survey_title">Morning After Survey</string>
 </resources>
