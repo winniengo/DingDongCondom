@@ -49,8 +49,7 @@ broadcast.initialize_annoucement();
 var post_order_campaign = require('./modules/support/sendout');
 post_order_campaign.initialize_post_order_campaign();
 
-
-schedule.scheduleJob({minute: 13}, function(){
+schedule.scheduleJob({hour: 12, minute: 05}, function(){
     post_order_campaign.do_post_order_sendout();
 });
 

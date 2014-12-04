@@ -8,7 +8,7 @@
      </string>
     <string name="request_details">Condoms will be placed under the specified room number door for
         Room deliveries and to a designated drop
-    box in on your specified floor's lounge for Lounge deliveries.</string>
+    box in on your specified floor\'s lounge for Lounge deliveries.</string>
     <string name="request_condom_button_text">I\'m Feeling Lucky!</string>
     <string name="request_condom_dorm_name">Dorm Name:</string>
     <string name="request_condom_dorm_room">Dorm Room:</string>
@@ -58,4 +58,8 @@
 
     <string name="action_settings">Settings</string>
     <string name="survey_title">Morning After Survey</string>
+    <string name="survey_explanation">Thank you very much for using our service! In order to better understand how useful this service was to you
+    and whether it is worth developing further, we would ask you to take a few moments to fill out the below survey.
+    As always, it is completely anonymous and will only be used for evaluation in terms of our research project.\n
+    Thanks again,\nAwjin, Winnie and Daniel</string>
 </resources>
