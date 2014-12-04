@@ -68,6 +68,13 @@ public class GcmIntentService extends IntentService {
      * Notifies user about the availability status of the app
      */
     private void sendBroadcastNotification(String msg) {
+        // Add JSON to intent
+        Intent i = new Intent(this, LoginActivity.class);
+
+        // Pending intent launches SurveyActivity when user clicks on notification
+        PendingIntent contentIntent =
+                PendingIntent.getActivity(this, 0, i, 0);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.noti_icon)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
