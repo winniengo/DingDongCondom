@@ -1,6 +1,8 @@
 package edu.swarthmore.cs.thesexbutton;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -171,11 +173,11 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
         mDormName = null;
     }
 
-
+    // Menu methods
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.request_condom, menu);
+        getMenuInflater().inflate(R.menu.request_condom_menu, menu);
         return true;
     }
 
@@ -185,7 +187,15 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        return (id == R.id.action_settings || super.onOptionsItemSelected(item));
+        switch (item.getItemId()) {
+            case R.id.menu_guide:
+                startActivity(new Intent(RequestCondomActivity.this, MenuGuideActivity.class));
+                return true;
+            case R.id.menu_our_service:
+                startActivity(new Intent(RequestCondomActivity.this, MenuServiceActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

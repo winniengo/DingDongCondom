@@ -8,7 +8,7 @@
      </string>
     <string name="request_details">Condoms will be placed under the specified room number door for
         Room deliveries and to a designated drop
-    box in on your specified floor's lounge for Lounge deliveries.</string>
+    box on your specified floor\'s lounge for Lounge deliveries.</string>
     <string name="request_condom_button_text">I\'m Feeling Lucky!</string>
     <string name="request_condom_dorm_name">Dorm Name:</string>
     <string name="request_condom_dorm_room">Dorm Room:</string>
@@ -58,4 +58,25 @@
 
     <string name="action_settings">Settings</string>
     <string name="survey_title">Morning After Survey</string>
+    <string name="menu_service">\tTo use this service you must provide us with your dorm
+        name, delivery type, and delivery details via our delivery request form.
+        In response, one of us will drop off
+        an envelope containing 3 condoms to your designated destination within 15 minutes.
+        Condoms will be placed under the specified room number door for
+        Room deliveries and to a designated drop box on your specified floor\'s lounge for Lounge deliveries.
+        \n\tLimit 1 order per night. Please use responsibly.</string>
+
+
+    <string name="menu_about_us">\tWe built this app for our Computer Science Senior Conference project.
+        This year\'s topic is Mobile Health and we wanted our project to be about something that\'s
+        relevant for most of us - sex in college. We want to research whether or not this service
+        improves access to condoms on campus and individuals\' sexual practices and health.
+
+        \n\tThis app works by allowing you to place an order during the hours that the app is open
+        this following week. In order to protect anonymity, we are not asking for or storing any
+        personally identifiable data (eg. phone numbers, emails). We are only collecting data from
+        the orders placed and responses to our
+        day-after surveys.
+
+        \n\tThanks for your help! - Winnie, Awjin, Daniel</string>
 </resources>
