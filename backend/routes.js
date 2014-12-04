@@ -76,9 +76,8 @@ module.exports = function(app) {
 	var dorm_name = req.body.dorm_name;
 	var dorm_room = req.body.dorm_room;
 	var delivery_type = req.body.delivery_type;
-	var coordinates = req.body.coordinates;
 	
-	order.request(session_token, dorm_name, dorm_room, delivery_type, coordinates, function (result, status) {
+	order.request(session_token, dorm_name, dorm_room, delivery_type, function (result, status) {
 				  console.log(result, status);
 				  res.status(status).json(result);
 		      });
