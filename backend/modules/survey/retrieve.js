@@ -42,8 +42,8 @@ exports.retrieve = function (session_token, campaign_id, callback) {
 					campaign.save(function(err){
 						if(err) {
 							console.log('in retrieve: '+ err);
-						}
 					});
+					
 
 					// return the survey in the response as JSON + campaign ID 
 					// so they know what they're posting back to
@@ -52,10 +52,10 @@ exports.retrieve = function (session_token, campaign_id, callback) {
 						 'survey_body' : campaign.survey_link,
 						}, 200);
 
-						} else {
-							callback({'response' : 'SURVEY_RETRIEVE_ERROR_SURVEY_NOT_FOUND'}, 404);
-						}
-					});
+					} else {
+						callback({'response' : 'SURVEY_RETRIEVE_ERROR_SURVEY_NOT_FOUND'}, 404);
+					}
+					
 				}
 				else {
 					callback({'response' : 'SURVEY_RETRIEVE_ERROR_CAMPAIGN_NOT_FOUND'}, 404);
