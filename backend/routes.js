@@ -114,6 +114,9 @@ module.exports = function(app) {
    	var order_number = req.body.order_number;
    	var delivery_estimate = req.body.delivery_estimate;
 
+	console.log('accept: '+ req.body.order_number);
+	console.log('accept2: '+ req.body.delivery_estimate);
+
 	deliverer.accept(session_token, order_number, delivery_estimate, function (result, status) {
 	    console.log(result);
 	    res.status(status).json(result);
