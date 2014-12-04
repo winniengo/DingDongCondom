@@ -15,13 +15,11 @@ var User = require('../user/models').User;
 
 var shortid = require('shortid');
 
-exports.request = function (session_token, dorm_name, dorm_room, delivery_type,
-							date_requested, callback) {
+exports.request = function (session_token, dorm_name, dorm_room, delivery_type, callback) {
 
     var dn = dorm_name;
     var dr = dorm_room;
     var dt = delivery_type;
-    var drt = date_requested;
 
     var now = new Date();
     var oid = shortid.generate();

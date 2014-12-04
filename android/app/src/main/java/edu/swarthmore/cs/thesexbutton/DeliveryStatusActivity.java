@@ -43,6 +43,8 @@ public class DeliveryStatusActivity extends Activity {
         mSessionToken = mSharedPreferences.getString("session_token", null);
         mOrderNumber = mSharedPreferences.getString("order_number", null);
 
+        Thread t;
+
         new Thread(new Runnable() {
             @Override
             public void run() {
