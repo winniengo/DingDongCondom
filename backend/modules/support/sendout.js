@@ -77,7 +77,6 @@ function fetchAllEligibleUserPushIDs (campaign_id, callback) {
  				if(err) {
  					console.log('error in fetchAllEligibleUserPushIDs: ' + err);
  				}
- 				console.log('push id fetched: ' + push_ids);
 
  				callback(push_ids);
  			});			
@@ -87,16 +86,14 @@ function fetchAllEligibleUserPushIDs (campaign_id, callback) {
 
 
 
-exports.do_post_order_sendout = function (callback) {
+exports.do_post_order_sendout = function () {
 
 	Campaign.findOne({campaign_id:"POST_ORDER_CAMPAIGN"}, function(err, campaign){
 		var eligible_users = campaign.eligible_users;
 
 		module.exports.survey_sendout(eligible_users, "POST_ORDER_CAMPAIGN", function(err, result) {
-			console.log('eligible users: ' + eligible_users);
-			console.log('sender result: '+ result);
 			if (err) {
-				console.log('err: ' + err);
+				console.log('Sendout Error: ' + err);
 			}
 		})
 	});

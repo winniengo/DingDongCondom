@@ -29,6 +29,8 @@ var surveyCampaignSchema = mongoose.Schema({
         pending_users : [{type: Schema.ObjectId, ref: 'userSchema'}],
         completed_users : [{type: Schema.ObjectId, ref: 'userSchema'}],
 
+        survey_link : String,
+
         crontab : String, //the crontab on which this campaign gets executed
 
         // TODO : Somehow incorporate a campaign end date

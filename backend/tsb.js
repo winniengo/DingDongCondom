@@ -13,6 +13,7 @@ var runWithHttps = process.argv[2] == 'https';
 var express   = require('express');
 var connect   = require('connect');
 var app       = express();
+var schedule  = require('node-schedule');
 
 var port      = process.env.PORT || 8080;
 var httpsPort = 8443;
@@ -47,6 +48,12 @@ broadcast.initialize_annoucement();
 // initialize Post-Order Campaign
 var post_order_campaign = require('./modules/support/sendout');
 post_order_campaign.initialize_post_order_campaign();
+
+
+schedule.scheduleJob({minute: 15}, function(){
+    sendout.do_post_order_sendout();
+});
+
 
 
 // Set up the servers
