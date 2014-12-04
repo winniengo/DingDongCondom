@@ -30,6 +30,15 @@
             android:background="@drawable/btn_green"
             android:text="Good luck!"
             android:textColor="#ffffff" />
+        <Button
+            android:id="@+id/guideButton"
+            android:layout_width="220dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_grey"
+            android:layout_margin="10dp"
+            android:text="Condom Guide"
+            android:textColor="#ffffff" />
 
     </LinearLayout>
 </ScrollView>

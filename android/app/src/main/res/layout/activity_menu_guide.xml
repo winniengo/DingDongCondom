@@ -17,5 +17,20 @@
             android:text="CONDOM GUIDE">
         </TextView>
 
+        <ImageView
+            android:id="@+id/app_name_logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/howto12"/>
+        <ImageView
+            android:id="@+id/app_name_logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/howto34"/>
+        <ImageView
+            android:id="@+id/app_name_logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/howto56"/>
     </LinearLayout>
 </ScrollView>
