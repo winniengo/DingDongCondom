@@ -3,7 +3,12 @@
 
     <string name="app_name">Ding Dong: Condom</string>
 
-    <string name="request_condom_text">blah\nblah\nblah\nblah\nblah</string>
+    <string name="request_condom_text">To place a condom order, please carefully input your dorm name, delivery type,
+        and delivery details. Then click the button below!
+     </string>
+    <string name="request_details">Condoms will be placed under the specified room number door for
+        Room deliveries and to a designated drop
+    box in on your specified floor's lounge for Lounge deliveries.</string>
     <string name="request_condom_button_text">I\'m Feeling Lucky!</string>
     <string name="request_condom_dorm_name">Dorm Name:</string>
     <string name="request_condom_dorm_room">Dorm Room:</string>
@@ -31,7 +36,26 @@
         <item>Woolman</item>
         <item>Worth</item>
     </string-array>
-    <string name="register_about">blah\nblah\nblah\nblah\nblah</string>
+    <string name="register_about">Thanks for downloading Ding Dong: Condom!\n\nWith this app you now
+        have access to our\nfree\non-demand\non-campus\ncondom delivery service.</string>
+
+    <string name="project_purpose">\tWe built this app for our Computer Science Senior Conference project.
+        This year\'s topic is Mobile Health and we wanted our project to be about something that\'s
+        relevant for most of us - sex in college. We want to research whether or not this service
+        improves access to condoms on campus and individuals\' sexual practices and health.
+
+        \n\tThis app works by allowing you to place an order during the hours that the app is open
+        this following week. In order to protect anonymity, we are not asking for or storing any
+        personally identifiable data (eg. phone numbers, emails). You register below with the
+        provided token. We are only collecting data from the orders placed and responses to our
+        day-after surveys.
+
+        \n\tTo use this service you must specify whether you want
+        it delivered to your room or to your lounge. In response, one of us will drop off
+        an envelope containing 3 condoms to your designated destination within 15 minutes.
+        Limit 1 order per night. Please use responsibly.
+
+        \n\tBest Winnie, Awjin, Daniel</string>
     <string name="action_settings">Settings</string>
     <string name="survey_title">Morning After Survey</string>
 </resources>
