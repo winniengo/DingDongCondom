@@ -46,6 +46,7 @@ exports.set_announcement = function(message, open_for_business, callback) {
 			if (announcement) {
 				console.log('Set new announcement: ' + announcement);
 				fetchAllUserPushIDs(function(push_ids) {
+					console.log('Pushing to ids: ' + push_ids);
 					sender.send(gcmMessage, push_ids , 4, function(err, result) {
 									if (err) {
 										console.log('Broadcast sender err: ' + err);
