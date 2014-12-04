@@ -8,7 +8,7 @@ def main():
 
 	print "This will send out a broadcast message to all TSB users"
 
-	message = raw_input('Enter the message to be broadcast:')
+	message = raw_input('Enter the message to be broadcast:\n\n>>')
 
 	send_broadcast(message)
 
@@ -16,7 +16,7 @@ def main():
 
 def send_broadcast(message):
 
-	data = urllib.urlencode({'message': message, 'open_for_business' : true, session_token: SESSION_TOKEN})
+	data = urllib.urlencode({'message': message, 'open_for_business' : True, 'session_token': SESSION_TOKEN})
 
 	h = httplib.HTTPConnection('localhost:8080')
 
