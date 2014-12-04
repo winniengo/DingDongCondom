@@ -3,6 +3,7 @@ package edu.swarthmore.cs.thesexbutton;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Editable;
@@ -75,16 +76,18 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mDormNumberString = s.toString();
-                mDormFilled = true;
-                if (mDeliveryTypeFilled) {
-                    mRequestButton.setEnabled(true);
-                    mRequestButton.setBackgroundColor(getResources().getColor(R.color.green));
+                if (s.length() > 0) {
+                    mDormFilled = true;
                 }
+                enableButton();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                // do nothing
+                if (s.length() <= 0) {
+                    mDormFilled = false;
+                }
+                enableButton();
             }
         });
 
@@ -145,12 +148,19 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
                 break;
         }
 
-        if(mDormFilled) {
-            mRequestButton.setEnabled(true);
-            mRequestButton.setBackgroundColor(getResources().getColor(R.color.green));
-        }
+        enableButton();
     }
 
+    // Button enable method
+    public void enableButton() {
+        if (mDeliveryTypeFilled && mDormFilled) {
+            mRequestButton.setEnabled(true);
+            mRequestButton.setBackgroundResource(R.drawable.btn_green);
+        } else {
+            mRequestButton.setEnabled(true);
+            mRequestButton.setBackgroundResource(R.drawable.btn_grey);
+        }
+    }
 
     // Spinner methods
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {

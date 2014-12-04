@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -31,9 +32,7 @@ public class DeliveryStatusActivity extends Activity {
     private ProgressDialog mProgressDialog;
     private Handler mHandler = new Handler(); // used to queue code execution on thread
     private int mProgressDialogStatus;
-
-    public DeliveryStatusActivity() {
-    }
+    private Activity mActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,14 +76,14 @@ public class DeliveryStatusActivity extends Activity {
     }
 
 
-
     // launches and loads progress bar
     public void launchProgressDialog(Context context) {
         // prepare for a progress bar dialog
         mProgressDialog = new ProgressDialog(context);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setTitle("Delivering...");
-        mProgressDialog.setMessage("Condom is on its way! Please wait...\n Estimated delivery time: " + mDeliveryEstimate + " min.");
+        mProgressDialog.setMessage("Condom is on its way!\nEstimated delivery time: " +
+                        mDeliveryEstimate + " min.");
         mProgressDialog.setCancelable(false); // dialog can't be cancelled by pressing back
         mProgressDialog.setIndeterminate(false);
         mProgressDialog.setMax(mDeliveryEstimate);
@@ -98,14 +97,14 @@ public class DeliveryStatusActivity extends Activity {
             public void run() {
                 int counter = 0;
                 while (!mDelivered) {
-                    // check delivery status every 20 seconds
+                    // check delivery status every 10 seconds
                     checkDeliveryStatus();
 
                     if(mDelivered) {
                         mProgressDialogStatus = mProgressDialog.getMax();
                     }
-                    else {
-                        if(counter%3==0) { // set status every minute
+                    else { // if loading bar isn't full, update every minute
+                        if(mProgressDialogStatus < mProgressDialog.getMax() && counter%6 == 0) {
                             mProgressDialogStatus++;
                             // update the progress bar
                             mHandler.post(new Runnable() {
@@ -116,8 +115,8 @@ public class DeliveryStatusActivity extends Activity {
                         }
                     }
 
-                    try { // sleep 20 seconds
-                        Thread.sleep(20000);
+                    try { // sleep 10 seconds
+                        Thread.sleep(00000);
                         counter++;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -125,16 +124,15 @@ public class DeliveryStatusActivity extends Activity {
                 }
 
                 // condom has been delivered
-                if (mProgressDialogStatus >= mProgressDialog.getMax()) {
-                    try { // sleep 1.5 seconds, display 100%
-                        Thread.sleep(1500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    // close the progress bar dialog
-                    mProgressDialog.dismiss();
+                mProgressDialog.setMessage("Thanks for waiting!");
+                try { // sleep 1.5 seconds, display 100%
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+
+                // close the progress bar dialog
+                 mProgressDialog.dismiss();
             }
         });
         thread.start();

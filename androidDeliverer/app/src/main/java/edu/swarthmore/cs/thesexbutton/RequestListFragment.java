@@ -48,7 +48,7 @@ public class RequestListFragment extends ListFragment{ // displays all condom re
         CondomRequestStore store = CondomRequestStore.update(mSessionToken);
         mCondomRequests = store.getCondomRequests();
 
-        Log.i(TAG, "Got updated list of condom requests");
+        Log.i(TAG, "Got updated list of condom requests " + mCondomRequests.size());
 
         mCondomRequestAdapter = new CondomRequestAdapter(mCondomRequests);
         setListAdapter(mCondomRequestAdapter);

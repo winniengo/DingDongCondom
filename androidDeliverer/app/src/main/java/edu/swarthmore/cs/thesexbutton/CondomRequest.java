@@ -44,7 +44,7 @@ public class CondomRequest { // constructor
                 " - " + des.getString("delivery_type") +
                 " - " + des.getString("dorm_room");
 
-        Log.i("CondomRequest", "" + mOrderNumber + mDeliveryDestination);
+        Log.i("CondomRequest", "" + mOrderNumber + mDeliveryDestination + mOrderAccepted + mOrderDelivered);
 
     }
 

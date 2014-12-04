@@ -43,12 +43,21 @@ public class CondomRequestStore {
                     if(jsonArray!=null) {
                         Log.i(TAG, "Total orders " + jsonArray.length());
                         JSONObject jsonObject;
+                        Boolean delivered;
                         CondomRequest cr;
                         for(int i=0; i < jsonArray.length(); i++) {
                             jsonObject = jsonArray.getJSONObject(i);
-                            cr = new CondomRequest((jsonObject));
-                            mCondomRequests.add(cr);
+                            delivered = jsonObject.getBoolean("order_delivered");
+                            Log.i(TAG, "order " + i + " delivered: " + delivered);
+
+                            // only add and view undelivered orders
+                            if (delivered.equals(false)) {
+                                Log.i(TAG, jsonObject.toString());
+                                cr = new CondomRequest((jsonObject));
+                                mCondomRequests.add(cr);
+                            }
                         }
+                        Log.i(TAG, mCondomRequests.size() + " total undelivered orders");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -61,7 +70,6 @@ public class CondomRequestStore {
     }
 
 
-
     public static CondomRequestStore get(String sessionToken) {
         if(sCondomRequestStore == null) {
             sCondomRequestStore = new CondomRequestStore(sessionToken);
@@ -69,10 +77,12 @@ public class CondomRequestStore {
         return sCondomRequestStore;
     }
 
+
     public static CondomRequestStore update(String sessionToken) {
         sCondomRequestStore = new CondomRequestStore(sessionToken);
         return sCondomRequestStore;
     }
+
 
     public ArrayList<CondomRequest> getCondomRequests() {
         return mCondomRequests;

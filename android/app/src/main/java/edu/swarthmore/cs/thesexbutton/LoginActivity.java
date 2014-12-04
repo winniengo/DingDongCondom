@@ -62,59 +62,59 @@ public class LoginActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {  // sleep 1.5 seconds
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            try {  // sleep 1.5 seconds
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                // Make sure device has internet connectivity
+                if (!checkInternet()) {
+                    Log.i(TAG, "No internet connection!");
+                    showErrorPopup("No internet connection!");
                 }
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Make sure device has internet connectivity
-                        if (!checkInternet()) {
-                            Log.i(TAG, "No internet connection!");
-                            showErrorPopup("No internet connection!");
-                        }
-
-                        // Make sure device has Play Services APK and register for GCM
-                        if (checkPlayServices()) {
-                            mRegid = getRegistrationId(context);
-                            if (mRegid.isEmpty()) {
-                                registerInBackground();
-                            } else {
-                                Log.i(TAG, "Prev gcm regid found: " + mRegid);
-                            }
-                        } else {
-                            Log.i(TAG, "No valid Google Play Services APK found.");
-                            showErrorPopup("No valid Google Play Services APK found.");
-                        }
-
-                        // Retrieve from previous registration
-                        mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
-                        mSessionToken = mSharedPreferences.getString("session_token", null);
-                        mSessionTokenExpires = mSharedPreferences.getString("session_token_expires", null);
-                        mDeviceUUID = mSharedPreferences.getString("device_uuid", null);
-                        mPassphrase = mSharedPreferences.getString("passphrase", null);
-                        mOrderNumber = mSharedPreferences.getString("order_number", null);
-
-                        Log.i(TAG, "onCreate: " + mSessionToken + " " + mOrderNumber + " " + mDeviceUUID);
-
-                        if (mSessionToken == null) {
-                            if (mDeviceUUID == null) {
-                                // New user; call Register Activity
-                                Log.i(TAG, "starting Register Activity");
-                                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
-                                i.putExtra("push_id", mRegid);
-                                startActivity(i);
-                                finish();
-                            }
-                        } else {
-                            Log.i(TAG, "logging in");
-                            Login(mDeviceUUID, mPassphrase, mRegid); // also handles request and status
-                        }
+                // Make sure device has Play Services APK and register for GCM
+                if (checkPlayServices()) {
+                    mRegid = getRegistrationId(context);
+                    if (mRegid.isEmpty()) {
+                        registerInBackground();
+                    } else {
+                        Log.i(TAG, "Prev gcm regid found: " + mRegid);
                     }
-                });
+                } else {
+                    Log.i(TAG, "No valid Google Play Services APK found.");
+                    showErrorPopup("No valid Google Play Services APK found.");
+                }
+
+                // Retrieve from previous registration
+                mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
+                mSessionToken = mSharedPreferences.getString("session_token", null);
+                mSessionTokenExpires = mSharedPreferences.getString("session_token_expires", null);
+                mDeviceUUID = mSharedPreferences.getString("device_uuid", null);
+                mPassphrase = mSharedPreferences.getString("passphrase", null);
+                mOrderNumber = mSharedPreferences.getString("order_number", null);
+
+                Log.i(TAG, "onCreate: " + mSessionToken + " " + mOrderNumber + " " + mDeviceUUID);
+
+                if (mSessionToken == null) {
+                    if (mDeviceUUID == null) {
+                        // New user; call Register Activity
+                        Log.i(TAG, "starting Register Activity");
+                        Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
+                        i.putExtra("push_id", mRegid);
+                        startActivity(i);
+                        finish();
+                    }
+                } else {
+                    Log.i(TAG, "logging in");
+                    Login(mDeviceUUID, mPassphrase, mRegid); // also handles request and status
+                }
+                }
+            });
             }
         }).start();
     }
@@ -124,6 +124,83 @@ public class LoginActivity extends Activity {
         super.onResume();
         Log.i(TAG, "onResume");
     }
+
+
+    /**
+     * Requests login to our server, sending deviceID, passphrase, and gcm regid.
+     * Server sends back an authorization token that is stored in sharedPreferences.
+     */
+    public void Login(String deviceUUID, String passphrase, String regid) {
+        Log.i(TAG, "Login " + deviceUUID);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("device_uuid", deviceUUID));
+        params.add(new BasicNameValuePair("passphrase", passphrase));
+        params.add(new BasicNameValuePair("push_id", regid));
+
+        ServerRequest serverRequest = new ServerRequest();
+        JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/login", params);
+
+        if (json != null) {
+            try {
+                mSessionToken = json.getString("session_token");
+                mSessionTokenExpires = json.getString("session_token_expires");
+
+                SharedPreferences.Editor edit = mSharedPreferences.edit();
+                edit.putString("session_token", mSessionToken);
+                edit.putString("session_token_expires", mSessionTokenExpires);
+                edit.apply();
+                Log.i(TAG, "Obtained session token: " + mSessionToken);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(mOrderNumber!=null) { // user has placed an order before
+            Log.i(TAG, "checking for open orders");
+            boolean open = CheckOrderStatus(mSessionToken, mOrderNumber);
+            Log.i(TAG, "open order: " + open);
+            if (open) { // check order status
+                Intent i = new Intent(LoginActivity.this, DeliveryStatusActivity.class);
+                startActivity(i);
+                finish();
+            }
+
+        Log.i(TAG, "starting Request Condom Activity");
+        Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
+        startActivity(i);
+        finish();
+        }
+    }
+
+    public boolean CheckOrderStatus(String sessionToken, String orderNumber) {
+        Log.d(TAG, "CheckOrderStatus: " + orderNumber + " for " + sessionToken);
+        boolean delivered = false;
+        //boolean failed = false;
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("session_token", sessionToken));
+        params.add(new BasicNameValuePair("order_number", orderNumber));
+
+        ServerRequest serverRequest = new ServerRequest();
+        JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/delivery/status", params);
+
+        if (json != null) {
+            try {
+                delivered = json.getBoolean("order_delivered");
+                //failed = json.getBoolean("order_failed");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(delivered) { // old, closed order
+            return false;
+        } else { // open order
+            return true;
+        }
+    }
+
 
     /**
      * Check the device's connectivity status.
@@ -253,81 +330,6 @@ public class LoginActivity extends Activity {
         editor.apply();
     }
 
-
-    /**
-     * Requests login to our server, sending deviceID, passphrase, and gcm regid.
-     * Server sends back an authorization token that is stored in sharedPreferences.
-     */
-    public void Login(String deviceUUID, String passphrase, String regid) {
-        Log.i(TAG, "Login " + deviceUUID);
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("device_uuid", deviceUUID));
-        params.add(new BasicNameValuePair("passphrase", passphrase));
-        params.add(new BasicNameValuePair("push_id", regid));
-
-        ServerRequest serverRequest = new ServerRequest();
-        JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/login", params);
-
-        if (json != null) {
-            try {
-                mSessionToken = json.getString("session_token");
-                mSessionTokenExpires = json.getString("session_token_expires");
-
-                SharedPreferences.Editor edit = mSharedPreferences.edit();
-                edit.putString("session_token", mSessionToken);
-                edit.putString("session_token_expires", mSessionTokenExpires);
-                edit.apply();
-                Log.i(TAG, "Obtained session token: " + mSessionToken);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if(mOrderNumber!=null) { // user has placed an order before
-            Log.i(TAG, "checking for open orders");
-            boolean open = CheckOrderStatus(mSessionToken, mOrderNumber);
-            Log.i(TAG, "open order: " + open);
-            if (open) { // check order status
-                Intent i = new Intent(LoginActivity.this, DeliveryStatusActivity.class);
-                startActivity(i);
-                finish();
-            }
-        } else {
-            Log.i(TAG, "starting Request Condom Activity");
-            Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
-            startActivity(i);
-            finish();
-        }
-    }
-
-    public boolean CheckOrderStatus(String sessionToken, String orderNumber) {
-        Log.d(TAG, "CheckOrderStatus: " + orderNumber + " for " + sessionToken);
-        boolean delivered = false;
-        //boolean failed = false;
-
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("session_token", sessionToken));
-        params.add(new BasicNameValuePair("order_number", orderNumber));
-
-        ServerRequest serverRequest = new ServerRequest();
-        JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/delivery/status", params);
-
-        if (json != null) {
-            try {
-                delivered = json.getBoolean("order_delivered");
-                //failed = json.getBoolean("order_failed");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if(delivered) { // old, closed order
-            return false;
-        } else { // open order
-            return true;
-        }
-    }
 
     /**
      *

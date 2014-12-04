@@ -114,7 +114,7 @@ public class RequestFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 acceptedIsChecked = isChecked;
-                Log.d(TAG, mOrderNumberString + " accepted checked");
+                Log.d(TAG, mOrderNumberString + " checked accepted");
             }
         });
 
@@ -122,7 +122,7 @@ public class RequestFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 deliveryIsChecked = isChecked;
-                Log.d(TAG, mOrderNumberString + " delivered checked");
+                Log.d(TAG, mOrderNumberString + " checked delivered");
             }
         });
 
@@ -130,7 +130,7 @@ public class RequestFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mCondomRequest.setOrderDelivered(isChecked);
-                Log.d(TAG, mOrderNumberString + " failed checked");
+                Log.d(TAG, mOrderNumberString + " checked delivered");
             }
         });
 
@@ -152,7 +152,7 @@ public class RequestFragment extends Fragment {
                 if(acceptedIsChecked) {
                     mCondomRequest.setOrderAccepted(acceptedIsChecked);
                     mDeliveryEstimateString = mDeliveryEstimate.getText().toString();
-                    mParams.add(new BasicNameValuePair("delivery_estimate", mDeliveryEstimateString));
+                    mParams.add(new BasicNameValuePair("delivery_estimate ", mDeliveryEstimateString));
 
                     JSONObject json = serverRequest.getJSON(API + "delivery/request/accept", mParams);
                     if (json != null) {
