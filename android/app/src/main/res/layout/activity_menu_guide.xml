@@ -40,16 +40,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="After-hours care : Please call (610)-326-8548 to talk to a Worth nurse or nurse practitioner."
-            android:padding="4dp"/>
+            android:layout_margin="4dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="4dp"
+            android:layout_margin="4dp"
             android:text="If you have an emergency and need 911, please call Public Safety at (610)-328-8333."/>
         <TextView
             android:layout_width="match_parent"
-            android:padding="4dp"
+            android:layout_margin="4dp"
             android:layout_height="wrap_content"
             android:text="Non-urgent questions : please feel free to email Worth at health@swarthmore.edu"/>
     </LinearLayout>
