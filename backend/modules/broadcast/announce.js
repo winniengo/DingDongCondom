@@ -92,9 +92,8 @@ exports.get_announcement  = function(callback) {
 			console.log('Error retrieving announcements');
 		}
 		if (announcement) {
-			var open = announcement.open_for_business;
 			var open_string;
-			if (open) {
+			if (announcement.open_for_delivery) {
 				open_string = "yes";
 			} else {
 				open_string = "no";
