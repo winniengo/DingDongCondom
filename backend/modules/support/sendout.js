@@ -16,7 +16,7 @@
  var User = require('../user/models.js').User;
 
 
- exports.survey_sendout = function(push_id_list, campaign_id, callback) {
+ exports.survey_sendout = function(push_id_list, campaign_id) {
 
  	var sender = new gcm.Sender('AIzaSyChUqVv6OSHR58eElHGTYOYJj3IbXgCZ5Y');
 
@@ -41,9 +41,10 @@
 			sender.send(message, push_ids , 4, function(err, result) {
 				if (err) {
 					console.log(campaign_id + 'Sender err: ' + err);
+				} else {
+					console.log('GCM Sender: ' + result);
 				} 
 				
-				callback(err, 'Successfuly sent out push notifications');
 			});
 		}
 	});
@@ -98,14 +99,7 @@ exports.do_post_order_sendout = function () {
 	Campaign.findOne({campaign_id:"POST_ORDER_CAMPAIGN"}, function(err, campaign){
 		var eligible_users = campaign.eligible_users;
 
-
-		module.exports.survey_sendout(eligible_users, "POST_ORDER_CAMPAIGN", function(err, result) {
-			if (err) {
-				console.log('Sendout Error: ' + err);
-			}
-		})
-	});
-
+		module.exports.survey_sendout(eligible_users, "POST_ORDER_CAMPAIGN");
 
 }
 
