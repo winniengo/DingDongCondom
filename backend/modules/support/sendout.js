@@ -32,8 +32,8 @@
 		
 	});
 	
-	console.log('in survey_sendout, ids: ' + push_ids);
 	fetchAllEligibleUserPushIDs (campaign_id, function(push_ids) {
+		console.log('in survey_sendout, ids: ' + push_ids);
 		if (!push_ids) {
 			callback('No eligible users to send out', 'none sent');
 		} else {
