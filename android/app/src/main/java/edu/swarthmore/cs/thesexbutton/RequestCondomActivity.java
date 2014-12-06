@@ -41,6 +41,7 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
     List<NameValuePair> mParams;
     SharedPreferences mSharedPreferences;
     private static String TAG = "RequestCondomActivity";
+    Boolean mOpenForBusiness;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,10 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
             }
         });
 
+        // set the open for business text
+        setOpenForBusiness();
+
+
         mRequestButton = (Button) findViewById(R.id.request_condom_button);
         mRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +147,29 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
         });
     }
 
+    // Set open for business text
+    public void setOpenForBusiness () {
+        TextView mOpenForBusinessText = (TextView) findViewById(R.id.open_for_business);
+        ServerRequest serverRequest = new ServerRequest();
+        ArrayList<NameValuePair> reqParams = new ArrayList<NameValuePair>();
+        reqParams.add(new BasicNameValuePair("session_token", mSessionToken));
+        JSONObject response = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/broadcast/announcement/get", reqParams);
+        if (response != null) {
+            try {
+                String open = response.getString("open_for_business");
+                if (open == "yes") {
+                    mOpenForBusiness = true;
+                    mOpenForBusinessText.setText("We are open for business!");
+                } else {
+                    mOpenForBusiness = false;
+                    mOpenForBusinessText.setText("We are currently not delivering.");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                mOpenForBusiness = false;
+            }
+        }
+    }
 
     // Radio Button method
     public void onRadioButtonClicked(View view) {
@@ -206,5 +234,12 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // once you resume, check if we're still delivering
+        setOpenForBusiness();
     }
 }

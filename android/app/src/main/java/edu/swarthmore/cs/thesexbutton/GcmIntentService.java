@@ -81,6 +81,7 @@ public class GcmIntentService extends IntentService {
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                 .setContentTitle("DingDong: Condom!")
                 .setContentText(msg)
+                .setContentIntent(contentIntent)
                 .setAutoCancel(true);
 
         NotificationManager notificationManager =

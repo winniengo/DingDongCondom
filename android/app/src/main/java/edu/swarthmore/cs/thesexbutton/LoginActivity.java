@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -25,6 +26,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
 
 public class LoginActivity extends Activity {
     String mSessionToken, mSessionTokenExpires, mDeviceUUID, mPassphrase, mOrderNumber;
@@ -75,9 +77,9 @@ public class LoginActivity extends Activity {
                     // Make sure device has internet connectivity
                     if (!checkInternet()) {
                         Log.i(TAG, "No internet connection!");
-                        showErrorPopup("No internet connection!");
+                        //showErrorPopup("No internet connection!");
+                        Toast.makeText(context, "Please connect to the internet.", Toast.LENGTH_LONG).show();
                     }
-
                     // Make sure device has Play Services APK and register for GCM
                     if (checkPlayServices()) {
                         mRegid = getRegistrationId(context);
@@ -90,7 +92,8 @@ public class LoginActivity extends Activity {
                         }
                     } else {
                         Log.i(TAG, "No valid Google Play Services APK found.");
-                        showErrorPopup("No valid Google Play Services APK found.");
+                        //showErrorPopup("No valid Google Play Services APK found.");
+                        mHasPlayServices = false;
                     }
 
 

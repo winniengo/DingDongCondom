@@ -22,7 +22,7 @@ def send_broadcast(message):
 
 	headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
 
-	h.request('POST', '/api/broadcast/announcement', data, headers)
+	h.request('POST', '/api/broadcast/announcement/set', data, headers)
 
 	r = h.getresponse()
 

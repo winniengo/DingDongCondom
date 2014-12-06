@@ -31,8 +31,9 @@
 		}
 		
 	});
-	
+     console.log('in survey_sendout:');
 	fetchAllEligibleUserPushIDs (campaign_id, function(push_ids) {
+		console.log('in survey_sendout, ids: ' + push_ids);
 		if (!push_ids) {
 			callback('No eligible users to send out', 'none sent');
 		} else {
@@ -60,25 +61,31 @@ function fetchAllEligibleUserPushIDs (campaign_id, callback) {
  			console.log('(Sendout.js): Error: ' + err);
  		}
 		if (campaign) {
+
  			var eligible_users = campaign.eligible_users;
 			
  			async.map(eligible_users, function(user_id, done) {
  				User.findOne({_id : user_id}, function (err, user){
 					if (err) {
 						console.log('in set_announcement: ' + err);
-					} else if (user) {
+				
+					}
+				    if (user) {
 						var id = user.push_id;
 						if (id) {
-							done(null, id);
+						   
+						    done(null, id);
 						}
+					} else {
+					    done(null, null);
 					}
 				});
  			}, function(err, push_ids) {
- 				if(err) {
- 					console.log('error in fetchAllEligibleUserPushIDs: ' + err);
- 				}
-
- 				callback(push_ids);
+ 			    if(err) {
+ 				console.log('error in fetchAllEligibleUserPushIDs: ' + err);
+ 			    }
+			    console.log('computing eligible users: ' +push_ids);
+ 			    callback(push_ids);
  			});			
 		}
 	});
@@ -90,6 +97,7 @@ exports.do_post_order_sendout = function () {
 
 	Campaign.findOne({campaign_id:"POST_ORDER_CAMPAIGN"}, function(err, campaign){
 		var eligible_users = campaign.eligible_users;
+
 
 		module.exports.survey_sendout(eligible_users, "POST_ORDER_CAMPAIGN", function(err, result) {
 			if (err) {
@@ -121,7 +129,7 @@ exports.initialize_post_order_campaign = function (callback) {
 		        pending_users : [],
 		        completed_users : [],
 
-		        survey_link : 'https://tinyurl.com/dingdongc',
+		        survey_link : 'https://docs.google.com/forms/d/1za7RHK4dhrIneY_XwkjQdOnBBi5CByW5sV4iCD-8xn0/viewform',
 
 		        crontab : "* * * * *", //the crontab on which this campaign gets executed
 				});

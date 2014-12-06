@@ -28,7 +28,7 @@ exports.set_announcement = function(message, open_for_business, callback) {
 	});
 
 	var open_for_business_bool;
-	if (open_for_business) {
+	if (open_for_business == 'yes') {
 		open_for_business_bool = true;
 	} else {
 		open_for_business_bool = false;
@@ -92,9 +92,16 @@ exports.get_announcement  = function(callback) {
 			console.log('Error retrieving announcements');
 		}
 		if (announcement) {
+			var open = announcement.open_for_business;
+			var open_string;
+			if (open) {
+				open_string = "yes";
+			} else {
+				open_string = "no";
+			}
 			callback({'response:' : 'ANNOUNCEMENT_GETANNOUNCEMENT_SUCCESS',
 					  'message' : announcement.message,
-					  'open_for_business' : announcement.open_for_business}, 200);
+					  'open_for_business' : open_string}, 200);
 		} else {
 			callback({'response': 'ANNOUNCEMENT_GETANNOUNCEMENT_ERROR'}, 500);
 		}
