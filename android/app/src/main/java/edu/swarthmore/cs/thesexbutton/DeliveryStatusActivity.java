@@ -49,7 +49,7 @@ public class DeliveryStatusActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (!mAccepted) {
+                while (!mAccepted && !mFailed) {
 
                     checkDeliveryStatus(); // check delivery status via JSON
                     try { // sleep 10 seconds
