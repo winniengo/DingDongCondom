@@ -83,6 +83,7 @@ public class GcmIntentService extends IntentService {
                 .setContentText(msg)
                 .setContentIntent(contentIntent)
                 .setAutoCancel(true);
+                //.setSound();
 
         NotificationManager notificationManager =
                 (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);

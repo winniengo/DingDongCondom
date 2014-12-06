@@ -7,14 +7,17 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:orientation="vertical"
                   android:layout_width="match_parent"
-                  android:layout_height="match_parent"
+                  android:layout_height="wrap_content"
                   android:layout_margin="10dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:textStyle="bold"
-            android:text="CONDOM GUIDE">
+            android:layout_marginTop="10dp"
+            android:text="HOW TO USE A CONDOM">
         </TextView>
 
         <ImageView
@@ -33,24 +36,30 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="10dp"
             android:textStyle="bold"
             android:text="HEALTH CENTER"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="After-hours care : Please call (610)-326-8548 to talk to a Worth nurse or nurse practitioner."
-            android:layout_margin="4dp"/>
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text="After-hours care : Call (610)-326-8548 to talk to a Worth nurse or nurse practitioner." />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:text="If you have an emergency and need 911, please call Public Safety at (610)-328-8333."/>
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text="If you have an emergency and need 911, call Public Safety at (610)-328-8333."/>
         <TextView
             android:layout_width="match_parent"
-            android:layout_margin="4dp"
             android:layout_height="wrap_content"
-            android:text="Non-urgent questions : please feel free to email Worth at health@swarthmore.edu"/>
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:text="Non-urgent questions: Feel free to email Worth at health@swarthmore.edu"/>
     </LinearLayout>
 </ScrollView>
