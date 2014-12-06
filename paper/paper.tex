@@ -1,508 +1,195 @@
-% THIS IS SIGPROC-SP.TEX - VERSION 3.1
-% WORKS WITH V3.2SP OF ACM_PROC_ARTICLE-SP.CLS
-% APRIL 2009
-%
-% It is an example file showing how to use the 'acm_proc_article-sp.cls' V3.2SP
-% LaTeX2e document class file for Conference Proceedings submissions.
-
 \documentclass{acm_proc_article-sp}
+\usepackage{enumerate}
 
 \begin{document}
 
-\title{A Sample {\ttlit ACM} SIG Proceedings Paper in LaTeX
-Format}
-
-% \subtitle{[Extended Abstract]
-% \titlenote{A full version of this paper is available as
-% \textit{Author's Guide to Preparing ACM SIG Proceedings Using
-% \LaTeX$2_\epsilon$\ and BibTeX} at
-% \texttt{www.acm.org/eaddress.htm}}}
-
-%
-% You need the command \numberofauthors to handle the 'placement
-% and alignment' of the authors beneath the title.
-%
-% For aesthetic reasons, we recommend 'three authors at a time'
-% i.e. three 'name/affiliation blocks' be placed beneath the title.
-%
-% NOTE: You are NOT restricted in how many 'rows' of
-% "name/affiliations" may appear. We just ask that you restrict
-% the number of 'columns' to three.
-%
-% Because of the available 'opening page real-estate'
-% we ask you to refrain from putting more than six authors
-% (two rows with three columns) beneath the article title.
-% More than six makes the first-page appear very cluttered indeed.
-%
-% Use the \alignauthor commands to handle the names
-% and affiliations for an 'aesthetic maximum' of six authors.
-% Add names, affiliations, addresses for
-% the seventh etc. author(s) as the argument for the
-% \additionalauthors command.
-% These 'additional authors' will be output/set for you
-% without further effort on your part as the last section in
-% the body of your article BEFORE References or any Appendices.
-
-\numberofauthors{2}
-
-%\author{
-% You can go ahead and credit any number of authors here,
-% e.g. one 'row of three' or two rows (consisting of one row of three
-% and a second row of one, two or three).
-%
-% The command \alignauthor (no curly braces needed) should
-% precede each author name, affiliation/snail-mail address and
-% e-mail address. Additionally, tag each line of
-% affiliation/address with \affaddr, and tag the
-% e-mail address with \email.
-%
-% 1st. author
-% \alignauthor
-% Ben Trovato\titlenote{Dr.~Trovato insisted his name be first.}\\
-%        \affaddr{Institute for Clarity in Documentation}\\
-%        \affaddr{1932 Wallamaloo Lane}\\
-%        \affaddr{Wallamaloo, New Zealand}\\
-%        \email{trovato@corporation.com}
-% % 2nd. author
-% \alignauthor
-% G.K.M. Tobin\titlenote{The secretary disavows
-% any knowledge of this author's actions.}\\
-%        \affaddr{Institute for Clarity in Documentation}\\
-%        \affaddr{P.O. Box 1212}\\
-%        \affaddr{Dublin, Ohio 43017-6221}\\
-%        \email{webmaster@marysville-ohio.com}
-% }
-
+\title{DingDong: Condom! Using Mobile Devices to Facilitate Preventative Sexual Health}
+\numberofauthors{3}
 \author{
 \alignauthor
-Ben Trovato\\
-       \affaddr{Institute for Clarity in Documentation}\\
-       \affaddr{1932 Wallamaloo Lane}\\
-       \affaddr{Wallamaloo, New Zealand}\\
-       \email{trovato@corporation.com}
-% 2nd. author
+Awjin Ahn\\
+  \vspace{0.567cm}
+  \affaddr{Swarthmore College}\\
+  \email{aahn1@swarthmore.edu}
 \alignauthor
-G.K.M. Tobin\\
-       \affaddr{Institute for Clarity in Documentation}\\
-       \affaddr{P.O. Box 1212}\\
-       \affaddr{Dublin, Ohio 43017-6221}\\
-       \email{webmaster@marysville-ohio.com}
+Daniel-Elia Feist-Alexandrov\\
+  \vspace{0.2cm}
+  \affaddr{Swarthmore College}\\
+  \email{aahn1@swarthmore.edu}
+\alignauthor
+Winnie Ngo\\
+  \vspace{0.567cm}
+  \affaddr{Swarthmore College}\\
+  \email{aahn1@swarthmore.edu}
 }
-
 \maketitle
+
+
 \begin{abstract}
-This paper provides a sample of a \LaTeX\ document which conforms to
-the formatting guidelines for ACM SIG Proceedings.
-It complements the document \textit{Author's Guide to Preparing
-ACM SIG Proceedings Using \LaTeX$2_\epsilon$\ and Bib\TeX}. This
-source file has been written with the intention of being
-compiled under \LaTeX$2_\epsilon$\ and BibTeX.
+\smallskip
+\textbf{Background:} Hook-up culture on college campuses is steadily gaining more traction and media attention.$^1$ On one hand, the culture celebrates the unique environment for sexual exploration and encounters provided by college campuses. On the other hand, the risks of unprotected sex, such as contracting an STI or having an unwanted pregnancy can be devastating for the college age group. This is a problem that can benefit immensley from the field of mobile health. We propose a mobile sexual health app that allows students to anonymously order a condom delivered to their dorm to facilitate safe sex.
 
-The developers have tried to include every imaginable sort
-of ``bells and whistles", such as a subtitle, footnotes on
-title, subtitle and authors, as well as in the text, and
-every optional component (e.g. Acknowledgments, Additional
-Authors, Appendices), not to mention examples of
-equations, theorems, tables and figures.
+\textbf{Objective:} To launch an app that provides a just-in-time condom delivery service and displays brief, digestible sexual health information. The backend is open-source and scalable to any college campus that wishes to deploy it.
 
-To make best use of this sample document, run it through \LaTeX\
-and BibTeX, and compare this source code with the printed
-output produced by the dvi file.
+\textbf{Methods:} We conducted a randomized survey of 217 students to identify the barriers to having safe sex. We built a user app, an app for the condom deliverer, and a scalable Node.js backend to handle all requests and announcements. We will trial this app on Swarthmore College's campus on a few weekend nights, when demand is expected to be high.
+
+\textbf{Results:} \textit{We have not yet run our trials yet. The test trials will occur on Dec 6, 7, 9.}
+
+\textbf{Conclusions:} \textit{Again, without any results we cannot assess the efficacy of the system.} The end goal is to have this system easily deployable by any college to bolster the sexual health on their campus. At Swarthmore College, we hope to work more closely with the Sexual Health Counseling Program and the campus Health Center to provide a system specifically tailored to the campus's needs.
 \end{abstract}
 
+
 \section{Introduction}
-The \textit{proceedings} are the records of a conference.
-ACM seeks to give these conference by-products a uniform,
-high-quality appearance.  To do this, ACM has some rigid
-requirements for the format of the proceedings documents: there
-is a specified format (balanced  double columns), a specified
-set of fonts (Arial or Helvetica and Times Roman) in
-certain specified sizes (for instance, 9 point for body copy),
-a specified live area (18 $\times$ 23.5 cm [7" $\times$ 9.25"]) centered on
-the page, specified size of margins (1.9 cm [0.75"]) top, (2.54 cm [1"]) bottom
-and (1.9 cm [.75"]) left and right; specified column width
-(8.45 cm [3.33"]) and gutter size (.83 cm [.33"]).
+\smallskip
+Contracting a sexually transmitted disease or having an unwanted pregnancy can change the trajectory of one's life. This is especially true for members of the college-aged population, who are in critical positions to advance their education and careers and have readily available access to sexual encounters. One of the most effective preventative methods is using a condom during sex, yet a surprisingly large amount of these young adults fail to do so---in a survey conducted by the CDC, 40\% of young adults did not use a condom the last time they had sex.$^2$ The main reasons we have identified for this behavior are 1) being unprepared with no form of protection on hand, 2) inadequate sexual health education (e.g. how to properly use a condom), and 3) fear/stigma of buying condoms.
 
-The good news is, with only a handful of manual
-settings\footnote{Two of these, the {\texttt{\char'134 numberofauthors}}
-and {\texttt{\char'134 alignauthor}} commands, you have
-already used; another, {\texttt{\char'134 balancecolumns}}, will
-be used in your very last run of \LaTeX\ to ensure
-balanced column heights on the last page.}, the \LaTeX\ document
-class file handles all of this for you.
+To help encourage and increase the use of condoms, we present a mobile phone application-based system that powers a 'just-in-time' condom delivery service for college campuses. This system will 1) allow students to quickly and discreetly request a condom delivery to their rooms, 2) provide brief digests about sexual health topics such as proper condom usage and Plan B, and 3) display relevant contact information, such as that of the college's health center, sexual health counselors, etc. By significantly decreasing the barriers to acquiring a condom, we hope to increase the practice of safe sex.
 
-The remainder of this document is concerned with showing, in
-the context of an ``actual'' document, the \LaTeX\ commands
-specifically available for denoting the structure of a
-proceedings paper, rather than with giving rigorous descriptions
-or explanations of such commands.
+In the architecture section, we detail the logistical aspects of deploying such a service on the Swarthmore College campus. The backend is powered by Node.js and MongoDB, and the user will be provided with an Android app.
 
-\section{The {\secit Body} of The Paper}
-Typically, the body of a paper is organized into a hierarchical
-structure, with numbered or unnumbered headings for sections,
-subsections, sub-subsections, and even smaller sections.  The command
-\texttt{{\char'134}section} that precedes this paragraph is part of
-such a hierarchy. \footnote{This is the second footnote.  It starts a
-  series of three footnotes that add nothing informational, but just
-  give an idea of how footnotes work and look. It is a wordy one, just
-  so you see how a longish one plays out.}  \LaTeX\ handles the
-numbering and placement of these headings for you, when you use the
-appropriate heading commands around the titles of the headings.  If
-you want a sub-subsection or smaller part to be unnumbered in your
-output, simply append an asterisk to the command name.  Examples of
-both numbered and unnumbered headings will appear throughout the
-balance of this sample document.
-
-Because the entire article is contained in
-the \textbf{document} environment, you can indicate the
-start of a new paragraph with a blank line in your
-input file; that is why this sentence forms a separate paragraph.
-
-\subsection{Type Changes and {\subsecit Special} Characters}
-We have already seen several typeface changes in this sample.  You can
-indicate italicized words or phrases in your text with the command
-\texttt{{\char'134}textit}; emboldening with the command
-\texttt{{\char'134}textbf} and typewriter-style (for instance, for
-computer code) with \texttt{{\char'134}texttt}.  But remember, you do
-not have to indicate typestyle changes when such changes are part of
-the \textit{structural} elements of your article; for instance, the
-heading of this subsection will be in a sans serif \footnote{A third
-  footnote, here.  Let's make this a rather short one to see how it
-  looks.}  typeface, but that is handled by the document class
-file. Take care with the use of\footnote{A fourth, and last,
-  footnote.}  the curly braces in typeface changes; they mark the
-beginning and end of the text that is to be in the different typeface.
-
-You can use whatever symbols, accented characters, or
-non-English characters you need anywhere in your document;
-you can find a complete list of what is
-available in the \textit{\LaTeX\
-User's Guide}\cite{Lamport:LaTeX}.
-
-\subsection{Math Equations}
-You may want to display math equations in three distinct styles:
-inline, numbered or non-numbered display.  Each of
-the three are discussed in the next sections.
-
-\subsubsection{Inline (In-text) Equations}
-A formula that appears in the running text is called an
-inline or in-text formula.  It is produced by the
-\textbf{math} environment, which can be
-invoked with the usual \texttt{{\char'134}begin. . .{\char'134}end}
-construction or with the short form \texttt{\$. . .\$}. You
-can use any of the symbols and structures,
-from $\alpha$ to $\omega$, available in
-\LaTeX\cite{Lamport:LaTeX}; this section will simply show a
-few examples of in-text equations in context. Notice how
-this equation: \begin{math}\lim_{n\rightarrow \infty}x=0\end{math},
-set here in in-line math style, looks slightly different when
-set in display style.  (See next section).
-
-\subsubsection{Display Equations}
-A numbered display equation -- one set off by vertical space
-from the text and centered horizontally -- is produced
-by the \textbf{equation} environment. An unnumbered display
-equation is produced by the \textbf{displaymath} environment.
-
-Again, in either environment, you can use any of the symbols
-and structures available in \LaTeX; this section will just
-give a couple of examples of display equations in context.
-First, consider the equation, shown as an inline equation above:
-\begin{equation}\lim_{n\rightarrow \infty}x=0\end{equation}
-Notice how it is formatted somewhat differently in
-the \textbf{displaymath}
-environment.  Now, we'll enter an unnumbered equation:
-\begin{displaymath}\sum_{i=0}^{\infty} x + 1\end{displaymath}
-and follow it with another numbered equation:
-\begin{equation}\sum_{i=0}^{\infty}x_i=\int_{0}^{\pi+2} f\end{equation}
-just to demonstrate \LaTeX's able handling of numbering.
-
-\subsection{Citations}
-Citations to articles \cite{bowman:reasoning, clark:pct, braams:babel, herlihy:methodology},
-conference
-proceedings \cite{clark:pct} or books \cite{salas:calculus, Lamport:LaTeX} listed
-in the Bibliography section of your
-article will occur throughout the text of your article.
-You should use BibTeX to automatically produce this bibliography;
-you simply need to insert one of several citation commands with
-a key of the item cited in the proper location in
-the \texttt{.tex} file \cite{Lamport:LaTeX}.
-The key is a short reference you invent to uniquely
-identify each work; in this sample document, the key is
-the first author's surname and a
-word from the title.  This identifying key is included
-with each item in the \texttt{.bib} file for your article.
-
-The details of the construction of the \texttt{.bib} file
-are beyond the scope of this sample document, but more
-information can be found in the \textit{Author's Guide},
-and exhaustive details in the \textit{\LaTeX\ User's
-Guide}\cite{Lamport:LaTeX}.
-
-This article shows only the plainest form
-of the citation command, using \texttt{{\char'134}cite}.
-This is what is stipulated in the SIGS style specifications.
-No other citation format is endorsed.
-
-\subsection{Tables}
-Because tables cannot be split across pages, the best
-placement for them is typically the top of the page
-nearest their initial cite.  To
-ensure this proper ``floating'' placement of tables, use the
-environment \textbf{table} to enclose the table's contents and
-the table caption.  The contents of the table itself must go
-in the \textbf{tabular} environment, to
-be aligned properly in rows and columns, with the desired
-horizontal and vertical rules.  Again, detailed instructions
-on \textbf{tabular} material
-is found in the \textit{\LaTeX\ User's Guide}.
-
-Immediately following this sentence is the point at which
-Table 1 is included in the input file; compare the
-placement of the table here with the table in the printed
-dvi output of this document.
-
-\begin{table}
-\centering
-\caption{Frequency of Special Characters}
-\begin{tabular}{|c|c|l|} \hline
-Non-English or Math&Frequency&Comments\\ \hline
-\O & 1 in 1,000& For Swedish names\\ \hline
-$\pi$ & 1 in 5& Common in math\\ \hline
-\$ & 4 in 5 & Used in business\\ \hline
-$\Psi^2_1$ & 1 in 40,000& Unexplained usage\\
-\hline\end{tabular}
-\end{table}
-
-To set a wider table, which takes up the whole width of
-the page's live area, use the environment
-\textbf{table*} to enclose the table's contents and
-the table caption.  As with a single-column table, this wide
-table will ``float" to a location deemed more desirable.
-Immediately following this sentence is the point at which
-Table 2 is included in the input file; again, it is
-instructive to compare the placement of the
-table here with the table in the printed dvi
-output of this document.
+In the evaluation section, we present data from trial runs of this service during two weekends at Swarthmore during the Fall 2014 semester. In order to evaluate the effectiveness of our system, we will use four metrics: 1) surveys of the student body of the need and viability of the service, 2) raw number of condoms delivered, 3) amount of inquiries the College Health Center receives about urgent sexual health matters before and after the service is deployed, and 4) post-service user feedback. We hypothesize that users will largely ignore surveys if they are prompted immediately after the condom is delivered. We aim, therefore, to collect data at a later time to ensure maximum feedback, in the form of ``morning-after'' surveys.
 
 
-\begin{table*}
-\centering
-\caption{Some Typical Commands}
-\begin{tabular}{|c|c|l|} \hline
-Command&A Number&Comments\\ \hline
-\texttt{{\char'134}alignauthor} & 100& Author alignment\\ \hline
-\texttt{{\char'134}numberofauthors}& 200& Author enumeration\\ \hline
-\texttt{{\char'134}table}& 300 & For tables\\ \hline
-\texttt{{\char'134}table*}& 400& For wider tables\\ \hline\end{tabular}
-\end{table*}
-% end the environment with {table*}, NOTE not {table}!
+\section{Related Works}
+\smallskip
+Our motives for creating this system stem from problems that are specific and unique to the college population. Therefore, research in this area has not been done explicitly, but related research is tabulated below:
+\begin{enumerate}
+\item The growth of hookup culture on college campuses$^3$
 
-\subsection{Figures}
-Like tables, figures cannot be split across pages; the
-best placement for them
-is typically the top or the bottom of the page nearest
-their initial cite.  To ensure this proper ``floating'' placement
-of figures, use the environment
-\textbf{figure} to enclose the figure and its caption.
+Hookup culture on college campuses has been againing increased media exposure, coverage, and general awareness. Relationships outside of relationships are becoming more common and less stigmatized. However, this leads to problems of not knowing what STIs potential partners might have, and necessitates the practice of safe sex.
 
-This sample document contains examples of \textbf{.png}
-and \textbf{.pdf} files to be displayable with \LaTeX.  More
-details on each of these is found in the \textit{Author's Guide}.
+\item Effectiveness of condoms in preventing many types of STIs$^4$
 
-\begin{figure}
-\centering
-\includegraphics{./figs/fly.png}
-\caption{A sample black and white graphic (.png format).}
-\end{figure}
+A NIH study conducted in 2000 determined conclusively that condom usage decreases the spread of HIV and gonorrhea. The authors of this newer study reexamine the NIH study in order to examine if condoms are useful for preventing a larger variety of STIs. They conclude that condoms can, in fact, help protect against a larger range, including chlamydia, herpes simplex virus type 2, syphilis, and HPV. In light of this research, the correct usage of condoms becomes even more compelling.
 
-\begin{figure}
-\centering
-\includegraphics[width=1in, width=1in]{./figs/fly.png}
-\caption{A sample black and white graphic (.png format)
-that has been resized with the \texttt{includegraphics} command.}
-\end{figure}
+\item The prevalence of incorrect confom usage$^5$
+
+A condom is rendered useless if it is not used corrected. Common errors, determined from randomized surveys, led to failed usage. Some of the response are shown below:
+\begin{enumerate}
+\item Using sharp instruments to open condom packages (11\%)
+\item Storing condoms in wallets (19\%)
+\item Not using a new condom when switching from one form of sex to another (83\%)
+
+A host of other problems, such as only using a condom after sex had begun, or removing the condom prematurely, were common in responses (38 and 14 percent, respectively). This clearly shows that proper education of condom use is necessary, even though it seems like a simple process. To that end, our app strives to include relevant and visually appealing information such that the user would be likely to read it. This would also improve the success rate of condom usage.
+\end{enumerate}
+
+\item Effectiveness of Just-in-time (JIT) services$^6$
+
+This paper analyzes how JIT services can benefit different types of fields. The main arguments are for client satisfaction, timeliness of delivery, agile backend services, and the general conservation of time and resources. All of these benefits are perfectly suited to our usage case. To that end, we apply the JIT paradigms in the design of our app.
+
+\end{enumerate}
+
+\section{User-Driven Design}
+\smallskip
+We had a general idea of what we wanted our app to look like at the start of our project. It needed to contain features that would allow users to register their mobile devices with the service, specify their delivery options, and place orders.
+
+In order to gain a better understanding of what users would want from such a service, we published a campus-wide survey. Since our trial was set to take place at Swarthmore College, we were very interested in what the students had to say, and tried to shape our design objectives to best fit their needs. We also made the assumption that Swarthmore students are a reasonable representation of the avereage college student.
+
+\subsection{Survey of the Student Body}
+Our survey asked a number of questions. We wanted an idea of how needed this service would be campus and how it would be received by students. Our survey asked users to rank how accessible condoms were for them in terms of price, location and availability. It also asked users if they had been in a situation where they needed a condom and didn't have one in the last year. To guide our service and app design, we also ask users how long they would be willing to wait for a condom to be delivered and what their preferred delivery method would be. In order to address to issue of protecting user anonymity, we wanted to make deliveries available to designated drop off boxes located in dorm lounges or outside buildings. Making deliveries directly to a user's dorm room would create an anonymity issue because identifying information like names are usually displayed on room doors.  Lastly, we gave users an opportunity to share any thoughts they had on the project. 
+
+Approximately 15\% of Swarthmore's study body took our survey and we received 217 responses. 
+
+We asked users to rate accessibility on a scale of 1 to 7, (1 being not accessible and 7 being readily accessible and received a wide and mostly even distribution of answers not including 1. 23\% said condoms were readily accessible, while 19\% and 16\% ranked condom availability as a 5 and 3 respectively. 42\% said that they had needed a condom and didn't have one in the past year. 52\% said they would most prefer condoms delivered directly to their rooms, while 35\% prefered deliveries to their lounges. 44\% of uses said that they would be willing to wait 5-15 minutes for their delivery and 33\% said 10-20 minutes. Finally, 60\% said that they would use our app and service if it existed on campus. 
+
+Overall, potential user response correlated well to our initial design objectives. There seemed to be a reasonable need at Swarthmore College for our service given that almost half of the 217 students who took our survey have been in situations where they've needed a condom and didn't have one in the recent. Issues concerning anonymity proved valid so we decided to make deliveries available to dorm lounges and dorm rooms. Overall, feedback was positive and encouraging. 
+
+From our survey responses, we finalized that our service would involve users providing information on their delivery destination via a simple form and ordering their condoms via a one-click app interface. Given the time requested, delivery destination, and type, deliverers would respond to new orders and delivery an envelope containing three condoms within 15 minutes of accepting the order. 
 
 
-As was the case with tables, you may want a figure
-that spans two columns.  To do this, and still to
-ensure proper ``floating'' placement of tables, use the environment
-\textbf{figure*} to enclose the figure and its caption.
+\section{Architecture}
+\smallskip
+The core idea of our project was to promote sexual health by making condoms and information about their use more accessible. Making this access convenient and anonymous, we theorized, would in turn increase propensity to use this service and thus ensure that people exercised safe sex. We found this paradigm, reducing friction to drive usage, very clear in industry: mobile apps like Uber and Lyft cut the process of transportation down to a simple address input and single button-click. Then, the client simply waits for a calculated amount of time for the car to pick them up. It is this convenience that we wanted to duplicate to drive adoption of safe sex practices. Thus, we oriented our design process on these established models in industry. Another important design consideration was scalability, since we want to develop this in a way that we can deploy this at schools both small and large.
 
-\subsection{Theorem-like Constructs}
-Other common constructs that may occur in your article are
-the forms for logical constructs like theorems, axioms,
-corollaries and proofs.  There are
-two forms, one produced by the
-command \texttt{{\char'134}newtheorem} and the
-other by the command \texttt{{\char'134}newdef}; perhaps
-the clearest and easiest way to distinguish them is
-to compare the two in the output of this sample document:
+\subsection{Backend}
+\smallskip
+One of the most important criteria in making architectural design choices in a software development environment is accounting for expected and unexpected growth. For instance, Google would not have been able to sustain its growth and success if the founders and chief infrastructure architects hadn't made deliberate decisions to invest in an architecture that could scale to any kind of traffic. Adopting this paradigm, we chose to use Node.js [http://nodejs.org/] as a framework for our application’s backend. (It is no coincidence that Uber uses it as part of its backend stack as well [http://builtwith.com/uber.com].)
 
-This uses the \textbf{theorem} environment, created by
-the\linebreak\texttt{{\char'134}newtheorem} command:
-\newtheorem{theorem}{Theorem}
-\begin{theorem}
-Let $f$ be continuous on $[a,b]$.  If $G$ is
-an antiderivative for $f$ on $[a,b]$, then
-\begin{displaymath}\int^b_af(t)dt = G(b) - G(a).\end{displaymath}
-\end{theorem}
+This necessitated us to adapt our coding style, as Node.js is a language driven by asynchronous processing. For instance, instead of using a for-loop to perform operations, we use a map function that does it all asynchronously and in parallel. This is very powerful for our purposes as it allows for a non-blocking I/O model, but its nondeterministic execution sequence makes debugging difficult.
 
-The other uses the \textbf{definition} environment, created
-by the \texttt{{\char'134}newdef} command:
-\newdef{definition}{Definition}
-\begin{definition}
-If $z$ is irrational, then by $e^z$ we mean the
-unique number which has
-logarithm $z$: \begin{displaymath}{\log e^z = z}\end{displaymath}
-\end{definition}
+In addition to the bare Node.js deployment we used various modules (see Appendix I for list) to make the development process easier and provide crucial functionality. The most important to mention is express.js [http://expressjs.com/] to provide a scaffold.
 
-\begin{figure}
-\centering
-\includegraphics[width=1.0in,width=1in]{./figs/rosette.pdf}
-\caption{A sample black and white graphic (.pdf format) that has
-been resized with the \texttt{includegraphics} command.}
-\end{figure}
+As a database, we decided to use a NoSQL solution and thus opted for the very popular MongoDB, since our data was not relational by nature. Using a NoSQL database like MongoDB also allows for ease of deployment because it allows changing models on the fly and provides strong scalability.
 
-Two lists of constructs that use one of these
-forms is given in the
-\textit{Author's  Guidelines}.
+The initial goal was to build a REST API on top of this, but due to limited knowledge of Node.js and Android, we ended up building an API that consists of POSTs. This can be refactored fairly easily with the knowledge we have to be truly RESTful. At its heart it does carry these principles. We implemented the API and models to allow for future expansion of functionality (e.g. adding location to delivery requests).
 
-\begin{figure*}
-\centering
-\includegraphics[height=2in]{./figs/flies.png}
-\caption{A sample black and white graphic (.png format)
-that needs to span two columns of text.}
-\end{figure*}
-and don't forget to end the environment with
-{figure*}, not {figure}!
- 
-There is one other similar construct environment, which is
-already set up
-for you; i.e. you must \textit{not} use
-a \texttt{{\char'134}newdef} command to
-create it: the \textbf{proof} environment.  Here
-is a example of its use:
-\begin{proof}
-Suppose on the contrary there exists a real number $L$ such that
-\begin{displaymath}
-\lim_{x\rightarrow\infty} \frac{f(x)}{g(x)} = L.
-\end{displaymath}
-Then
-\begin{displaymath}
-l=\lim_{x\rightarrow c} f(x)
-= \lim_{x\rightarrow c}
-\left[ g{x} \cdot \frac{f(x)}{g(x)} \right ]
-= \lim_{x\rightarrow c} g(x) \cdot \lim_{x\rightarrow c}
-\frac{f(x)}{g(x)} = 0\cdot L = 0,
-\end{displaymath}
-which contradicts our assumption that $l\neq 0$.
-\end{proof}
+We also implemented a GCM powered broadcast with the ‘node-schedule’ and ‘node-gcm’ packages. The former allows us to execute JS functions on a schedule without using Cron itself. Any notifications are then sent through Google Cloud Messaging servers. We have a simple python script that lets us send out ‘broadcasts’ to all users, if we need to make announcements or adjustments on the fly. This type of communication is useful for a demographic that is always connected to the internet.
 
-Complete rules about using these environments and using the
-two different creation commands are in the
-\textit{Author's Guide}; please consult it for more
-detailed instructions.  If you need to use another construct,
-not listed therein, which you want to have the same
-formatting as the Theorem
-or the Definition\cite{salas:calculus} shown above,
-use the \texttt{{\char'134}newtheorem} or the
-\texttt{{\char'134}newdef} command,
-respectively, to create it.
+\subsection{Android Applications}
+\smallskip
+We implemented two apps: 1) DingDong: Condom!, for the user, and 2) DingDong: Deliverer for the person delivering the condoms.
 
-\subsection*{A {\secit Caveat} for the \TeX\ Expert}
-Because you have just been given permission to
-use the \texttt{{\char'134}newdef} command to create a
-new form, you might think you can
-use \TeX's \texttt{{\char'134}def} to create a
-new command: \textit{Please refrain from doing this!}
-Remember that your \LaTeX\ source code is primarily intended
-to create camera-ready copy, but may be converted
-to other forms -- e.g. HTML. If you inadvertently omit
-some or all of the \texttt{{\char'134}def}s recompilation will
-be, to say the least, problematic.
+\subsubsection{DingDong Client}
+\smallskip
+This app was built on top the Android Jelly Bean SDK. It handles most things by firing off requests to the node backend (like checking for status, registering and so on). We store no real personally identifyiable information (PII)---only a randomly generated device identifier and passphrase, and dorm name and room. The app contains a Google Cloud Messaging (GCM) component, which handles notifications from the backend and delivers usage surveys to the user. The app also comes with pertinent sexual health content, such as a graphical guide on how to use a condom.
 
-\section{Conclusions}
-This paragraph will end the body of this sample document.
-Remember that you might still have Acknowledgments or
-Appendices; brief samples of these
-follow.  There is still the Bibliography to deal with; and
-we will make a disclaimer about that here: with the exception
-of the reference to the \LaTeX\ book, the citations in
-this paper are to articles which have nothing to
-do with the present subject and are used as
-examples only.
-%\end{document}  % This is where a 'short' article might terminate
+\subsubsection{DingDong Deliverer}
+\smallskip
+The deliverer app has been designed to optimize the just-in-time delivery paradigm. A simple list fragment powered the overview of all the different open orders. This app allows the deliverer to view the location of delivery, and then asks the deliverer to accept the order with a delivery ETA. This triggers a progress screen in the client app that shows the real-time progress. Once delivered, the deliverer can mark this in the app. This changes the status of the order in the backend. Once the client app picks up on that change, it notifies the user that the condom is delivered. The app then shows the user a guid on proper condom use. 
 
-%ACKNOWLEDGMENTS are optional
-\section{Acknowledgments}
-This section is optional; it is a location for you
-to acknowledge grants, funding, editing assistance and
-what have you.  In the present case, for example, the
-authors would like to thank Gerald Murray of ACM for
-his help in codifying this \textit{Author's Guide}
-and the \textbf{.cls} and \textbf{.tex} files that it describes.
 
-%
-% The following two commands are all you need in the
-% initial runs of your .tex file to
-% produce the bibliography for the citations in your paper.
+\section{Evaluation}
+\smallskip
+\subsection{On-campus Trials}
+\smallskip
+We are most interested in learning if providing emergency condom delivery service improves sexual health and practices on college campuses. 
+
+We will collect data from the condom orders made and from responses to our 'morning-after' survey. This survey will be pushed to users who placed an order the night before at noon of the next day. It will ask users the following:
+\begin{enumerate}
+\item Did they use any of the condoms delivered?
+\item How would they rate their waiting time?
+\item How would they rate the usability and desing of the app's interface?
+\item Would they use the app again in the future?
+\end{enumerate}
+
+To test our app and survey, we conducted nightly trials on the Swarthmore College campus. To optimize our results, we chose nights of parties when we predicted condom usage would be at its highest. We chose the last Saturday and Tuesday of the semester. We made our service available from 8:00 pm to 2:00 am of those nights. Users were sent notifications of opening and closing times. 
+
+\subsection{Challenges and Constraints}
+\smallskip
+We faced several constraints which limited our evaluation of our system. 
+
+First, we had very limited access to dorm buildings on campus. All dorms require a key and the propping of doors is strictly forbidden. Though there are master keys which open all doors on campus, the administration had issues lending them out to us for our testing purposes. Thus, users were only able to order condoms to the campus building we could readily open, which consisted of academic buildings and dorms for which we procured a resident’s key. In addition, due to weather conditions and our delivery terms we had to exclude the non-central off-campus dorms. 
+
+Second, in our limited time we were only able to build an Android app. Lacking a web interface and an iOS app, we were only able to target students with Android phones. 
+
+Lastly, due to deadlines we were only able to run trials on two nights of the semester. 
+
+
+\section{Conclusion and Future Work}
+\smallskip
+In this paper we have presented “DingDong: Condom!”, a condom delivery application and service that was trialed at Swarthmore College during the fall Semester of 2014. Our intention with the application was to provide just-in-time condom delivery and sexual health information to drive adoption of safe sex practices and in turn reduce the incidence of sexually transmitted diseases and unwanted side effects (such as the need to use ``Plan B''). In the development and testing of our application and service, we faced time constraints constraints that rendered us unable to implement the full feature set that we had planned. We also found that Swarthmore College was not an optimal location for this evaluation, mostly due to its small size, atypically sex-positive practices and policy preventing us from covering all residence halls with our service. These factors strongly reduced the reach and effectiveness of the application.
+
+Regardless of the challenges, we hope that our system will be adopted by other college campuses. Future work is needed to bundle our apps, backend frameworks, and lessons learned into a single package that will be rapidly deployable and easily run by organizations at other colleges and universities. By providing a service on modern mobile platforms, providing on-demand convenience, and increasing accessibility and lowering the hurdles for procurement, we capture the spirit of mobile health, and hope to increase the practice of safe sex.
+
+\section{Appendix I}
+\smallskip
+"express":"~4.0.0"\\
+"mongoose":"~3.8.8"\\
+"csprng":"~0.1.1"\\
+"connect":"~2.14.4"\\
+"nodemailer":"~0.6.3"\\
+"shortid":"~2.1.3"\\
+"node-gcm":"~0.9.12"\\
+"node-schedule":"~0.1.13"\\
+"bluebird":"~2.3.11"
+
 \bibliographystyle{abbrv}
-\bibliography{final_report}  % sigproc.bib is the name of the Bibliography in this case
-% You must have a proper ".bib" file
-%  and remember to run:
+\bibliography{final_report}
+% sigproc.bib is the name of the Bibliography in this case
+% You must have a proper ".bib" file and remember to run:
 % latex bibtex latex latex
 % to resolve all references
-%
 % ACM needs 'a single self-contained file'!
-%
-%APPENDICES are optional
-%\balancecolumns
-\appendix
-%Appendix A
-\section{Headings in Appendices}
-The rules about hierarchical headings discussed above for
-the body of the article are different in the appendices.
-In the \textbf{appendix} environment, the command
-\textbf{section} is used to
-indicate the start of each Appendix, with alphabetic order
-designation (i.e. the first is A, the second B, etc.) and
-a title (if you include one).  So, if you need
-hierarchical structure
-\textit{within} an Appendix, start with \textbf{subsection} as the
-highest level. Here is an outline of the body of this
-document in Appendix-appropriate form:
-\subsection{Introduction}
-\subsection{The Body of the Paper}
-\subsubsection{Type Changes and  Special Characters}
-\subsubsection{Math Equations}
-\paragraph{Inline (In-text) Equations}
-\paragraph{Display Equations}
-\subsubsection{Citations}
-\subsubsection{Tables}
-\subsubsection{Figures}
-\subsubsection{Theorem-like Constructs}
-\subsubsection*{A Caveat for the \TeX\ Expert}
-\subsection{Conclusions}
-\subsection{Acknowledgments}
-\subsection{Additional Authors}
-This section is inserted by \LaTeX; you do not insert it.
-You just add the names and information in the
-\texttt{{\char'134}additionalauthors} command at the start
-of the document.
-\subsection{References}
-Generated by bibtex from your ~.bib file.  Run latex,
-then bibtex, then latex twice (to resolve references)
-to create the ~.bbl file.  Insert that ~.bbl file into
-the .tex source file and comment out
-the command \texttt{{\char'134}thebibliography}.
-% This next section command marks the start of
-% Appendix B, and does not continue the present hierarchy
-\section{More Help for the Hardy}
-The acm\_proc\_article-sp document class file itself is chock-full of succinct
-and helpful comments.  If you consider yourself a moderately
-experienced to expert user of \LaTeX, you may find reading
-it useful but please remember not to change it.
-\balancecolumns
-% That's all folks!
+
+\section{References}
+\smallskip
+\begin{enumerate}[$^1$]
+\item CDC. Youth risk behavior surveillance—United States, 2011. MMWR 2012;61(SS-4).
+\item Dye, Lee. "Want to Have a Hookup? What Does It Mean?" ABC News 21 Sept. 2011: n. pag.
+\item Olson, Amanda J. "Talk about "Hooking Up": How College Students' Accounts of "Hooking Up" in Social Networks Influences Engaging in Risky Sexual Behavior." (2005): n. pag. Web.
+\item Holmes, King K., Ruth Levine, and Marcia Weaver. "Effectiveness of Condoms in Preventing Sexually Transmitted Infections." Bulletin of the World Health Organization 82.6 (2004): 454-61. Web.
+\item Crosby, Richard, Stephanie Sanders, William L. Yarber, and Cynthia A. Graham. "Condom-use Errors and Problems: A Neglected Aspect of Studies Assessing Condom Effectiveness." American Journal of Preventive Medicine 24.4 (2003): 367-70. Web.
+\item Younies, Hassan, Belal Barheim, and C. Ed Hsu. "A Review of the Adoption Just-In-Time Method and Its Effect on Efficiency." Public Administration and Management: An Interactive Journal 12.2 (2007): 25-46. Web.
+\end{enumerate}
+
 \end{document}
