@@ -145,3 +145,27 @@ exports.deliver = function(session_token, order_number, callback) {
 	});
 
 }
+
+
+exports.fail = function(session_token, order_number, callback) {
+
+    //get the user's device_uuid
+    User.find ({session_token : session_token}, function(err, users) {
+		if (users.length == 0) {
+		    callback({'response': 'DELIVERY_REQUEST_ACCEPT_ERROR_USER_NOT_FOUND'}, 400);
+		} else { 
+			var now = new Date();
+			var deliverer = users[0].device_uuid;
+			Order.findOneAndUpdate({order_number : order_number}, 
+								   { order_faile:true }, function(err) {
+										if (err) {
+											console.log(err);
+										}
+										callback({'response':'DELIVERY_REQUEST_ACCEPT_SUCCESS'}, 
+												  200);
+									});
+		}
+
+	});
+
+}

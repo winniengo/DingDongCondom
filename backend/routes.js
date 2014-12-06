@@ -138,6 +138,20 @@ module.exports = function(app) {
 
     });
 
+	
+	// fail a request
+   	app.post('/api/delivery/request/fail', middleware.is_authenticated_and_admin, function(req, res) {
+
+   	var session_token = req.body.session_token;
+   	var order_number = req.body.order_number;
+   	
+	deliverer.fail(session_token, order_number, function (result, status) {
+	    console.log(result);
+	    res.status(status).json(result);
+		});
+
+    });
+
 
     // get a survey for a given campaign id
 
@@ -179,16 +193,16 @@ module.exports = function(app) {
 
     	announce.set_announcement(message, open_for_business, function(result, status) {
     		console.log(result);
-    		res.status(200).json(result);
+    		res.status(status).json(result);
     	});
 
     });
 
     app.post('/api/broadcast/announcement/get', middleware.is_authenticated, function(req,res) {
 
-    	announce.get_announcement( function(result, status) {
+    	announce.get_announcement(function(result, status) {
     		console.log(result);
-    		res.status(200).json(result);
+    		res.status(status).json(result);
     	});
 
     });
