@@ -185,7 +185,7 @@ module.exports = function(app) {
     });
 
 
-    app.post('/api/broadcast/announcement/set', middleware.is_authenticated, function(req,res) {
+    app.post('/api/broadcast/announcement/set', middleware.is_authenticated_and_admin, function(req,res) {
 
     	var message = req.body.message;
     	console.log('msg: ' + message);
@@ -200,6 +200,7 @@ module.exports = function(app) {
 
     app.post('/api/broadcast/announcement/get', middleware.is_authenticated, function(req,res) {
 
+    	console.log('getting announcement');
     	announce.get_announcement(function(result, status) {
     		console.log(result);
     		res.status(status).json(result);
