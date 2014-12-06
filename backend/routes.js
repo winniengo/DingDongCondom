@@ -171,13 +171,22 @@ module.exports = function(app) {
     });
 
 
-    app.post('/api/broadcast/announcement', middleware.is_authenticated, function(req,res) {
+    app.post('/api/broadcast/announcement/set', middleware.is_authenticated, function(req,res) {
 
     	var message = req.body.message;
     	console.log('msg: ' + message);
     	var open_for_business = req.body.open_for_business;
 
     	announce.set_announcement(message, open_for_business, function(result, status) {
+    		console.log(result);
+    		res.status(200).json(result);
+    	});
+
+    });
+
+    app.post('/api/broadcast/announcement/get', middleware.is_authenticated, function(req,res) {
+
+    	announce.get_announcement(function(result, status) {
     		console.log(result);
     		res.status(200).json(result);
     	});
