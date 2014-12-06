@@ -14,7 +14,7 @@ public class MenuGuideActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_guide);
-        //TODO Menu Guide Layout
+
         Log.i(TAG, "onCreate");
     }
 }

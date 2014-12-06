@@ -7,10 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -33,7 +32,6 @@ public class DeliveryStatusActivity extends Activity {
     private ProgressDialog mProgressDialog;
     private Handler mHandler = new Handler(); // used to queue code execution on thread
     private int mProgressDialogStatus;
-    private Activity mActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +42,8 @@ public class DeliveryStatusActivity extends Activity {
         mSessionToken = mSharedPreferences.getString("session_token", null);
         mOrderNumber = mSharedPreferences.getString("order_number", null);
 
-        Thread t;
+        TextView orderNum = (TextView)findViewById(R.id.text_order_number_status);
+        orderNum.setText("Order " + mOrderNumber);
 
         new Thread(new Runnable() {
             @Override
@@ -63,24 +62,41 @@ public class DeliveryStatusActivity extends Activity {
                     public void run() {
                         // delivery has been accepted
                         launchProgressDialog(DeliveryStatusActivity.this);
-                        setContentView(R.layout.delivery_arrival);
-                        Button restart = (Button) findViewById(R.id.restartButton);
-                        restart.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
-                                startActivity(i);
-                            }
-                        });
+                        if(mFailed) {
+                            SharedPreferences.Editor edit = mSharedPreferences.edit();
+                            edit.putBoolean("order_failed", mFailed);
+                            edit.apply();
 
-                        Button guide = (Button) findViewById(R.id.guideButton);
-                        guide.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent i = new Intent(DeliveryStatusActivity.this, MenuGuideActivity.class);
-                                startActivity(i);
-                            }
-                        });
+                            Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
+                            startActivity(i);
+                        }
+
+                        else if(mDelivered) {
+                            SharedPreferences.Editor edit = mSharedPreferences.edit();
+                            edit.putBoolean("order_failed", false);
+                            edit.apply();
+
+                            setContentView(R.layout.delivery_arrival);
+                            TextView orderNum = (TextView) findViewById(R.id.text_order_number_arrival);
+                            orderNum.setText("Order " + mOrderNumber);
+                            Button restart = (Button) findViewById(R.id.restartButton);
+                            restart.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
+                                    startActivity(i);
+                                }
+                            });
+
+                            Button guide = (Button) findViewById(R.id.guideButton);
+                            guide.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent i = new Intent(DeliveryStatusActivity.this, MenuGuideActivity.class);
+                                    startActivity(i);
+                                }
+                            });
+                        }
                     }
                 });
             }
@@ -93,9 +109,9 @@ public class DeliveryStatusActivity extends Activity {
         // prepare for a progress bar dialog
         mProgressDialog = new ProgressDialog(context);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        mProgressDialog.setTitle("Delivering...");
+        mProgressDialog.setTitle("Delivering Order " + mOrderNumber + "...");
         mProgressDialog.setMessage("Condoms are on their way!\nEstimated delivery time: " +
-                        mDeliveryEstimate + " min.");
+                mDeliveryEstimate + " min.");
         mProgressDialog.setCancelable(false); // dialog can't be cancelled by pressing back
         mProgressDialog.setIndeterminate(false);
         mProgressDialog.setMax(mDeliveryEstimate);
@@ -111,6 +127,10 @@ public class DeliveryStatusActivity extends Activity {
                 while (!mDelivered) {
                     // check delivery status every 10 seconds
                     checkDeliveryStatus();
+
+                    if(mFailed) { // exit progress bar
+                        mDelivered = false;
+                    }
 
                     if(mDelivered) {
                         mProgressDialogStatus = mProgressDialog.getMax();
@@ -132,12 +152,9 @@ public class DeliveryStatusActivity extends Activity {
                             e.printStackTrace();
                         }
                     }
-
-
                 }
 
                 // condom has been delivered
-                //mProgressDialog.setMessage("Thanks for waiting!");
                 try { // sleep 1.5 seconds, display 100%
                     Thread.sleep(1500);
                 } catch (InterruptedException e) {

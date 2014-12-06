@@ -41,7 +41,7 @@ public class RequestFragment extends Fragment {
     private CheckBox mAcceptedCheckBox, mDeliveredCheckBox, mFailedCheckBox;
     private Button mConfirm;
 
-    boolean deliveryIsChecked, acceptedIsChecked;
+    boolean deliveryIsChecked, acceptedIsChecked, failedIsChecked;
     private static final String TAG = "RequestFragment";
     private static final String API = "http://tsb.sccs.swarthmore.edu:8080/api/";
 
@@ -145,7 +145,8 @@ public class RequestFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mCondomRequest.setOrderDelivered(isChecked);
-                Log.d(TAG, mOrderNumberString + " checked delivered");
+                failedIsChecked = isChecked;
+                Log.d(TAG, mOrderNumberString + " checked failed");
             }
         });
 
@@ -190,6 +191,20 @@ public class RequestFragment extends Fragment {
                             String jsonString = json.getString("response");
                             Toast.makeText(activity,jsonString,Toast.LENGTH_LONG).show();
                             Log.d(TAG, mOrderNumberString + " POST delivered");
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                if(failedIsChecked) {
+                    mCondomRequest.setOrderFailed(failedIsChecked);
+                    JSONObject json = serverRequest.getJSON(API + "delivery/request/fail", mParams);
+                    if(json!=null) {
+                        try{
+                            String jsonString = json.getString("response");
+                            Toast.makeText(activity,jsonString,Toast.LENGTH_LONG).show();
+                            Log.d(TAG, mOrderNumberString + " POST failed");
                         }catch (JSONException e) {
                             e.printStackTrace();
                         }

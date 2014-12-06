@@ -1,11 +1,8 @@
 package edu.swarthmore.cs.thesexbutton;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Editable;
@@ -20,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -37,6 +35,8 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
     String mDormNumberString = null;
     boolean mDeliveryTypeFilled = false;
     boolean mDormFilled = false;
+    boolean mDeliveryFailed = false;
+    String mOrderNumber;
     Button mRequestButton;
     List<NameValuePair> mParams;
     SharedPreferences mSharedPreferences;
@@ -51,6 +51,15 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
 
         mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
         mSessionToken = mSharedPreferences.getString("session_token", null);
+        mDeliveryFailed = mSharedPreferences.getBoolean("order_failed", false);
+
+        if(mDeliveryFailed) { // if previous ordered failed, change display texts
+            String orderNumber = mSharedPreferences.getString("order_number", null);
+            TextView failedBlurb = (TextView)findViewById(R.id.request_condom_text);
+            TextView failedBlurb2 = (TextView)findViewById(R.id.request_condom_text_details);
+            failedBlurb.setText("Order " + mOrderNumber + " unexpectedly failed. Please try again!");
+            failedBlurb2.setText("To place a condom order, please carefully input your dorm name, delivery type, and delivery details. Then click the button below!");
+        }
 
         // Allow networking in the main thread
         if (android.os.Build.VERSION.SDK_INT > 9)
