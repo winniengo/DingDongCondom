@@ -44,7 +44,6 @@ public class LoginActivity extends Activity {
     Context context;
     String mRegid;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,9 +75,9 @@ public class LoginActivity extends Activity {
                     // Make sure device has internet connectivity
                     if (!checkInternet()) {
                         Log.i(TAG, "No internet connection!");
-                        //showErrorPopup("No internet connection!");
                         Toast.makeText(context, "Please connect to the internet.", Toast.LENGTH_LONG).show();
                     }
+
                     // Make sure device has Play Services APK and register for GCM
                     if (checkPlayServices()) {
                         mRegid = getRegistrationId(context);
@@ -91,7 +90,6 @@ public class LoginActivity extends Activity {
                         }
                     } else {
                         Log.i(TAG, "No valid Google Play Services APK found.");
-                        //showErrorPopup("No valid Google Play Services APK found.");
                         mHasPlayServices = false;
                     }
 
@@ -134,7 +132,6 @@ public class LoginActivity extends Activity {
         Log.i(TAG, "onResume");
     }
 
-
     /**
      * Requests login to our server, sending deviceID, passphrase, and gcm regid.
      * Server sends back an authorization token that is stored in sharedPreferences.
@@ -152,11 +149,11 @@ public class LoginActivity extends Activity {
         if (json != null) {
             try {
                 mSessionToken = json.getString("session_token");
-                //mSessionTokenExpires = json.getString("session_token_expires");
+                mSessionTokenExpires = json.getString("session_token_expires");
 
                 SharedPreferences.Editor edit = mSharedPreferences.edit();
                 edit.putString("session_token", mSessionToken);
-                //edit.putString("session_token_expires", mSessionTokenExpires);
+                edit.putString("session_token_expires", mSessionTokenExpires);
                 edit.apply();
                 Log.i(TAG, "Obtained session token: " + mSessionToken);
             } catch (JSONException e) {
@@ -202,13 +199,8 @@ public class LoginActivity extends Activity {
             }
         }
 
-        if(delivered) { // old, closed order
-            return false;
-        } else { // open order
-            return true;
-        }
+        return !delivered;
     }
-
 
     /**
      * Check the device's connectivity status.
@@ -219,7 +211,6 @@ public class LoginActivity extends Activity {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return (activeNetwork != null && activeNetwork.isConnected());
     }
-
 
     /**
      * Check the device to make sure it has the Google Play Services APK. If it doesn't, display a
@@ -240,12 +231,9 @@ public class LoginActivity extends Activity {
         return true;
     }
 
-
     /**
      * Gets the current registration ID for application on GCM service.
      * If result is empty, the app needs to register.
-     *
-     * @return registration ID, or empty string if there is no existing registration ID.
      */
     private String getRegistrationId(Context context) {
         prefs = getGCMPreferences();
@@ -267,7 +255,6 @@ public class LoginActivity extends Activity {
         return registrationId;
     }
 
-
     /**
      * return Application's sharedPreferences.
      */
@@ -275,7 +262,6 @@ public class LoginActivity extends Activity {
         return getSharedPreferences(RequestCondomActivity.class.getSimpleName(),
                 Context.MODE_PRIVATE);
     }
-
 
     /**
      * return Application's version code from the PackageManager.
@@ -289,7 +275,6 @@ public class LoginActivity extends Activity {
             throw new RuntimeException("Could not get package name: " + e);  // should never happen
         }
     }
-
 
     /**
      * Registers the application with GCM servers asynchronously.
@@ -320,13 +305,9 @@ public class LoginActivity extends Activity {
         }.execute(null, null, null);
     }
 
-
     /**
      * Stores the registration ID and app versionCode in the application's
      * SharedPreferences
-     *
-     * @param context application's context.
-     * @param regId registration ID
      */
     private void storeRegistrationId(Context context, String regId) {
         prefs = getGCMPreferences();
@@ -336,15 +317,5 @@ public class LoginActivity extends Activity {
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
         editor.apply();
-    }
-
-
-    /**
-     *
-     */
-    public void showErrorPopup(String msg) {
-        Intent i = new Intent(LoginActivity.this, PopupActivity.class);
-        startActivity(i);
-        finish();
     }
 }

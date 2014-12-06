@@ -27,7 +27,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RequestCondomActivity extends Activity implements AdapterView.OnItemSelectedListener {
+public class RequestCondomActivity extends Activity implements AdapterView.OnItemSelectedListener
+{
     String mSessionToken = null;
     String mDormName = null;
     String mDeliveryType = null;
@@ -44,7 +45,8 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
     Boolean mOpenForBusiness;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_condom);
 
@@ -149,7 +151,8 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
     }
 
     // Set open for business text
-    public void setOpenForBusiness (TextView openForBusiness) {
+    public void setOpenForBusiness (TextView openForBusiness)
+    {
         ServerRequest serverRequest = new ServerRequest();
         ArrayList<NameValuePair> reqParams = new ArrayList<NameValuePair>();
         reqParams.add(new BasicNameValuePair("session_token", mSessionToken));
@@ -172,7 +175,8 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
     }
 
     // Radio Button method
-    public void onRadioButtonClicked(View view) {
+    public void onRadioButtonClicked(View view)
+    {
         mDeliveryTypeFilled = ((RadioButton) view).isChecked();
 
         // Check which radio button was clicked
@@ -190,8 +194,11 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
         enableButton();
     }
 
-    // Button enable method
-    public void enableButton() { // only enable orders when app is open and proper fields are filled
+    /**
+     * Button enable method. Only enable orders when app is open and proper fields are filled
+     */
+    public void enableButton()
+    {
         if (mDeliveryTypeFilled && mDormFilled && mOpenForBusiness) {
             mRequestButton.setEnabled(true);
             mRequestButton.setBackgroundResource(R.drawable.btn_green);
@@ -202,17 +209,20 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
     }
 
     // Spinner methods
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
+    {
         mDormName = (String) parent.getItemAtPosition(pos);
     }
 
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onNothingSelected(AdapterView<?> parent)
+    {
         mDormName = null;
     }
 
     // Menu methods
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.request_condom_menu, menu);
         return true;
@@ -220,7 +230,8 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
 
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -237,7 +248,8 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
         // once you resume, check if we're still delivering
         TextView openForBusinessText = (TextView) findViewById(R.id.open_for_business);

@@ -20,7 +20,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeliveryStatusActivity extends Activity {
+public class DeliveryStatusActivity extends Activity
+{
     String mOrderNumber, mSessionToken;
 
     SharedPreferences mSharedPreferences;
