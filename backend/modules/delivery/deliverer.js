@@ -13,6 +13,8 @@ var Order = require('./models').Order;
 var User = require('../user/models').User;
 var Campaign = require('../survey/models').SurveyCampaign;
 
+var sendout = require('../support/sendout.js')
+
 var shortid = require('shortid');
 
 
@@ -126,6 +128,9 @@ exports.deliver = function(session_token, order_number, callback) {
 				}
 				if (user) {
 					var id = user._id;
+
+					// send delivery notificaiton
+					sendout.delivery_sendout(id);
 					
 					Campaign.findOne({campaign_id:'POST_ORDER_CAMPAIGN'}, function(err, campaign) { 
 											  	if (err) {
@@ -134,12 +139,10 @@ exports.deliver = function(session_token, order_number, callback) {
 											  	if (campaign) {
 												  	console.log('user id: ' + id);
 											  		//check that use is only here once
-											  		userNotEligible(campaign.eligible_users, user, function(res){
-											  			if (!res) {
+											  		userEligible(campaign.eligible_users, user, function(res){
+											  			if (res) {
 											  				campaign.eligible_users.push(id);
 											  				campaign.save();
-											  			} else {
-											  				console.log('not adding because of redundancy');
 											  			}
 											  		});
 											  		
@@ -151,6 +154,11 @@ exports.deliver = function(session_token, order_number, callback) {
 		}
 	});
 
+
+	// send out a push notification! 
+
+
+
 }
 
 function userNotEligible (array, user, callback) {
@@ -160,9 +168,9 @@ function userNotEligible (array, user, callback) {
 	});
 
 	if (isNotEligible) {
-		callback(true);
-	} else {
 		callback(false);
+	} else {
+		callback(true);
 	}
 
 }

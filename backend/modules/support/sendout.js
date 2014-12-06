@@ -147,6 +147,47 @@ exports.initialize_post_order_campaign = function (callback) {
 
 }
 
+
+exports.delivery_sendout = function(user_id) {
+	var sender = new gcm.Sender('AIzaSyChUqVv6OSHR58eElHGTYOYJj3IbXgCZ5Y');
+
+ 	// or with object values
+	var message = new gcm.Message({
+	    collapseKey: 'DingDong: Condom!',
+	    delayWhileIdle: true,
+	    timeToLive: 3,
+	    data: {
+	    	type: 'delivery'   
+		}
+		
+	});
+
+	User.findOne({_id: user_id}, function(err, user) {
+		if (err) {
+			console.log('Error in delivery_sendout: ' + err);
+		} else if (user) {
+			var push_id = user.push_id;
+			if (push_id) {
+				sender.send(message, [push_id] , 4, function(err, result) {
+					if (err) {
+						console.log("delivery_sendout: sender err: " + err);
+					} 
+				});
+			} else {
+				console.log("User " + user.device_uuid + " does not have a push_id");
+			}
+
+		} else {
+			console.log("User not found");
+		}
+
+	});
+
+			
+}
+
+
+
 exports.do_test_sendout =  function (callback) {
 
 	Campaign.findOne({campaign_id:"TestCampaign1"}, function(err, campaign){
