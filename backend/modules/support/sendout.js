@@ -31,7 +31,7 @@
 		}
 		
 	});
-	
+     console.log('in survey_sendout:');
 	fetchAllEligibleUserPushIDs (campaign_id, function(push_ids) {
 		console.log('in survey_sendout, ids: ' + push_ids);
 		if (!push_ids) {
@@ -61,25 +61,31 @@ function fetchAllEligibleUserPushIDs (campaign_id, callback) {
  			console.log('(Sendout.js): Error: ' + err);
  		}
 		if (campaign) {
+
  			var eligible_users = campaign.eligible_users;
 			
  			async.map(eligible_users, function(user_id, done) {
  				User.findOne({_id : user_id}, function (err, user){
 					if (err) {
 						console.log('in set_announcement: ' + err);
-					} else if (user) {
+				
+					}
+				    if (user) {
 						var id = user.push_id;
 						if (id) {
-							done(null, id);
+						   
+						    done(null, id);
 						}
+					} else {
+					    done(null, null);
 					}
 				});
  			}, function(err, push_ids) {
- 				if(err) {
- 					console.log('error in fetchAllEligibleUserPushIDs: ' + err);
- 				}
-
- 				callback(push_ids);
+ 			    if(err) {
+ 				console.log('error in fetchAllEligibleUserPushIDs: ' + err);
+ 			    }
+			    console.log('computing eligible users: ' +push_ids);
+ 			    callback(push_ids);
  			});			
 		}
 	});
@@ -92,7 +98,7 @@ exports.do_post_order_sendout = function () {
 	Campaign.findOne({campaign_id:"POST_ORDER_CAMPAIGN"}, function(err, campaign){
 		var eligible_users = campaign.eligible_users;
 
-		console.log('in do_post_order_sendout');
+
 		module.exports.survey_sendout(eligible_users, "POST_ORDER_CAMPAIGN", function(err, result) {
 			if (err) {
 				console.log('Sendout Error: ' + err);

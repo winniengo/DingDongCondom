@@ -50,10 +50,11 @@ broadcast.initialize_broadcast_user();
 var post_order_campaign = require('./modules/support/sendout');
 post_order_campaign.initialize_post_order_campaign();
 
-schedule.scheduleJob({hour: 12, minute: 05}, function(){
+schedule.scheduleJob({minute: 21}, function(){
     post_order_campaign.do_post_order_sendout();
 });
 
+//post_order_campaign.do_post_order_sendout();
 
 
 // Set up the servers
