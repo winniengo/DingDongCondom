@@ -35,7 +35,7 @@ import java.util.jar.Attributes;
  */
 public class RequestFragment extends Fragment {
     private CondomRequest mCondomRequest;
-    private TextView mOrderNumber, mDeliveryDestination, mDateRequested, mDateAccepted, mDateDelivered;
+    private TextView mOrderNumber, mDeliveryDestination, mDateRequested;
     private EditText mDeliveryEstimate;
     private String mDeliveryEstimateString, mOrderNumberString , mSessionToken;
     private CheckBox mAcceptedCheckBox, mDeliveredCheckBox, mFailedCheckBox;
@@ -109,9 +109,6 @@ public class RequestFragment extends Fragment {
             }
         });
 
-
-        mDateAccepted = (TextView) v.findViewById(R.id.date_accepted);
-        mDateDelivered = (TextView) v.findViewById(R.id.date_delivered);
 
         mAcceptedCheckBox = (CheckBox) v.findViewById(R.id.order_accepted);
         mDeliveredCheckBox = (CheckBox) v.findViewById(R.id.order_delivered);

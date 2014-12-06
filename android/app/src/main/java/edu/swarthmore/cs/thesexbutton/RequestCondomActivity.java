@@ -58,7 +58,7 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
             String orderNumber = mSharedPreferences.getString("order_number", null);
             TextView failedBlurb = (TextView)findViewById(R.id.request_condom_text);
             TextView failedBlurb2 = (TextView)findViewById(R.id.request_condom_text_details);
-            failedBlurb.setText("Order " + mOrderNumber + " unexpectedly failed. Please try again!");
+            failedBlurb.setText("Order " + orderNumber + " couldn't be completed.\nPlease try again!");
             failedBlurb2.setText("To place a condom order, please carefully input your dorm name, delivery type, and delivery details. Then click the button below!");
         }
 

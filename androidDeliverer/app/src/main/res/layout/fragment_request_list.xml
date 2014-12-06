@@ -60,4 +60,16 @@
         android:layout_alignRight="@+id/requestListAccepted"
         android:layout_alignEnd="@+id/requestListAccepted"/>
 
+    <CheckBox
+        android:id="@+id/requestListFailed"
+        android:text="Failed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:enabled="false"
+        android:focusable="false"
+        android:layout_below="@+id/requestListDelivered"
+        android:layout_alignLeft="@+id/requestListDelivered"
+        android:layout_alignStart="@+id/requestListDelivered"/>
+
 </RelativeLayout>

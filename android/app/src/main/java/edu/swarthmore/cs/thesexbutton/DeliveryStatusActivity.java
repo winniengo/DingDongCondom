@@ -67,38 +67,29 @@ public class DeliveryStatusActivity extends Activity {
                         TextView orderNum = (TextView) findViewById(R.id.text_order_number_arrival);
                         orderNum.setText("Order " + mOrderNumber);
 
-                        if(mFailed) {
-                            SharedPreferences.Editor edit = mSharedPreferences.edit();
-                            edit.putBoolean("order_failed", mFailed);
-                            edit.apply();
+                        SharedPreferences.Editor edit = mSharedPreferences.edit();
+                        edit.putBoolean("order_failed", false);
+                        edit.apply();
 
-                            Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
-                            startActivity(i);
-                        }
+                        Button restart = (Button) findViewById(R.id.restartButton);
+                        restart.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
+                                startActivity(i);
+                                finish();
+                            }
+                        });
 
-                        else if(mDelivered) {
-                            SharedPreferences.Editor edit = mSharedPreferences.edit();
-                            edit.putBoolean("order_failed", false);
-                            edit.apply();
-
-                            Button restart = (Button) findViewById(R.id.restartButton);
-                            restart.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
-                                    startActivity(i);
-                                }
-                            });
-
-                            Button guide = (Button) findViewById(R.id.guideButton);
-                            guide.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent i = new Intent(DeliveryStatusActivity.this, MenuGuideActivity.class);
-                                    startActivity(i);
-                                }
-                            });
-                        }
+                        Button guide = (Button) findViewById(R.id.guideButton);
+                        guide.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i = new Intent(DeliveryStatusActivity.this, MenuGuideActivity.class);
+                                startActivity(i);
+                                finish();
+                            }
+                        });
                     }
                 });
             }
@@ -126,15 +117,10 @@ public class DeliveryStatusActivity extends Activity {
         Thread thread = new Thread(new Runnable() { // used to execute in parallel with UI thread
             public void run() {
                 int counter = 1;
-                while (!mDelivered) {
+                while (!mDelivered && !mFailed) {
+                    Log.i("StatusActivity", mDelivered + " " + mFailed);
                     // check delivery status every 10 seconds
                     checkDeliveryStatus();
-
-                    /*
-                    if(mFailed) { // exit progress bar
-                        mDelivered = false;
-                    }
-                    */
 
                     if(mDelivered) {
                         mProgressDialogStatus = mProgressDialog.getMax();
@@ -167,6 +153,17 @@ public class DeliveryStatusActivity extends Activity {
 
                 // close the progress bar dialog
                  mProgressDialog.dismiss();
+
+                if(mFailed) {
+                    SharedPreferences.Editor edit = mSharedPreferences.edit();
+                    edit.putBoolean("order_failed", true);
+                    edit.putString("order_number", mOrderNumber);
+
+                    edit.apply();
+
+                    Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
+                    startActivity(i);
+                }
             }
         });
         thread.start();

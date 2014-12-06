@@ -73,12 +73,6 @@
                 android:text="Accepted"
                 android:id="@+id/order_accepted"
                 />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text = "Date Accepted: "
-                android:id="@+id/date_accepted"
-                android:layout_margin="10dp"/>
 
             <CheckBox
                 android:layout_width="match_parent"
@@ -87,12 +81,6 @@
                 android:layout_marginLeft="16dp"
                 android:text="Delivered"
                 android:id="@+id/order_delivered" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text = "Date Delivered: "
-                android:id="@+id/date_delivered"
-                android:layout_margin="10dp"/>
 
             <CheckBox
                 android:layout_width="match_parent"

@@ -86,19 +86,21 @@ public class RequestListFragment extends ListFragment{ // displays all condom re
 
             // fill view with condom request details
             TextView orderNumber, dateRequested, destination;
-            CheckBox accepted, delivered;
+            CheckBox accepted, delivered, failed;
 
             orderNumber = (TextView)convertView.findViewById(R.id.requestListOrderNumber);
             dateRequested = (TextView)convertView.findViewById(R.id.requestListDateRequested);
             destination = (TextView)convertView.findViewById(R.id.requestListDestination);
             accepted = (CheckBox)convertView.findViewById(R.id.requestListAccepted);
             delivered = (CheckBox)convertView.findViewById(R.id.requestListDelivered);
+            failed = (CheckBox)convertView.findViewById(R.id.requestListFailed);
 
             orderNumber.setText(cr.getOrderNumber());
             dateRequested.setText(cr.getDateRequested().toString());
             destination.setText(cr.getDeliveryDestination());
             accepted.setChecked(cr.isOrderAccepted());
             delivered.setChecked(cr.isOrderDelivered());
+            failed.setChecked(cr.isOrderFailed());
 
             return convertView; // return the view object
         }
