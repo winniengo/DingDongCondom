@@ -186,7 +186,7 @@ module.exports = function(app) {
 
     app.post('/api/broadcast/announcement/get', middleware.is_authenticated, function(req,res) {
 
-    	announce.get_announcement(function(result, status) {
+    	announce.get_announcement( function(result, status) {
     		console.log(result);
     		res.status(200).json(result);
     	});

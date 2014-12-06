@@ -145,7 +145,7 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
         ServerRequest serverRequest = new ServerRequest();
         ArrayList<NameValuePair> reqParams = new ArrayList<NameValuePair>();
         reqParams.add(new BasicNameValuePair("session_token", mSessionToken));
-        JSONObject response = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/broadcast/get", reqParams);
+        JSONObject response = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/broadcast/announcement/get", reqParams);
         if (response != null) {
             try {
                 String open = response.getString("open_for_business");

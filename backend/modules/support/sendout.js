@@ -32,6 +32,7 @@
 		
 	});
 	
+	console.log('in survey_sendout, ids: ' + push_ids);
 	fetchAllEligibleUserPushIDs (campaign_id, function(push_ids) {
 		if (!push_ids) {
 			callback('No eligible users to send out', 'none sent');
@@ -91,6 +92,7 @@ exports.do_post_order_sendout = function () {
 	Campaign.findOne({campaign_id:"POST_ORDER_CAMPAIGN"}, function(err, campaign){
 		var eligible_users = campaign.eligible_users;
 
+		console.log('in do_post_order_sendout');
 		module.exports.survey_sendout(eligible_users, "POST_ORDER_CAMPAIGN", function(err, result) {
 			if (err) {
 				console.log('Sendout Error: ' + err);
