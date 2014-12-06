@@ -132,10 +132,17 @@ exports.deliver = function(session_token, order_number, callback) {
 											  		console.log('In deliver: ' + err);
 											  	}
 											  	if (campaign) {
-											  	console.log('user id: ' + id);
-
-											  		campaign.eligible_users.push(id);
-											  		campaign.save();
+												  	console.log('user id: ' + id);
+											  		//check that use is only here once
+											  		userNotEligible(campaign.eligible_users, user, function(res){
+											  			if (!res) {
+											  				campaign.eligible_users.push(id);
+											  				campaign.save();
+											  			} else {
+											  				console.log('not adding because of redundancy');
+											  			}
+											  		});
+											  		
 											  	}
 
 											  });
@@ -145,6 +152,21 @@ exports.deliver = function(session_token, order_number, callback) {
 	});
 
 }
+
+function userNotEligible (array, user, callback) {
+
+	var isNotEligible = array.some(function(current) {
+		return current.equals(user._id);
+	});
+
+	if (isNotEligible) {
+		callback(true);
+	} else {
+		callback(false);
+	}
+
+}
+
 
 
 exports.fail = function(session_token, order_number, callback) {
