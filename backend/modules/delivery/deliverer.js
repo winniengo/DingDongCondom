@@ -131,7 +131,7 @@ exports.deliver = function(session_token, order_number, callback) {
 
 					// send delivery notificaiton
 					sendout.delivery_sendout(id);
-					
+
 					Campaign.findOne({campaign_id:'POST_ORDER_CAMPAIGN'}, function(err, campaign) { 
 											  	if (err) {
 											  		console.log('In deliver: ' + err);
@@ -161,7 +161,7 @@ exports.deliver = function(session_token, order_number, callback) {
 
 }
 
-function userNotEligible (array, user, callback) {
+function userEligible (array, user, callback) {
 
 	var isNotEligible = array.some(function(current) {
 		return current.equals(user._id);
