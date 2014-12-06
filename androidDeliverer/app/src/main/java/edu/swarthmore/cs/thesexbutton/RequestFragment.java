@@ -115,7 +115,7 @@ public class RequestFragment extends Fragment {
 
         mAcceptedCheckBox = (CheckBox) v.findViewById(R.id.order_accepted);
         mDeliveredCheckBox = (CheckBox) v.findViewById(R.id.order_delivered);
-        mFailedCheckBox = (CheckBox) v. findViewById(R.id.order_failed);
+        mFailedCheckBox = (CheckBox) v.findViewById(R.id.order_failed);
 
         String dateAccepted = mCondomRequest.getDateAccepted();
         String dateDelivered = mCondomRequest.getDateDelivered();
@@ -144,7 +144,6 @@ public class RequestFragment extends Fragment {
         mFailedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mCondomRequest.setOrderDelivered(isChecked);
                 failedIsChecked = isChecked;
                 Log.d(TAG, mOrderNumberString + " checked failed");
             }

@@ -104,7 +104,8 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
         });
 
         // set the open for business text
-        setOpenForBusiness();
+        TextView openForBusinessText = (TextView) findViewById(R.id.open_for_business);
+        setOpenForBusiness(openForBusinessText);
 
 
         mRequestButton = (Button) findViewById(R.id.request_condom_button);
@@ -148,8 +149,7 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
     }
 
     // Set open for business text
-    public void setOpenForBusiness () {
-        TextView mOpenForBusinessText = (TextView) findViewById(R.id.open_for_business);
+    public void setOpenForBusiness (TextView openForBusiness) {
         ServerRequest serverRequest = new ServerRequest();
         ArrayList<NameValuePair> reqParams = new ArrayList<NameValuePair>();
         reqParams.add(new BasicNameValuePair("session_token", mSessionToken));
@@ -157,17 +157,17 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
         if (response != null) {
             try {
                 String open = response.getString("open_for_business");
-                if (open == "yes") {
+                openForBusiness.setText(response.getString("message"));
+                if (open.equals("yes")) {
                     mOpenForBusiness = true;
-                    mOpenForBusinessText.setText("We are open for business!");
                 } else {
                     mOpenForBusiness = false;
-                    mOpenForBusinessText.setText("We are currently not delivering.");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                mOpenForBusiness = false;
+                //mOpenForBusiness = false;
             }
+            Log.i(TAG, "mOpenForBusiness : "+mOpenForBusiness.toString());
         }
     }
 
@@ -191,8 +191,8 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
     }
 
     // Button enable method
-    public void enableButton() {
-        if (mDeliveryTypeFilled && mDormFilled) {
+    public void enableButton() { // only enable orders when app is open and proper fields are filled
+        if (mDeliveryTypeFilled && mDormFilled && mOpenForBusiness) {
             mRequestButton.setEnabled(true);
             mRequestButton.setBackgroundResource(R.drawable.btn_green);
         } else {
@@ -240,6 +240,7 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
     protected void onResume() {
         super.onResume();
         // once you resume, check if we're still delivering
-        setOpenForBusiness();
+        TextView openForBusinessText = (TextView) findViewById(R.id.open_for_business);
+        setOpenForBusiness(openForBusinessText);
     }
 }

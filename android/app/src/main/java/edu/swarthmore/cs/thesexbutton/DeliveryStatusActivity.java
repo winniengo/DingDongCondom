@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -62,6 +63,10 @@ public class DeliveryStatusActivity extends Activity {
                     public void run() {
                         // delivery has been accepted
                         launchProgressDialog(DeliveryStatusActivity.this);
+                        setContentView(R.layout.delivery_arrival);
+                        TextView orderNum = (TextView) findViewById(R.id.text_order_number_arrival);
+                        orderNum.setText("Order " + mOrderNumber);
+
                         if(mFailed) {
                             SharedPreferences.Editor edit = mSharedPreferences.edit();
                             edit.putBoolean("order_failed", mFailed);
@@ -76,9 +81,6 @@ public class DeliveryStatusActivity extends Activity {
                             edit.putBoolean("order_failed", false);
                             edit.apply();
 
-                            setContentView(R.layout.delivery_arrival);
-                            TextView orderNum = (TextView) findViewById(R.id.text_order_number_arrival);
-                            orderNum.setText("Order " + mOrderNumber);
                             Button restart = (Button) findViewById(R.id.restartButton);
                             restart.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -128,9 +130,11 @@ public class DeliveryStatusActivity extends Activity {
                     // check delivery status every 10 seconds
                     checkDeliveryStatus();
 
+                    /*
                     if(mFailed) { // exit progress bar
                         mDelivered = false;
                     }
+                    */
 
                     if(mDelivered) {
                         mProgressDialogStatus = mProgressDialog.getMax();
@@ -182,6 +186,8 @@ public class DeliveryStatusActivity extends Activity {
                 mDelivered = json.getBoolean("order_delivered");
                 mFailed = json.getBoolean("order_failed");
                 mDeliveryEstimate = json.getInt("delivery_estimate");
+
+                Log.i("checkDeliveryStatus", mAccepted + " " + mDelivered + " " + mFailed);
 
                 if (mDeliveryEstimate == -1) {
                     mDeliveryEstimate = 15;
