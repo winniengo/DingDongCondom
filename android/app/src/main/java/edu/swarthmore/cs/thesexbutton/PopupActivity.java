@@ -20,6 +20,7 @@ public class PopupActivity extends Activity {
     Button mButton;
     boolean click = true;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPopUp = new PopupWindow(this);

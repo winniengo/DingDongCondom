@@ -121,7 +121,7 @@ exports.initialize_post_order_campaign = function (callback) {
 		        pending_users : [],
 		        completed_users : [],
 
-		        survey_link : 'https://tinyurl.com/dingdongc',
+		        survey_link : 'https://docs.google.com/forms/d/1za7RHK4dhrIneY_XwkjQdOnBBi5CByW5sV4iCD-8xn0/viewform',
 
 		        crontab : "* * * * *", //the crontab on which this campaign gets executed
 				});
