@@ -101,7 +101,7 @@ exports.do_post_order_sendout = function () {
 
 		module.exports.survey_sendout(eligible_users, "POST_ORDER_CAMPAIGN");
 
-	}
+	});
 
 }
 
