@@ -17,19 +17,16 @@
     <string name="request_condom_delivery_type_to_dorm">To My Dorm</string>
     <string-array name="dorms_array">
         <item>AP</item>
-        <item>Dana</item>
         <item>DK</item>
-        <item>Hallowell</item>
         <item>Kohlberg</item>
         <item>Lodges</item>
         <item>Mertz</item>
-        <item>ML</item>
-        <item>Parrish</item>
         <item>Science Center</item>
         <item>Wharton AB</item>
         <item>Wharton CD</item>
         <item>Wharton EF</item>
-        <item>Willets</item>
+        <item>Willets North</item>
+        <item>Willets South</item>
         <item>Worth</item>
     </string-array>
     <string name="register_about">Thanks for downloading Ding Dong: Condom!\n\nWith this app you now
