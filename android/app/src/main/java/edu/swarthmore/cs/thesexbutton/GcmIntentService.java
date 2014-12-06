@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -39,31 +40,59 @@ public class GcmIntentService extends IntentService {
         String messageType = gcm.getMessageType(intent);
         String campaignId;
 
+        // Filter messages based on message type
         if (!extras.isEmpty()) {
-            // Filter messages based on message type
             if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 String type = extras.getString("type");
 
+                // App availability
                 if (type.equals("broadcast")) {
                     String msg = extras.getString("message");
-                    Log.i(TAG, "Broadcast message: " + msg);
-
-                    // Notify user about app availability status
-                    sendBroadcastNotification(msg);
-                } else if (type.equals("survey")) {
+                    sendBroadcastNotification(msg); }
+                // Survey availability
+                else if (type.equals("survey")) {
                     campaignId = extras.getString("campaign_id");
-                    Log.i(TAG, "CampaignId: " + campaignId);
-
-                    // Retrieve survey and notify user
                     JSONObject surveyJson = retrieveSurvey(campaignId);
-                    sendSurveyNotification("We had your back, and now we're asking you to have ours. Click here to take our survey.", surveyJson);
-                }
-            }
+                    sendSurveyNotification("We had your back, and now we're asking you to have ours. Click here to take our survey.", surveyJson); }
+                // Condom delivered
+                else if (type.equals("delivery")) {
+                    sendDeliveryNotification("Your condom is here!"); } }
 
             // Release the wake lock provided by the WakefulBroadcastReceiver
-            GcmBroadcastReceiver.completeWakefulIntent(intent);
-        }
+            GcmBroadcastReceiver.completeWakefulIntent(intent); }
     }
+
+
+    /**
+     * Helper function for creating notifications
+     */
+    private void notificationHelper(String msg, PendingIntent intent) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.noti_icon)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+                .setContentTitle("DingDong: Condom!")
+                .setContentText(msg)
+                .setAutoCancel(true)
+                .setSound(Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.doubledong));
+
+        if (intent != null) {
+            builder.setContentIntent(intent); }
+
+        NotificationManager notificationManager =
+                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
+    }
+
+
+    /**
+     * Notifies user that the condom is delivered
+     */
+    private void sendDeliveryNotification(String msg) {
+        Intent i = new Intent(this, DeliveryStatusActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, i, 0);
+        notificationHelper(msg, contentIntent);
+    }
+
 
     /**
      * Notifies user about the availability status of the app
@@ -71,24 +100,33 @@ public class GcmIntentService extends IntentService {
     private void sendBroadcastNotification(String msg) {
         // Add JSON to intent
         Intent i = new Intent(this, LoginActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, i, 0);
+        notificationHelper(msg, contentIntent);
+    }
+
+
+    /**
+     * Notifies the user that a survey is available
+     */
+    private void sendSurveyNotification(String msg, JSONObject survey) {
+        // get the link from the JSON object
+        String link;
+
+        try {
+            link = survey.getString("survey_body"); }
+        catch (JSONException j) {
+            link = "http://tinyurl.com/dingdongc";
+            Log.e(TAG, "Handled Json Exception"); }
+
+        // Add JSON to intent
+        Intent i = new Intent(this, SurveyActivity.class);
+        i.putExtra("survey", link);
 
         // Pending intent launches SurveyActivity when user clicks on notification
-        PendingIntent contentIntent =
-                PendingIntent.getActivity(this, 0, i, 0);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.noti_icon)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
-                .setContentTitle("DingDong: Condom!")
-                .setContentText(msg)
-                .setContentIntent(contentIntent)
-                .setAutoCancel(true);
-                //.setSound();
-
-        NotificationManager notificationManager =
-                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, i, 0);
+        notificationHelper(msg, contentIntent);
     }
+
 
     /**
      * Retrieves new survey from the server
@@ -103,41 +141,5 @@ public class GcmIntentService extends IntentService {
 
         ServerRequest serverRequest = new ServerRequest();
         return serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/survey/retrieve", params);
-    }
-
-    /**
-     * Notifies the user that a survey is available
-     */
-    private void sendSurveyNotification(String msg, JSONObject survey) {
-
-        // get the link from the JSON object
-        String link;
-
-        try {
-            link = survey.getString("survey_body");
-        } catch (JSONException j) {
-            link = "http://tinyurl.com/dingdongc";
-            Log.e(TAG, "Handled Json Exception");
-        }
-
-        // Add JSON to intent
-        Intent i = new Intent(this, SurveyActivity.class);
-        i.putExtra("survey", link);
-
-        // Pending intent launches SurveyActivity when user clicks on notification
-        PendingIntent contentIntent =
-                PendingIntent.getActivity(this, 0, i, 0);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.noti_icon)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
-                .setContentTitle("DingDong: Condom!")
-                .setContentText(msg)
-                .setContentIntent(contentIntent)
-                .setAutoCancel(true);
-
-        NotificationManager notificationManager =
-                (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 }

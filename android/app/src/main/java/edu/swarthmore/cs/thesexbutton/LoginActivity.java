@@ -26,7 +26,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Handler;
 
 public class LoginActivity extends Activity {
     String mSessionToken, mSessionTokenExpires, mDeviceUUID, mPassphrase, mOrderNumber;
@@ -96,6 +95,7 @@ public class LoginActivity extends Activity {
                         mHasPlayServices = false;
                     }
 
+                    Log.i(TAG, "Play services status: " + mHasPlayServices);
 
                     if (mHasPlayServices) {
                         // Retrieve from previous registration
@@ -152,20 +152,19 @@ public class LoginActivity extends Activity {
         if (json != null) {
             try {
                 mSessionToken = json.getString("session_token");
-                mSessionTokenExpires = json.getString("session_token_expires");
+                //mSessionTokenExpires = json.getString("session_token_expires");
 
                 SharedPreferences.Editor edit = mSharedPreferences.edit();
                 edit.putString("session_token", mSessionToken);
-                edit.putString("session_token_expires", mSessionTokenExpires);
+                //edit.putString("session_token_expires", mSessionTokenExpires);
                 edit.apply();
                 Log.i(TAG, "Obtained session token: " + mSessionToken);
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        if(mOrderNumber!=null) { // user has placed an order before
+        if(mOrderNumber != null) { // user has placed an order before
             Log.i(TAG, "checking for open orders");
             boolean open = CheckOrderStatus(mSessionToken, mOrderNumber);
             Log.i(TAG, "open order: " + open);
@@ -173,12 +172,12 @@ public class LoginActivity extends Activity {
                 Intent i = new Intent(LoginActivity.this, DeliveryStatusActivity.class);
                 startActivity(i);
                 finish();
-            } else {
-                Log.i(TAG, "starting Request Condom Activity");
-                Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
-                startActivity(i);
-                finish();
             }
+        } else {
+            Log.i(TAG, "starting Request Condom Activity");
+            Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
+            startActivity(i);
+            finish();
         }
     }
 
