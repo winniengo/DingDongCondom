@@ -28,25 +28,27 @@
         <item>Willets South</item>
         <item>Worth</item>
     </string-array>
-    <string name="register_about">Thanks for downloading Ding Dong: Condom!\n\nWith this app you now
-        have access to our\nfree, on-demand, on-campus\ncondom delivery service.</string>
+    <string name="register_about">Thanks for downloading Ding Dong: Condom!\nYou now
+        have access to our free, \non-demand condom delivery service.</string>
 
-    <string name="project_purpose">\tWe built this app for our Computer Science Senior Conference project.
-        This year\'s topic is Mobile Health and we wanted our project to be about something that\'s
-        relevant for most of us - sex in college. We want to research whether or not this service
-        improves access to condoms on campus and individuals\' sexual practices and health.
+    <string name="project_purpose">
+        \nThis app is for our Computer Science senior project. This year\'s topic is Mobile Health,
+        so we built something relevant to many of us: sex in college. Our goal is to improve
+        sexual health on campus by making condom access easier.
 
-        \n\tThis app works by allowing you to place an order during the hours that the app is open
-        this following week. In order to protect anonymity, we are not asking for or storing any
-        personally identifiable data (eg. phone numbers, emails). You register below with the
-        provided token. We are only collecting data from the orders placed and responses to our
-        day-after surveys.
-        \n\tBest Winnie, Awjin, Daniel</string>
+        \n\nxo Winnie, Awjin, Daniel</string>
     <string name="service_how_to">
-        \tTo use this service you must specify whether you want
-        it delivered to your room or to your lounge. In response, one of us will drop off
-        an envelope containing 3 condoms to your designated destination within 15 minutes.
-        Limit 1 order per night. Please use responsibly.</string>
+        \nTHE PREP
+        \nRegister with the provided token.
+        \nYou'll get a notification when we open for business.
+
+        \n\nTHE DELIVERY
+        \n\tYou provide a room number or a lounge.
+        \n\tWe drop off an envelope of 3 condoms within 15 min.
+
+        \n\nKEEP IN MIND
+        \n\tLimit 1 order per night.
+        \n\tWe don't store any personally identifiable info, so all requests are anonymous!</string>
 
     <string name="action_settings">Settings</string>
     <string name="survey_title">Morning After Survey</string>
