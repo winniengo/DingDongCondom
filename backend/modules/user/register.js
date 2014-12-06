@@ -16,7 +16,7 @@ exports.register = function(device_uuid, passphrase, signup_token, device_os,
 
 
     // check that the signup_token is correct
-    if (st != "TSBSignupToken2014") {
+    if (st != "tsb2014") {
 		console.log("TSBToken incorrect, token was:", signup_token);
     	callback({'response': 'REGISTER_ERROR_INVALID_SIGNUP_TOKEN'}, 401);
     } else {

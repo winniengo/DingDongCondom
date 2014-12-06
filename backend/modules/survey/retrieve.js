@@ -38,7 +38,7 @@ exports.retrieve = function (session_token, campaign_id, callback) {
 					// find by document id and update
 
 					campaign.eligible_users.pull(user._id);
-					//campaign.pending_users.push(user._id);
+					campaign.completed_users.push(user._id);
 					campaign.save(function(err){
 						if(err) {
 							console.log('in retrieve: '+ err);
