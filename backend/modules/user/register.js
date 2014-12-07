@@ -56,7 +56,7 @@ exports.register = function(device_uuid, passphrase, signup_token, device_os,
 					device_os : dos,
 					
 					hashed_passphrase : hp, 
-				        salt : s,
+				    salt : s,
 					
 					session_token : t,
 					session_token_expires : t_expiration,

@@ -13,7 +13,8 @@
 		"node-gcm":"~0.9.12",
 		"node-schedule":"~0.1.13",
 		"bluebird":"~2.3.11",
-		"async":"0.9.0"
+		"async":"0.9.0",
+	        "npid":"0.4.0"
 	}
 
 

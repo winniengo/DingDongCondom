@@ -21,9 +21,21 @@ var db 		  = require('./modules/db/db.js');
 var fs 		  = require('fs');
 var http 	  = require('http');
 var https 	  = require('https');
+var npid 	  = require('npid');
+
+// acquire PID file
+try {
+    var pid = npid.create('/var/run/tsb-node.pid');
+    pid.removeOnExit();
+} catch (err) {
+    console.log(err);
+    process.exit(1);
+}
+
+
+
 
 // SSL configuration
-
 if (runWithHttps) {
 	var privateKey = fs.readFileSync('/etc/ssl/private/server.key', 'utf8');
 	var certificate = fs.readFileSync('/etc/ssl/certs/server.crt', 'utf8');
