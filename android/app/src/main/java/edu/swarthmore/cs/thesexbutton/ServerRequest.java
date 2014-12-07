@@ -1,5 +1,6 @@
 package edu.swarthmore.cs.thesexbutton;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -40,11 +41,14 @@ public class ServerRequest {
     static InputStream mInputStream = null;
     static JSONObject mJsonObject = null;
     static String mJson = "";
-    public ServerRequest() {
+    final Context context;
+
+    public ServerRequest(Context c) {
+        this.context = c;
     }
     public JSONObject getJSONFromUrl(String url, List<NameValuePair> params) {
         try {
-            DefaultHttpClient httpClient = new DefaultHttpClient();
+            DefaultHttpClient httpClient = new tsbHTTPSClient(context);
             HttpPost httpPost = new HttpPost(url);
             httpPost.setEntity(new UrlEncodedFormEntity(params));
             HttpResponse httpResponse = httpClient.execute(httpPost);
@@ -106,7 +110,7 @@ public class ServerRequest {
     private class Request extends AsyncTask<Params, String, JSONObject> {
         @Override
         protected JSONObject doInBackground(Params... args) {
-            ServerRequest request = new ServerRequest();
+            ServerRequest request = new ServerRequest(context);
             return request.getJSONFromUrl(args[0].url,args[0].params);
         }
         @Override

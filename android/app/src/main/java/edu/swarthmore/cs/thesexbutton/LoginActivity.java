@@ -150,8 +150,8 @@ public class LoginActivity extends Activity {
         params.add(new BasicNameValuePair("passphrase", passphrase));
         params.add(new BasicNameValuePair("push_id", regid));
 
-        ServerRequest serverRequest = new ServerRequest();
-        JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/login", params);
+        ServerRequest serverRequest = new ServerRequest(getApplicationContext());
+        JSONObject json = serverRequest.getJSON("https://tsb.sccs.swarthmore.edu:8443/api/login", params);
 
         if (json != null) {
             try {
@@ -193,8 +193,8 @@ public class LoginActivity extends Activity {
         params.add(new BasicNameValuePair("session_token", sessionToken));
         params.add(new BasicNameValuePair("order_number", orderNumber));
 
-        ServerRequest serverRequest = new ServerRequest();
-        JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/delivery/status", params);
+        ServerRequest serverRequest = new ServerRequest(getApplicationContext());
+        JSONObject json = serverRequest.getJSON("https://tsb.sccs.swarthmore.edu:8443/api/delivery/status", params);
 
         if (json != null) {
             try {

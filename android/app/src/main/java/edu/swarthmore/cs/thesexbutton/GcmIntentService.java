@@ -140,7 +140,7 @@ public class GcmIntentService extends IntentService
         params.add(new BasicNameValuePair("campaign_id", campaignId));
         params.add(new BasicNameValuePair("session_token", token));
 
-        ServerRequest serverRequest = new ServerRequest();
-        return serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/survey/retrieve", params);
+        ServerRequest serverRequest = new ServerRequest(getApplicationContext());
+        return serverRequest.getJSON("https://tsb.sccs.swarthmore.edu:8443/api/survey/retrieve", params);
     }
 }

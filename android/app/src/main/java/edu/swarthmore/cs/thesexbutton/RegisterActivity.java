@@ -67,8 +67,8 @@ public class RegisterActivity extends Activity {
                 mParams.add(new BasicNameValuePair("passphrase", mPassphrase));
                 mParams.add(new BasicNameValuePair("push_id", mRegid));
 
-                ServerRequest serverRequest = new ServerRequest();
-                JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/register", mParams);
+                ServerRequest serverRequest = new ServerRequest(getApplicationContext());
+                JSONObject json = serverRequest.getJSON("https://tsb.sccs.swarthmore.edu:8443/api/register", mParams);
 
                 if (json != null) {
                     try {
