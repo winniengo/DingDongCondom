@@ -10,13 +10,24 @@ def main():
 
 	message = raw_input('Enter the message to be broadcast:\n\n>>')
 
-	send_broadcast(message)
+        print "Please input yes for if we're delivering or no if not:\n\n"
+
+        raw_delivery = raw_input(">>")
+
+        if raw_delivery == "yes" or raw_delivery == "no":
+                deliver = raw_delivery
+                send_broadcast(message, deliver)
+        else:
+                print "Error in parsing your input. Try again"
+
+        
+        
 
 
+def send_broadcast(message, delivering):
 
-def send_broadcast(message):
 
-	data = urllib.urlencode({'message': message, 'open_for_business' : True, 'session_token': SESSION_TOKEN})
+	data = urllib.urlencode({'message': message, 'open_for_business' : delivering, 'session_token': SESSION_TOKEN})
 
 	h = httplib.HTTPConnection('localhost:8080')
 

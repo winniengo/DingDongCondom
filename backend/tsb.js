@@ -25,8 +25,8 @@ var https 	  = require('https');
 // SSL configuration
 
 if (runWithHttps) {
-	var privateKey = fs.readFileSync('etc/ssl/private/server.key', 'utf8');
-	var certificate = fs.readFileSync('etc/ssl/private/server.crt', 'utf8');
+	var privateKey = fs.readFileSync('/etc/ssl/private/server.key', 'utf8');
+	var certificate = fs.readFileSync('/etc/ssl/certs/server.crt', 'utf8');
 	var credentials = {key: privateKey, cert: certificate};
 }
 
