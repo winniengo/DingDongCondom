@@ -24,14 +24,15 @@ var https 	  = require('https');
 var npid 	  = require('npid');
 
 // acquire PID file
-try {
-    var pid = npid.create('/var/run/tsb-node.pid');
-    pid.removeOnExit();
-} catch (err) {
-    console.log(err);
-    process.exit(1);
+if (runWithHttps) {
+    try {
+	var pid = npid.create('/var/run/tsb-node.pid');
+	pid.removeOnExit();
+    } catch (err) {
+	console.log(err);
+	process.exit(1);
+    }
 }
-
 
 
 

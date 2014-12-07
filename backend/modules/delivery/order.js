@@ -13,6 +13,8 @@ var crypto = require('crypto');
 var Order = require('./models').Order;
 var User = require('../user/models').User;
 
+var sendout = require('../support/sendout');
+
 var shortid = require('shortid');
 
 exports.request = function (session_token, dorm_name, dorm_room, delivery_type, callback) {
@@ -69,6 +71,9 @@ exports.request = function (session_token, dorm_name, dorm_room, delivery_type, 
 				if (err) {
 				    console.log('Error saving new order: ' + err);
 				}
+
+				sendout.request_alert_sendout(dorm_name);
+
 				callback({'response': "DELIVERY_REQUEST_SUCCESS",
 					  'order_number': oid}, 
 				 	 201);

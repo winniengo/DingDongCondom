@@ -143,6 +143,46 @@ exports.initialize_post_order_campaign = function (callback) {
 }
 
 
+exports.request_alert_sendout = function(dorm) {
+	var sender = new gcm.Sender('AIzaSyChUqVv6OSHR58eElHGTYOYJj3IbXgCZ5Y');
+	// should be a separate GCM entity
+
+	// or with object values
+	var message = new gcm.Message({
+	    collapseKey: 'DingDong:Condom',
+	    delayWhileIdle: true,
+	    timeToLive: 3,
+	    data: {
+	    	type: 'request',
+	        dorm : dorm,	    
+		}
+		
+	});
+
+	User.find({role:'ADMIN'}, function(err, admins) {
+		if (err) {
+			console.log('Errors in request_alert_sendout: ' + err);
+		} else if (admins) {
+			for (i in admins) {
+				if (admins[i].push_id) {
+					sender.send(message, [admins[i].push_id], 4, function(err, result){
+						if (err) { console.log('error alerting admin') 
+						} else { console.log('alert sender: ' + result);}
+					});
+				} else {
+					console.log('admin ' + admins[i].device_uuid + ' has no push_id');
+				}
+			}
+		} else {
+			console.log('Errors in request_alert_sendout: No admins found');
+		}
+
+	});
+
+
+}
+
+
 exports.delivery_sendout = function(user_id, status) {
 	var sender = new gcm.Sender('AIzaSyChUqVv6OSHR58eElHGTYOYJj3IbXgCZ5Y');
 
