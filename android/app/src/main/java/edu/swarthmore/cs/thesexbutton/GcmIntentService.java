@@ -8,13 +8,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -112,18 +110,9 @@ public class GcmIntentService extends IntentService
      */
     private void sendSurveyNotification(String msg, JSONObject survey)
     {
-        // Get the link from JSON object
-        String link;
-        try {
-            link = survey.getString("survey_body");
-        } catch (JSONException j) {
-            link = "http://tinyurl.com/dingdongc";
-            Log.e(TAG, "Handled Json Exception");
-        }
-
-        // Add JSON to intent
+        // Add JSON to intent as a string. Gets converted back to JSON object in SurveyActivity
         Intent i = new Intent(this, SurveyActivity.class);
-        i.putExtra("survey", link);
+        i.putExtra("survey", survey.toString());
 
         // Pending intent launches SurveyActivity when user clicks on notification
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, i, 0);
