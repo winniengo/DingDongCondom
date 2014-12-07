@@ -11,7 +11,7 @@ exports.register = function(device_uuid, passphrase, signup_token, device_os,
 							push_id, callback) {
     var u = device_uuid;
     var p = passphrase;
-    var st = signup_token.replace(/ /g,''); //strip whitespace
+    var st = signup_token.replace(/\s/g, ""); //strip whitespace
     var dos = device_os;
 
 
