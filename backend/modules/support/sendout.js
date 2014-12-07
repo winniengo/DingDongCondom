@@ -147,7 +147,7 @@ exports.request_alert_sendout = function(dorm) {
 	var sender = new gcm.Sender('AIzaSyChUqVv6OSHR58eElHGTYOYJj3IbXgCZ5Y');
 	// should be a separate GCM entity
 
-	// or with object values
+	// create a new message
 	var message = new gcm.Message({
 	    collapseKey: 'DingDong:Condom',
 	    delayWhileIdle: true,
@@ -163,7 +163,7 @@ exports.request_alert_sendout = function(dorm) {
 		if (err) {
 			console.log('Errors in request_alert_sendout: ' + err);
 		} else if (admins) {
-			for (i in admins) {
+			for (i=0;i<admins.length;i++) {
 				if (admins[i].push_id) {
 					sender.send(message, [admins[i].push_id], 4, function(err, result){
 						if (err) { console.log('error alerting admin') 

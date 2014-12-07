@@ -19,7 +19,7 @@ public class CondomRequestStore {
     private ArrayList<CondomRequest> mCondomRequests;
 
     private static final String TAG = "CondomRequestStore";
-    private static final String API = "http://tsb.sccs.swarthmore.edu:8080/api/";
+    private static final String mAPI = "http://tsb.sccs.swarthmore.edu:8080/api/";
 
     List<NameValuePair> mParams;
 
@@ -30,7 +30,7 @@ public class CondomRequestStore {
 
             Log.i(TAG, "SessionToken: " + sessionToken);
             mParams.add(new BasicNameValuePair("session_token", sessionToken));
-            JSONObject json = serverRequest.getJSON(API + "delivery/request/all", mParams);
+            JSONObject json = serverRequest.getJSON(mAPI + "delivery/request/all", mParams);
             if (json != null) {
                 try {
                     // retrieves array of orders and parses it into list of Condom Requests

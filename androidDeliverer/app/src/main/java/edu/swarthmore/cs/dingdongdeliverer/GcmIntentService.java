@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -33,9 +34,16 @@ public class GcmIntentService extends IntentService
         String campaignId;
 
         // Filter messages based on message type
+        Log.i("GCMIntentService", "Received a message!");
         if(!extras.isEmpty()) {
+            Log.i("GCMIntentService", "Received a message with extras!");
             if(GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 String type = extras.getString("type");
+                if (type.equals("request")) {
+                    Intent i = new Intent(this, LoginActivity.class);
+                    PendingIntent contentIntent = PendingIntent.getActivity(this, 0, i, 0);
+                    notificationHelper("A new delivery request to " + extras.getString("dorm") + "has come in", contentIntent);
+                }
             }
 
             // Release the wake lock provided by the WakefulBroadcastReceiver
@@ -54,7 +62,7 @@ public class GcmIntentService extends IntentService
                 .setContentTitle("DingDong: Condom!")
                 .setContentText(msg)
                 .setAutoCancel(true)
-                //.setSound(Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.doubledong));
+                .setSound(Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.doubledong));
                 ;
         if(intent != null) {
             builder.setContentIntent(intent);

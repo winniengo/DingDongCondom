@@ -4,6 +4,7 @@
 
 package edu.swarthmore.cs.dingdongdeliverer;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -29,8 +30,12 @@ public class ServerRequest {
     static InputStream mInputStream = null;
     static JSONObject mJsonObject = null;
     static String mJson = "";
+    private Context context;
+
     public ServerRequest() {
+
     }
+
     public JSONObject getJSONFromUrl(String url, List<NameValuePair> params) {
         try {
             DefaultHttpClient httpClient = new DefaultHttpClient();

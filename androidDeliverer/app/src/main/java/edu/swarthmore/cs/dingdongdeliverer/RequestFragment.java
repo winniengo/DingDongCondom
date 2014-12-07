@@ -37,7 +37,11 @@ public class RequestFragment extends Fragment {
 
     boolean deliveryIsChecked, acceptedIsChecked, failedIsChecked;
     private static final String TAG = "RequestFragment";
-    private static final String API = "http://tsb.sccs.swarthmore.edu:8080/api/";
+
+    //Globals mGlobals = (Globals) getActivity().getApplication();
+    //private final String API = mGlobals.getApiPath();
+
+    String API = "http://tsb.sccs.swarthmore.edu:8080/api/";
 
     List<NameValuePair> mParams;
 

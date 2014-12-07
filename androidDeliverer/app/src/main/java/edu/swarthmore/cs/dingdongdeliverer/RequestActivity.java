@@ -18,8 +18,12 @@ public class RequestActivity extends Activity {
     SharedPreferences mSharedPreferences;
     String mSessionToken;
     List<NameValuePair> mParams;
+    //Globals mGlobals = (Globals) getApplication();
+    //String mApiPath = mGlobals.getApiPath();
 
-    private static final String API = "http://tsb.sccs.swarthmore.edu:8080/api/";
+    String mApiPath = "http://tsb.sccs.swarthmore.edu:8080/api/";
+
+
     @Override
     protected  void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +42,7 @@ public class RequestActivity extends Activity {
 
             /*
             ServerRequest sr = new ServerRequest();
-            JSONObject json = sr.getJSON(API + "delivery/requests/all", mParams);
+            JSONObject json = sr.getJSON(mApiPath + "delivery/requests/all", mParams);
 
             if(json!=null){
                 try{
