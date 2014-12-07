@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -37,12 +38,19 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
     boolean mDeliveryTypeFilled = false;
     boolean mDormFilled = false;
     boolean mDeliveryFailed = false;
-    String mOrderNumber;
     Button mRequestButton;
     List<NameValuePair> mParams;
     SharedPreferences mSharedPreferences;
     private static String TAG = "RequestCondomActivity";
     Boolean mOpenForBusiness;
+    int requestButtonCounter = 0;
+
+    /**
+     * Disable back button
+     */
+    @Override
+    public void onBackPressed() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,11 +65,17 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
         mDeliveryFailed = mSharedPreferences.getBoolean("order_failed", false);
 
         if(mDeliveryFailed) { // if previous ordered failed, change display texts
-            String orderNumber = mSharedPreferences.getString("order_number", null);
             TextView failedBlurb = (TextView)findViewById(R.id.request_condom_text);
             TextView failedBlurb2 = (TextView)findViewById(R.id.request_condom_text_details);
-            failedBlurb.setText("Order " + orderNumber + " couldn't be completed.\nPlease try again!");
-            failedBlurb2.setText("To place a condom order, please carefully input your dorm name, delivery type, and delivery details. Then click the button below!");
+            failedBlurb.setText("Oops! Your order couldn't be completed.\nPlease try again!");
+            failedBlurb.setBackgroundColor(getResources().getColor(R.color.red));
+            failedBlurb2.setText(R.string.request_condom_text);
+
+            // Clear out failure data
+            SharedPreferences.Editor edit = mSharedPreferences.edit();
+            edit.putBoolean("order_failed", false);
+            edit.putString("order_number", "");
+            edit.commit();
         }
 
         // Allow networking in the main thread
@@ -109,41 +123,53 @@ public class RequestCondomActivity extends Activity implements AdapterView.OnIte
         TextView openForBusinessText = (TextView) findViewById(R.id.open_for_business);
         setOpenForBusiness(openForBusinessText);
 
-
         mRequestButton = (Button) findViewById(R.id.request_condom_button);
         mRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRequestButton.setEnabled(false);
+                if (requestButtonCounter == 0) {
+                    Toast.makeText(getApplication(), "Are you sure? You only get 1 request per night.", Toast.LENGTH_LONG).show();
+                    requestButtonCounter = 1;
+                } else {
+                    mRequestButton.setEnabled(false);
 
-                mParams = new ArrayList<NameValuePair>();
-                mParams.add(new BasicNameValuePair("session_token", mSessionToken));
-                mParams.add(new BasicNameValuePair("dorm_name", mDormName));
-                mParams.add(new BasicNameValuePair("dorm_room", mDormNumberString));
-                mParams.add(new BasicNameValuePair("delivery_type", mDeliveryType));
+                    mParams = new ArrayList<NameValuePair>();
+                    mParams.add(new BasicNameValuePair("session_token", mSessionToken));
+                    mParams.add(new BasicNameValuePair("dorm_name", mDormName));
+                    mParams.add(new BasicNameValuePair("dorm_room", mDormNumberString));
+                    mParams.add(new BasicNameValuePair("delivery_type", mDeliveryType));
 
-                ServerRequest serverRequest = new ServerRequest();
-                JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/delivery/request", mParams);
-                Log.i("RequestCondomActivity", mSessionToken + mDormName + mDormNumberString + mDeliveryType);
-                if (json != null){
-                    try{
-                        Log.i("RequestCondomActivity", json.toString());
+                    ServerRequest serverRequest = new ServerRequest();
+                    JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/delivery/request", mParams);
+                    Log.i("RequestCondomActivity", mSessionToken + mDormName + mDormNumberString + mDeliveryType);
+                    if (json != null) {
+                        try {
+                            String jsonString = json.getString("response");
+                            String orderNumber = "";
+                            try {
+                                orderNumber = json.getString("order_number");
+                            } catch (Exception e) {
+                            }
 
-                        String jsonString = json.getString("response");
-                        String orderNumber = json.getString("order_number");
-                        Log.d("Order Requested:", orderNumber);
+                            // Check for rate limit
+                            if(jsonString.equals("DELIVERY_REQUEST_ERROR_TOO_MANY_REQUESTS")) {
+                                Toast.makeText(getApplication(), "Sorry! You've already reached your limit for tonight.", Toast.LENGTH_LONG).show();
+                                mRequestButton.setEnabled(true);
+                            } else {
+                                // save current order details
+                                SharedPreferences.Editor edit = mSharedPreferences.edit();
+                                edit.putString("order_number", orderNumber);
+                                edit.commit();
 
-                        // save current order details
-                        SharedPreferences.Editor edit = mSharedPreferences.edit();
-                        edit.putString("order_number", orderNumber);
-                        edit.apply();
+                                // call Delivery Status Activity
+                                Intent i = new Intent(RequestCondomActivity.this, DeliveryStatusActivity.class);
+                                startActivity(i);
+                                finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
-                        // call Delivery Status Activity
-                        Intent i = new Intent(RequestCondomActivity.this, DeliveryStatusActivity.class);
-                        startActivity(i);
-                        finish();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
                 }
             }

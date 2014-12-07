@@ -39,7 +39,7 @@
             android:layout_gravity="center"
             android:layout_margin="25dp"
             android:gravity="center"
-            android:text="Finding you a deliverer..."
+            android:text="Finding you a deliverer.\nShould be quick!"
             android:textSize = "25sp" />
     </LinearLayout>
 </ScrollView>

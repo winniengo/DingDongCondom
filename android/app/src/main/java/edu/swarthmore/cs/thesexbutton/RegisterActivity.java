@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -26,6 +25,13 @@ public class RegisterActivity extends Activity {
     List<NameValuePair> mParams;
     SharedPreferences mSharedPreferences;
     private static String TAG = "RegisterActivity";
+
+    /**
+     * Disable back button
+     */
+    @Override
+    public void onBackPressed() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +81,7 @@ public class RegisterActivity extends Activity {
                         edit.putString("session_token_expires", sessionTokenExpires);
                         edit.putString("device_uuid", mDeviceUUID);
                         edit.putString("passphrase", mPassphrase);
-                        edit.apply();
-
-                        Toast.makeText(getApplication(),jsonString,Toast.LENGTH_LONG).show();
-                        Log.d("Hello:", mDeviceUUID);
+                        edit.commit();
 
                         // switch to Request Condom Activity
                         Intent i = new Intent(RegisterActivity.this, RequestCondomActivity.class);

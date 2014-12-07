@@ -55,10 +55,19 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layout_marginTop="10dp"
                 android:text="@string/request_details"
                 android:id="@+id/request_condom_text_details"
                 android:textSize="12sp"
                 android:textColor="#000000" />
+
+            <View
+                android:layout_width="50dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
+                android:background="#969696" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,20 +77,21 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_marginTop="20dp"
                     android:text="Building Name"
                     android:textColor="#000000"/>
 
                 <Spinner
                     android:id="@+id/dorms_spinner"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="10dp"
                     android:text="@string/request_condom_delivery_type"
                     android:textColor="#000000"/>
 
@@ -109,7 +119,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
+                    android:layout_marginTop="10dp"
                     android:text="Room/Floor Number:"
                     android:textColor="#000000" />
 
@@ -126,6 +136,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_margin="10dp"
                 android:gravity="bottom">
 
                 <Button
@@ -133,8 +144,8 @@
                     android:background="@drawable/btn_grey"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_gravity="bottom"
+                    android:gravity="center"
                     android:enabled="false"
                     android:text="@string/request_condom_button_text"
                     android:textColor="#ffffff" />

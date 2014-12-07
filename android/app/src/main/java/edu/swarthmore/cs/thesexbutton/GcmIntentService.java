@@ -53,8 +53,15 @@ public class GcmIntentService extends IntentService
                     JSONObject surveyJson = retrieveSurvey(campaignId);
                     sendSurveyNotification("We had your back, and now we're asking you to have ours. Click here to take our survey.", surveyJson);
                 } else if(type.equals("delivery")) {
-                // Condom delivered
-                    sendDeliveryNotification("Your condom is here!");
+                // Delivery success/fail
+                    String status = extras.getString("status");
+                    String msg;
+                    if(status.equals("success")) {
+                        msg = "Your condom is here! :)";
+                    } else {
+                        msg = "Your order failed :( Please try again.";
+                    }
+                    sendDeliveryNotification(msg, status);
                 }
             }
 
@@ -74,7 +81,8 @@ public class GcmIntentService extends IntentService
                 .setContentTitle("DingDong: Condom!")
                 .setContentText(msg)
                 .setAutoCancel(true)
-                .setSound(Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.doubledong));
+                .setSound(Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.doubledong))
+                .setVibrate(new long[]{100, 200, 100, 500});
 
         if(intent != null) {
             builder.setContentIntent(intent);
@@ -88,9 +96,10 @@ public class GcmIntentService extends IntentService
     /**
      * Notifies user that the condom is delivered
      */
-    private void sendDeliveryNotification(String msg)
+    private void sendDeliveryNotification(String msg, String status)
     {
         Intent i = new Intent(this, DeliveryStatusActivity.class);
+        i.putExtra("status", status);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, i, 0);
         notificationHelper(msg, contentIntent);
     }

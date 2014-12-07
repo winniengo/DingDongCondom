@@ -2,11 +2,8 @@
 <resources>
 
     <string name="app_name">Ding Dong: Condom</string>
-    <string name="request_condom_text">To place a condom order, please carefully input your dorm name, delivery type,
-        and delivery details. Then click the button below!
-     </string>
-    <string name="request_details">Condoms will be placed under the specified room number door for
-        Room deliveries and to a designated drop box in on your specified floor\'s lounge for Lounge deliveries.</string>
+    <string name="request_condom_text">To order a condom, fill out your delivery info\n and click the button!</string>
+    <string name="request_details">Room deliveries:\nCondoms will be put under the door\n\nLounge deliveries:\nCondom will be put in a designated drop box in your lounge</string>
     <string name="request_condom_button_text">I\'m Feeling Lucky!</string>
     <string name="request_condom_dorm_name">Dorm Name:</string>
     <string name="request_condom_dorm_room">Dorm Room:</string>

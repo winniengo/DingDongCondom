@@ -44,6 +44,13 @@ public class LoginActivity extends Activity {
     Context context;
     String mRegid;
 
+    /**
+     * Disable back button
+     */
+    @Override
+    public void onBackPressed() {
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,12 +156,12 @@ public class LoginActivity extends Activity {
         if (json != null) {
             try {
                 mSessionToken = json.getString("session_token");
-                mSessionTokenExpires = json.getString("session_token_expires");
+                //mSessionTokenExpires = json.getString("session_token_expires");
 
                 SharedPreferences.Editor edit = mSharedPreferences.edit();
                 edit.putString("session_token", mSessionToken);
-                edit.putString("session_token_expires", mSessionTokenExpires);
-                edit.apply();
+                //edit.putString("session_token_expires", mSessionTokenExpires);
+                edit.commit();
                 Log.i(TAG, "Obtained session token: " + mSessionToken);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -315,6 +322,6 @@ public class LoginActivity extends Activity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
-        editor.apply();
+        editor.commit();
     }
 }

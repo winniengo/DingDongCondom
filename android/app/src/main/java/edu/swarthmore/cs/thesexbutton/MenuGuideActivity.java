@@ -8,6 +8,13 @@ public class MenuGuideActivity extends Activity
 {
     private static String TAG = "MenuGuideActivity";
 
+    /**
+     * Disable back button
+     */
+    @Override
+    public void onBackPressed() {
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

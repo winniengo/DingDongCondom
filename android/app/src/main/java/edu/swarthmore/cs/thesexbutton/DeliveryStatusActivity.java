@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import org.apache.http.NameValuePair;
@@ -30,67 +28,110 @@ public class DeliveryStatusActivity extends Activity
     boolean mAccepted;
     boolean mDelivered;
     boolean mFailed;
+    String status;
+
+    /**
+     * Disable back button
+     */
+    @Override
+    public void onBackPressed() {
+    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery_status);
 
         mSharedPreferences = getSharedPreferences("SharedPreferences", MODE_PRIVATE);
         mSessionToken = mSharedPreferences.getString("session_token", null);
         mOrderNumber = mSharedPreferences.getString("order_number", null);
-
-        TextView orderNum = (TextView)findViewById(R.id.text_order_number_status);
+        TextView orderNum = (TextView) findViewById(R.id.text_order_number_status);
         orderNum.setText("Order " + mOrderNumber);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // Poll the server every 10 secs until order accepted or fails
-                while (!mAccepted && !mFailed) {
-                    checkDeliveryStatus();
-                    mySleep(5000);
-                }
+        status = getIntent().getStringExtra("status");
+        if (status != null) {
+        // Means this activity was called by GCMIntentService
+            if (status.equals("success")) {
+                handleDeliveryComplete();
+            } else if (status.equals("fail")) {
+                handleDeliveryFail();
+            }
+        } else {
+        // Means this activity was called by Request Condom Service
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // Poll the server every 5 sec until order accepted or fails
+                    while (!mAccepted && !mFailed) {
+                        checkDeliveryStatus();
+                        mySleep(5000);
+                    }
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Delivery has been accepted
-                        launchProgressDialog(DeliveryStatusActivity.this);
-
-                        setContentView(R.layout.delivery_arrival);
-                        TextView orderNum = (TextView) findViewById(R.id.text_order_number_arrival);
-                        orderNum.setText("Order " + mOrderNumber);
-
-                        SharedPreferences.Editor edit = mSharedPreferences.edit();
-                        edit.putBoolean("order_failed", false);
-                        edit.apply();
-
-                        // TODO: I feel like this restart button is unnecessary -Awj
-//                        Button restart = (Button) findViewById(R.id.restartButton);
-//                        restart.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
-//                                startActivity(i);
-//                                finish();
-//                            }
-//                        });
-
-                        Button guide = (Button) findViewById(R.id.guideButton);
-                        guide.setOnClickListener(new View.OnClickListener() {
+                    // Check if failed or accepted
+                    if (mFailed) {
+                        handleDeliveryFail();
+                    } else {
+                        runOnUiThread(new Runnable() {
                             @Override
-                            public void onClick(View v) {
-                                Intent i = new Intent(DeliveryStatusActivity.this, MenuGuideActivity.class);
-                                startActivity(i);
-                                finish();
+                            public void run() {
+                                launchProgressDialog(DeliveryStatusActivity.this);
                             }
                         });
                     }
-                });
-            }
-        }).start();
+                }
+            }).start();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkDeliveryStatus();
+
+        if(mDelivered) {
+            handleDeliveryComplete();
+        } else if(mFailed) {
+            handleDeliveryFail();
+        }
+    }
+
+    /**
+     * Shows user that the condoms have been delivered
+     */
+    public void handleDeliveryComplete()
+    {
+        try {
+            mProgressDialog.dismiss();
+        } catch(NullPointerException e) {
+        }
+
+        SharedPreferences.Editor edit = mSharedPreferences.edit();
+        edit.putBoolean("order_failed", false);
+        edit.commit();
+
+        Intent i = new Intent(DeliveryStatusActivity.this, DeliveryCompleteActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    /**
+     * Upon order fail, allow user to reorder condom
+     */
+    public void handleDeliveryFail()
+    {
+        try {
+            mProgressDialog.dismiss();
+        } catch(NullPointerException e) {
+        }
+
+        SharedPreferences.Editor edit = mSharedPreferences.edit();
+        edit.putBoolean("order_failed", true);
+        edit.putString("order_number", mOrderNumber);
+        edit.commit();
+
+        Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
+        startActivity(i);
+        finish();
     }
 
     /**
@@ -109,9 +150,7 @@ public class DeliveryStatusActivity extends Activity
         mProgressDialog.setProgress(0);  // set the current progress to zero
         mProgressDialog.show();
 
-        // Reset progress bar status
         mProgressDialogStatus = 0;
-
         Thread thread = new Thread(new Runnable() {  // used to execute in parallel with UI thread
             public void run() {
                 int counter = 1;
@@ -134,22 +173,14 @@ public class DeliveryStatusActivity extends Activity
                         counter++;
                     }
                 }
-
-                // Condom has been delivered
-                mySleep(1500);
-
-                // Close the progress bar dialog
                 mProgressDialog.dismiss();
 
+                // Determine failed or completed delivery
                 if(mFailed) {
-                    SharedPreferences.Editor edit = mSharedPreferences.edit();
-                    edit.putBoolean("order_failed", true);
-                    edit.putString("order_number", mOrderNumber);
-                    edit.apply();
-
-                    Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
-                    startActivity(i);
-                    finish();
+                    handleDeliveryFail();
+                } else {
+                    mySleep(1500);
+                    handleDeliveryComplete();
                 }
             }
         });
