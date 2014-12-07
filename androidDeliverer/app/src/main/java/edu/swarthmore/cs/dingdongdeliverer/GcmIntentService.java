@@ -41,7 +41,7 @@ public class GcmIntentService extends IntentService
                 if (type.equals("request")) {
                     Intent i = new Intent(this, LoginActivity.class);
                     PendingIntent contentIntent = PendingIntent.getActivity(this, 0, i, 0);
-                    notificationHelper("A new delivery request to " + extras.getString("dorm") + "has come in", contentIntent);
+                    notificationHelper("A new delivery request to " + extras.getString("dorm") + " has come in", contentIntent);
                 }
             }
 
