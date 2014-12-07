@@ -85,7 +85,6 @@ function fetchAllEligibleUserPushIDs (campaign_id, callback) {
  			    if(err) {
  				console.log('error in fetchAllEligibleUserPushIDs: ' + err);
  			    }
-			    console.log('computing eligible users: ' +push_ids);
  			    callback(push_ids);
  			});			
 		}
