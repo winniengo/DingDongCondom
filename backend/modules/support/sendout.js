@@ -143,7 +143,7 @@ exports.initialize_post_order_campaign = function (callback) {
 }
 
 
-exports.delivery_sendout = function(user_id) {
+exports.delivery_sendout = function(user_id, status) {
 	var sender = new gcm.Sender('AIzaSyChUqVv6OSHR58eElHGTYOYJj3IbXgCZ5Y');
 
  	// or with object values
@@ -152,7 +152,8 @@ exports.delivery_sendout = function(user_id) {
 	    delayWhileIdle: true,
 	    timeToLive: 3,
 	    data: {
-	    	type: 'delivery'   
+	    	type: 'delivery', 
+	    	status: status   
 		}
 		
 	});
@@ -177,10 +178,8 @@ exports.delivery_sendout = function(user_id) {
 		}
 
 	});
-
-			
+		
 }
-
 
 
 exports.do_test_sendout =  function (callback) {

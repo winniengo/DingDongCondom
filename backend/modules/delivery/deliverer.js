@@ -130,7 +130,7 @@ exports.deliver = function(session_token, order_number, callback) {
 					var id = user._id;
 
 					// send delivery notificaiton
-					sendout.delivery_sendout(id);
+					sendout.delivery_sendout(id, "success");
 
 					Campaign.findOne({campaign_id:'POST_ORDER_CAMPAIGN'}, function(err, campaign) { 
 											  	if (err) {
@@ -187,12 +187,23 @@ exports.fail = function(session_token, order_number, callback) {
 			var now = new Date();
 			var deliverer = users[0].device_uuid;
 			Order.findOneAndUpdate({order_number : order_number}, 
-								   { order_failed:true }, function(err) {
+								   {$set : {order_failed:true}}, function(err, order) {
 										if (err) {
 											console.log(err);
-										}
-										callback({'response':'DELIVERY_REQUEST_FAIL_SUCCESS'}, 
+										} else if (order) {
+											var requester = order.requester;
+											User.findOne({device_uuid: requester}, function(err, user) {
+												if (err) {
+													console.log("Error in fail: " + err);
+												} else if (user) {
+													sendout.delivery_sendout(user._id, "fail");
+												} else {
+													console.log("Error in fail: couldn't find requesting user");
+												}
+											});
+											callback({'response':'DELIVERY_REQUEST_FAIL_SUCCESS'}, 
 												  200);
+										}	
 									});
 		}
 
