@@ -23,21 +23,17 @@ public class SurveyActivity extends Activity
         try {
             mSurveyJson = new JSONObject(getIntent().getStringExtra("survey"));
         } catch (JSONException e) {
-            // TODO: display error to user?
         }
 
-        if(mSurveyJson != null){
-            try{
+        if(mSurveyJson != null) {
+            try {
                 mSurveyBody = mSurveyJson.getString("survey_body");
             } catch (JSONException e) {
-                e.printStackTrace();
             }
         }
 
-        if (mSurveyBody != null) {
-            Log.i("Survey body TEXT:", mSurveyBody);
-            mTextView = (TextView) findViewById(R.id.survey_link);
-            mTextView.setText(mSurveyBody);
-        }
+        Log.i("Survey Body", mSurveyBody);
+        mTextView = (TextView) findViewById(R.id.survey_link);
+        mTextView.setText(mSurveyBody);
     }
 }
