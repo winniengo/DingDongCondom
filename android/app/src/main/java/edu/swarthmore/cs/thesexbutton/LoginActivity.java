@@ -161,21 +161,20 @@ public class LoginActivity extends Activity {
             }
         }
 
-        if(mOrderNumber != null) { // user has placed an order before
-            Log.i(TAG, "checking for open orders");
-            boolean open = CheckOrderStatus(mSessionToken, mOrderNumber);
-            Log.i(TAG, "open order: " + open);
-            if (open) { // check order status
+        // Check if user has an open order
+        if(mOrderNumber != null) {
+            if (CheckOrderStatus(mSessionToken, mOrderNumber)) {
                 Intent i = new Intent(LoginActivity.this, DeliveryStatusActivity.class);
                 startActivity(i);
                 finish();
             }
-        } else {
-            Log.i(TAG, "starting Request Condom Activity");
-            Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
-            startActivity(i);
-            finish();
         }
+
+        // If no open order, go to request condom activity
+        Log.i(TAG, "starting Request Condom Activity");
+        Intent i = new Intent(LoginActivity.this, RequestCondomActivity.class);
+        startActivity(i);
+        finish();
     }
 
     public boolean CheckOrderStatus(String sessionToken, String orderNumber) {
