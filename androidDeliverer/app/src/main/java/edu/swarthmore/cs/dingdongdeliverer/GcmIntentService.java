@@ -31,7 +31,6 @@ public class GcmIntentService extends IntentService
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         String messageType = gcm.getMessageType(intent);
-        String campaignId;
 
         // Filter messages based on message type
         Log.i("GCMIntentService", "Received a message!");
@@ -63,7 +62,7 @@ public class GcmIntentService extends IntentService
                 .setContentText(msg)
                 .setAutoCancel(true)
                 .setSound(Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.doubledong));
-                ;
+
         if(intent != null) {
             builder.setContentIntent(intent);
         }

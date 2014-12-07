@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-
 import android.support.v4.content.WakefulBroadcastReceiver;
+import android.util.Log;
 
 /**
  * This WakefulBroadcastReceiver creates and manages a partial wake lock. It passes the work of
@@ -22,6 +22,8 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver
         // Specify that GcmIntentService will handle the intent
         ComponentName comp =
                 new ComponentName(context.getPackageName(), GcmIntentService.class.getName());
+
+        Log.d("Broadcast received:", "GCM msg");
 
         startWakefulService(context, (intent.setComponent(comp)));
         setResultCode(Activity.RESULT_OK);

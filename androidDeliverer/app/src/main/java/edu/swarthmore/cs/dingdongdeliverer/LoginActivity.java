@@ -1,7 +1,6 @@
 package edu.swarthmore.cs.dingdongdeliverer;
 
 import android.app.Activity;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -69,7 +68,6 @@ public class LoginActivity extends Activity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-
 
         if (!checkInternet()) {
             Log.i(TAG, "No internet connection!");
