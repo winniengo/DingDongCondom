@@ -56,7 +56,7 @@ public class GcmIntentService extends IntentService
     private void notificationHelper(String msg, PendingIntent intent)
     {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                //.setSmallIcon(R.drawable.noti_icon)
+                .setSmallIcon(R.drawable.noti_icon)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
                 .setContentTitle("DingDong: Condom!")
                 .setContentText(msg)
