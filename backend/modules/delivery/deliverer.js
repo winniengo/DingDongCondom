@@ -137,7 +137,6 @@ exports.deliver = function(session_token, order_number, callback) {
 											  		console.log('In deliver: ' + err);
 											  	}
 											  	if (campaign) {
-												  	console.log('user id: ' + id);
 											  		//check that use is only here once
 											  		userEligible(campaign.eligible_users, user, function(res){
 											  			if (res) {
