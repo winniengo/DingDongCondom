@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,21 +21,19 @@ import java.util.List;
 
 public class DeliveryStatusActivity extends Activity
 {
+    private ProgressDialog mProgressDialog;
+    private Handler mHandler = new Handler();  // used to queue code execution on thread
+    private int mProgressDialogStatus;
     String mOrderNumber, mSessionToken;
-
     SharedPreferences mSharedPreferences;
-
     int mDeliveryEstimate;
     boolean mAccepted;
     boolean mDelivered;
     boolean mFailed;
 
-    private ProgressDialog mProgressDialog;
-    private Handler mHandler = new Handler(); // used to queue code execution on thread
-    private int mProgressDialogStatus;
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery_status);
 
@@ -50,20 +47,18 @@ public class DeliveryStatusActivity extends Activity
         new Thread(new Runnable() {
             @Override
             public void run() {
+                // Poll the server every 10 secs until order accepted or fails
                 while (!mAccepted && !mFailed) {
-
-                    checkDeliveryStatus(); // check delivery status via JSON
-                    try { // sleep 10 seconds
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    checkDeliveryStatus();
+                    mySleep(5000);
                 }
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // delivery has been accepted
+                        // Delivery has been accepted
                         launchProgressDialog(DeliveryStatusActivity.this);
+
                         setContentView(R.layout.delivery_arrival);
                         TextView orderNum = (TextView) findViewById(R.id.text_order_number_arrival);
                         orderNum.setText("Order " + mOrderNumber);
@@ -72,7 +67,7 @@ public class DeliveryStatusActivity extends Activity
                         edit.putBoolean("order_failed", false);
                         edit.apply();
 
-                        // TODO: I feel like this restart buttos is unnecessary
+                        // TODO: I feel like this restart button is unnecessary -Awj
 //                        Button restart = (Button) findViewById(R.id.restartButton);
 //                        restart.setOnClickListener(new View.OnClickListener() {
 //                            @Override
@@ -98,38 +93,36 @@ public class DeliveryStatusActivity extends Activity
         }).start();
     }
 
-
-    // launches and loads progress bar
+    /**
+     * Launches and loads progress bar
+     */
     public void launchProgressDialog(Context context) {
-        // prepare for a progress bar dialog
+        // Prepare for a progress bar dialog
         mProgressDialog = new ProgressDialog(context);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setTitle("Delivering Order " + mOrderNumber + "...");
         mProgressDialog.setMessage("Condoms are on their way!\nEstimated delivery time: " +
                 mDeliveryEstimate + " min.");
-        mProgressDialog.setCancelable(false); // dialog can't be cancelled by pressing back
+        mProgressDialog.setCancelable(false);  // dialog can't be cancelled by pressing back
         mProgressDialog.setIndeterminate(false);
         mProgressDialog.setMax(mDeliveryEstimate);
-        mProgressDialog.setProgress(0); // set the current progress to zero
+        mProgressDialog.setProgress(0);  // set the current progress to zero
         mProgressDialog.show();
 
-        //reset progress bar status
+        // Reset progress bar status
         mProgressDialogStatus = 0;
 
-        Thread thread = new Thread(new Runnable() { // used to execute in parallel with UI thread
+        Thread thread = new Thread(new Runnable() {  // used to execute in parallel with UI thread
             public void run() {
                 int counter = 1;
-                while (!mDelivered && !mFailed) {
-                    Log.i("StatusActivity", mDelivered + " " + mFailed);
-                    // check delivery status every 10 seconds
-                    checkDeliveryStatus();
 
+                // Check delivery status every 10 seconds
+                while(!mDelivered && !mFailed) {
+                    checkDeliveryStatus();
                     if(mDelivered) {
                         mProgressDialogStatus = mProgressDialog.getMax();
-                    }
-                    else { // if loading bar isn't full, update every minute
+                    } else { // if loading bar isn't full, update progress
                         if(mProgressDialogStatus < mProgressDialog.getMax() && counter%6 == 0) {
-                            // update the progress bar
                             mHandler.post(new Runnable() {
                                 public void run() {
                                     mProgressDialog.setProgress(mProgressDialogStatus);
@@ -137,41 +130,48 @@ public class DeliveryStatusActivity extends Activity
                             });
                             mProgressDialogStatus++;
                         }
-                        try { // sleep 10 seconds
-                            Thread.sleep(10000);
-                            counter++;
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        mySleep(10000);
+                        counter++;
                     }
                 }
 
-                // condom has been delivered
-                try { // sleep 1.5 seconds, display 100%
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                // Condom has been delivered
+                mySleep(1500);
 
-                // close the progress bar dialog
-                 mProgressDialog.dismiss();
+                // Close the progress bar dialog
+                mProgressDialog.dismiss();
 
                 if(mFailed) {
                     SharedPreferences.Editor edit = mSharedPreferences.edit();
                     edit.putBoolean("order_failed", true);
                     edit.putString("order_number", mOrderNumber);
-
                     edit.apply();
 
                     Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
                     startActivity(i);
+                    finish();
                 }
             }
         });
         thread.start();
     }
 
-    public void checkDeliveryStatus() {
+    /**
+     * Thread.sleep wrapper
+     */
+    private void mySleep(int time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Hits our server to determine delivery status of order
+     */
+    public void checkDeliveryStatus()
+    {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("session_token", mSessionToken));
         params.add(new BasicNameValuePair("order_number", mOrderNumber));
@@ -179,19 +179,16 @@ public class DeliveryStatusActivity extends Activity
         ServerRequest serverRequest = new ServerRequest();
         JSONObject json = serverRequest.getJSON("http://tsb.sccs.swarthmore.edu:8080/api/delivery/status", params);
 
-        if (json != null) {
+        if(json != null) {
             try {
                 mAccepted = json.getBoolean("order_accepted");
                 mDelivered = json.getBoolean("order_delivered");
                 mFailed = json.getBoolean("order_failed");
                 mDeliveryEstimate = json.getInt("delivery_estimate");
 
-                Log.i("checkDeliveryStatus", mAccepted + " " + mDelivered + " " + mFailed);
-
-                if (mDeliveryEstimate == -1) {
+                if(mDeliveryEstimate == -1) {
                     mDeliveryEstimate = 15;
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
