@@ -28,9 +28,12 @@ var announce = require('./modules/broadcast/announce');
 
 
 module.exports = function(app) {
+
+
     app.get('/', function(req, res) {
-		res.end("TSB Backend v0.0.1");
+		res.end("TSB Backend v0.1");
     });
+
 
     // authenticate with the backend by supplying
     //   - a persistent device uuid
@@ -51,6 +54,7 @@ module.exports = function(app) {
     
     });
     
+
     // register with the backend by supplying 
     //     - a (persistent) device uuid
     //     - a signup_code that is distributed to each user
@@ -70,7 +74,6 @@ module.exports = function(app) {
 
 
     // request a delivery 
-    ///TODO: Add eligibility
     app.post('/api/delivery/request', middleware.is_authenticated_and_eligible, function(req, res) {
 	var session_token = req.body.session_token;
 	var dorm_name = req.body.dorm_name;
@@ -209,6 +212,7 @@ module.exports = function(app) {
     });
 
 
+    /*
     // for testing purposes
     app.get('/api/survey/create_test_campaign', function (req, res) {
 
@@ -228,5 +232,6 @@ module.exports = function(app) {
     	});
 
     });
+    */
 
 };
