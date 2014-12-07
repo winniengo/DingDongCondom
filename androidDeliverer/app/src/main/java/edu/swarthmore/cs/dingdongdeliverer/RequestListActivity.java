@@ -5,8 +5,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
 /**
@@ -36,25 +34,24 @@ public class RequestListActivity extends Activity {
             //TODO: login as deliverer, obtain valid session token
         }
 
-        // set the refresh thing
-        final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        CondomRequestStore store = CondomRequestStore.update(mSessionToken);
-                        swipeLayout.setRefreshing(false);
-                    }
-                }, 1000);
-            }
-        });
-        swipeLayout.setColorScheme(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
+//        // set the refresh thing
+//        final SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+//        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        CondomRequestStore store = CondomRequestStore.update(mSessionToken);
+//                        swipeLayout.setRefreshing(false);
+//                    }
+//                }, 1000);
+//            }
+//        });
+//        swipeLayout.setColorScheme(android.R.color.holo_blue_bright,
+//                android.R.color.holo_green_light,
+//                android.R.color.holo_orange_light,
+//                android.R.color.holo_red_light);
 
         FragmentManager fm = getFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
