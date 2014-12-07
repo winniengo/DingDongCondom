@@ -149,12 +149,12 @@ exports.request_alert_sendout = function(dorm) {
 
 	// create a new message
 	var message = new gcm.Message({
-	    collapseKey: 'DingDong:Condom',
+	    collapseKey: 'DingDong:Deliverer',
 	    delayWhileIdle: true,
 	    timeToLive: 3,
 	    data: {
 	    	type: 'request',
-	        dorm : dorm,	    
+	        dorm : dorm,
 		}
 		
 	});
