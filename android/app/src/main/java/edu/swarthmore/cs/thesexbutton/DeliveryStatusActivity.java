@@ -72,15 +72,16 @@ public class DeliveryStatusActivity extends Activity
                         edit.putBoolean("order_failed", false);
                         edit.apply();
 
-                        Button restart = (Button) findViewById(R.id.restartButton);
-                        restart.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
-                                startActivity(i);
-                                finish();
-                            }
-                        });
+                        // TODO: I feel like this restart buttos is unnecessary
+//                        Button restart = (Button) findViewById(R.id.restartButton);
+//                        restart.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                Intent i = new Intent(DeliveryStatusActivity.this, RequestCondomActivity.class);
+//                                startActivity(i);
+//                                finish();
+//                            }
+//                        });
 
                         Button guide = (Button) findViewById(R.id.guideButton);
                         guide.setOnClickListener(new View.OnClickListener() {

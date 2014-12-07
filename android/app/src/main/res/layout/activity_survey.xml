@@ -25,16 +25,18 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="20dp"
+            android:textSize="16sp"
             android:text="@string/survey_explanation" />
-
-        <TextView
-            android:id="@+id/survey_link"
+        <Button
+            android:id="@+id/survey_button"
+            android:background="@drawable/btn_green"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_margin="20dp"
-            android:autoLink="web"
-            android:linksClickable="true" />
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:text="Take Survey"
+            android:textColor="#ffffff" />
     </LinearLayout>
 
 </ScrollView>

@@ -1,8 +1,11 @@
 package edu.swarthmore.cs.thesexbutton;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -14,6 +17,7 @@ public class SurveyActivity extends Activity
     // private String mResponse;  // use to debug
     private String mSurveyBody;
     private TextView mTextView;
+    private Button mButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +36,13 @@ public class SurveyActivity extends Activity
             }
         }
 
-        Log.i("Survey Body", mSurveyBody);
-        mTextView = (TextView) findViewById(R.id.survey_link);
-        mTextView.setText(mSurveyBody);
+        mButton = (Button) findViewById(R.id.survey_button);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Uri uri = Uri.parse(mSurveyBody);
+                Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(i);
+            }
+        });
     }
 }

@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">Ding Dong: Condom</string>
-
     <string name="request_condom_text">To place a condom order, please carefully input your dorm name, delivery type,
         and delivery details. Then click the button below!
      </string>
@@ -26,7 +25,12 @@
         <item>Wharton EF</item>
         <item>Willets North</item>
         <item>Willets South</item>
-        <item>Worth</item>
+        <item>Worth I</item>
+        <item>Worth J</item>
+        <item>Worth K</item>
+        <item>Worth L</item>
+        <item>Worth M</item>
+        <item>Worth N</item>
     </string-array>
     <string name="register_about">
         Thanks for downloading Ding Dong: Condom!\nYou now have access to our free, \non-demand
@@ -68,11 +72,15 @@
     </string>
     <string name="menu_about_us"></string>
     <string name="survey_explanation">
-    Thank you for using our service! Filling out the survey below will help us better understand how
-    useful this service was to you and whether it\'s worth developing further. As always, your
-    responses are completely anonymous and will only be used for evaluation purposes.
+        Thank you for using our service!
 
-    \n\nCheers,\nAwjin, Winnie and Daniel
+        \n\nFilling out the survey below will help us better understand how
+        useful this service was to you and whether it\'s worth developing further.
+
+        \n\nAs always, your
+        responses are completely anonymous and will only be used for evaluation purposes.
+
+        \n\nCheers,\nAwjin, Winnie, and Daniel
     </string>
     <string name="open_for_business_text">We are currently not delivering.</string>
     <string name="condom_guide_link"></string>
