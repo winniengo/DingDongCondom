@@ -11,13 +11,13 @@ exports.register = function(device_uuid, passphrase, signup_token, device_os,
 							push_id, callback) {
     var u = device_uuid;
     var p = passphrase;
-    var st = signup_token;
+    var st = signup_token.replace(/ /g,''); //strip whitespace
     var dos = device_os;
 
 
     // check that the signup_token is correct
     if (st != "tsb2014") {
-		console.log("TSBToken incorrect, token was:", signup_token);
+		console.log("TSBToken incorrect, token was:", st);
     	callback({'response': 'REGISTER_ERROR_INVALID_SIGNUP_TOKEN'}, 401);
     } else {
     	// do crypto to hash passphrase and generate auth_token
